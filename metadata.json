@@ -1,0 +1,6 @@
+{
+  "name": "Correio Digital Angola",
+  "description": "Plataforma de correspondência digital oficial inovadora, ligando o cidadão e o Estado de Angola com segurança offline.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
