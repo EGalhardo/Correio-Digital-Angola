@@ -212,8 +212,8 @@ export default function About() {
         {/* Fine-print branding */}
         <section className="pt-4 border-t border-gray-100">
           <div className="flex flex-col items-center text-center">
-            <span className="text-4xl font-black text-gray-900 tracking-tighter leading-none">FACILITASCAN</span>
-            <span className="text-red-600 font-bold uppercase tracking-[0.3em] text-[10px] leading-none mt-2">Facilitando sua Vida</span>
+            <span className="text-4xl font-black text-gray-900 tracking-tighter leading-none">CORREIO DIGITAL</span>
+            <span className="text-red-700 font-bold uppercase tracking-[0.3em] text-[10px] leading-none mt-2">República de Angola</span>
           </div>
         </section>
       </div>

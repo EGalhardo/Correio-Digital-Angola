@@ -22,6 +22,8 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
   const [currentAngle, setCurrentAngle] = useState(0);
   const [activeCard, setActiveCard] = useState(0);
   const [radius, setRadius] = useState(360);
+  const [cardW, setCardW] = useState(236);
+  const [cardH, setCardH] = useState(420);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<number | null>(null);
@@ -33,9 +35,31 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
 
   const updateRadius = useCallback(() => {
     const w = window.innerWidth;
-    if (w < 540) setRadius(226);
-    else if (w < 900) setRadius(314);
-    else setRadius(416);
+    if (w < 370) {
+      setCardW(116);
+      setCardH(206);
+      setRadius(95);
+    } else if (w < 430) {
+      setCardW(136);
+      setCardH(242);
+      setRadius(115);
+    } else if (w < 540) {
+      setCardW(166);
+      setCardH(295);
+      setRadius(140);
+    } else if (w < 640) {
+      setCardW(186);
+      setCardH(330);
+      setRadius(175);
+    } else if (w < 900) {
+      setCardW(206);
+      setCardH(366);
+      setRadius(250);
+    } else {
+      setCardW(236);
+      setCardH(420);
+      setRadius(416);
+    }
   }, []);
 
   useEffect(() => {
@@ -143,8 +167,10 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
         {/* Ring */}
         <div 
           ref={ringRef}
-          className="pentagon-ring w-[236px] h-[420px] relative transition-transform duration-75 ease-linear"
+          className="pentagon-ring relative transition-transform duration-75 ease-linear"
           style={{
+            width: `${cardW}px`,
+            height: `${cardH}px`,
             transform: `rotateY(${currentAngle}deg)`,
             transformStyle: "preserve-3d"
           }}
@@ -154,6 +180,8 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
               key={i}
                className={`penta-card ${i === activeCard ? "shadow-2xl shadow-black/50 scale-105" : ""}`}
               style={{
+                width: `${cardW}px`,
+                height: `${cardH}px`,
                 transform: `rotateY(${i * ANGLE_STEP}deg) translateZ(${radius}px)`,
                 transition: "box-shadow 0.3s, transform 0.3s"
               }}
@@ -171,16 +199,16 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
               e.stopPropagation();
               onPlayClick();
             }}
-            className="absolute z-20 w-28 h-28 bg-white/15 hover:bg-white/30 border-[3px] border-white backdrop-blur-md text-white rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.4)] transition-all duration-300 hover:scale-115 hover:shadow-[0_0_60px_rgba(220,38,38,0.6)] active:scale-95 cursor-pointer group"
+            className="absolute z-20 w-16 h-16 min-[380px]:w-20 min-[380px]:h-20 sm:w-28 sm:h-28 bg-white/15 hover:bg-white/30 border-[2px] sm:border-[3px] border-white backdrop-blur-md text-white rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.4)] transition-all duration-300 hover:scale-115 hover:shadow-[0_0_60px_rgba(220,38,38,0.6)] active:scale-95 cursor-pointer group"
             aria-label={isPlayingAudio ? "Pausar Áudio" : "Tocar Áudio"}
           >
             {/* Intensive dual pulsing waves */}
-            <div className={`absolute inset-0 rounded-full border-2 border-white/60 pointer-events-none ${isPlayingAudio ? "animate-ping" : "group-hover:animate-ping"}`} />
-            <div className={`absolute -inset-3 rounded-full border border-red-500/40 pointer-events-none ${isPlayingAudio ? "animate-pulse [animation-duration:1s]" : "group-hover:animate-pulse [animation-duration:1.5s]"}`} />
+            <div className={`absolute inset-0 rounded-full border border-white/60 pointer-events-none ${isPlayingAudio ? "animate-ping" : "group-hover:animate-ping"}`} />
+            <div className={`absolute -inset-2 sm:-inset-3 rounded-full border border-red-500/40 pointer-events-none ${isPlayingAudio ? "animate-pulse [animation-duration:1s]" : "group-hover:animate-pulse [animation-duration:1.5s]"}`} />
             {isPlayingAudio ? (
-              <Pause size={38} fill="currentColor" className="text-white transition-transform duration-300 group-hover:scale-115" />
+              <Pause size={cardW < 140 ? 22 : cardW < 180 ? 28 : 38} fill="currentColor" className="text-white transition-transform duration-300 group-hover:scale-115" />
             ) : (
-              <Play size={38} fill="currentColor" className="translate-x-[3px] text-white transition-transform duration-300 group-hover:scale-115" />
+              <Play size={cardW < 140 ? 22 : cardW < 180 ? 28 : 38} fill="currentColor" className="translate-x-[2px] sm:translate-x-[3px] text-white transition-transform duration-300 group-hover:scale-115" />
             )}
           </button>
         )}

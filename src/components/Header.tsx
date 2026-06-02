@@ -218,7 +218,7 @@ export default function Header() {
               
               <div className="mt-4 pt-4 border-t border-gray-100">
                 <p className="text-[10px] font-black tracking-widest text-gray-400 text-center">
-                  FacilitaScan © 2026
+                  Correio Digital Angola © 2026
                 </p>
               </div>
             </div>

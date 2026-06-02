@@ -117,10 +117,11 @@ export default function TestimonialsCarousel() {
       };
     }
 
+    const isSmallMobile = windowWidth < 380;
     const isMobile = windowWidth < 640;
     const isTablet = windowWidth < 1024;
-    const xOffset = isMobile ? 80 : isTablet ? 180 : 280;
-    const xOffset2 = isMobile ? 150 : isTablet ? 320 : 480;
+    const xOffset = isSmallMobile ? 45 : isMobile ? 65 : isTablet ? 180 : 280;
+    const xOffset2 = isSmallMobile ? 85 : isMobile ? 125 : isTablet ? 320 : 480;
 
     if (abs === 1) {
       return {
@@ -169,7 +170,7 @@ export default function TestimonialsCarousel() {
           <p className="text-amber-400 text-lg uppercase tracking-widest font-bold">Líderes angolanos que confiam no Correio Digital</p>
         </div>
 
-        <div className="relative flex items-center justify-center h-[480px] sm:h-[520px] perspective-1000">
+        <div className="relative flex items-center justify-center h-[340px] min-[380px]:h-[400px] min-[440px]:h-[440px] sm:h-[520px] perspective-1000">
           {/* Navigation Buttons */}
           <button 
             onClick={prev}
@@ -187,7 +188,7 @@ export default function TestimonialsCarousel() {
           </button>
 
           {/* Cards Track */}
-          <div className="relative w-[280px] sm:w-[340px] h-[400px] sm:h-[480px] preserve-3d">
+          <div className="relative w-[220px] min-[380px]:w-[260px] min-[440px]:w-[300px] sm:w-[340px] h-[260px] min-[380px]:h-[310px] min-[440px]:h-[360px] sm:h-[480px] preserve-3d">
             {SLIDES.map((slide, i) => {
               const pos = getPositionStyle(i);
               const isActive = i === current;
