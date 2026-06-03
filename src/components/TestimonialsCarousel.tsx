@@ -154,9 +154,9 @@ export default function TestimonialsCarousel() {
       {/* Main Background Image with referrerPolicy to bypass cross-origin restrictions */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://i.postimg.cc/ZnFjVdPt/Logomarca-Correio-Digital-Angola-Site.jpg" 
+          src="https://i.postimg.cc/VNY83HJW/Chat-GPT-Image-3-de-jun-de-2026-19-08-10.png" 
           alt="Correio Digital Angola Background" 
-          className="w-full h-full object-cover opacity-100 filter brightness-[1.25] contrast-[1.02]"
+          className="w-full h-full object-cover opacity-100 filter brightness-[1.1] contrast-[1.01]"
           referrerPolicy="no-referrer"
         />
       </div>
