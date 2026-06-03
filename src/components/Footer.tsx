@@ -22,13 +22,13 @@ export default function Footer() {
               <p className="text-red-100/90 text-xs lg:text-sm leading-relaxed mb-6 font-medium">Mais rápido. Mais seguro. Mais perto de si.</p>
             </div>
             <div className="flex gap-4">
-              <a href="#" className="w-11 h-11 rounded-xl bg-red-600 hover:bg-red-500 flex items-center justify-center transition-all hover:scale-110 shadow-lg shadow-red-950/40 border border-white/10">
+              <a href="#" onClick={(e) => e.preventDefault()} className="w-11 h-11 rounded-xl bg-red-600 hover:bg-red-500 flex items-center justify-center transition-all hover:scale-110 shadow-lg shadow-red-950/40 border border-white/10">
                 <Facebook size={22} />
               </a>
-              <a href="#" className="w-11 h-11 rounded-xl bg-red-600 hover:bg-red-500 flex items-center justify-center transition-all hover:scale-110 shadow-lg shadow-red-950/40 border border-white/10">
+              <a href="#" onClick={(e) => e.preventDefault()} className="w-11 h-11 rounded-xl bg-red-600 hover:bg-red-500 flex items-center justify-center transition-all hover:scale-110 shadow-lg shadow-red-950/40 border border-white/10">
                 <Instagram size={22} />
               </a>
-              <a href="#" className="w-11 h-11 rounded-xl bg-red-600 hover:bg-red-500 flex items-center justify-center transition-all hover:scale-110 shadow-lg shadow-red-950/40 border border-white/10">
+              <a href="#" onClick={(e) => e.preventDefault()} className="w-11 h-11 rounded-xl bg-red-600 hover:bg-red-500 flex items-center justify-center transition-all hover:scale-110 shadow-lg shadow-red-950/40 border border-white/10">
                 <Youtube size={22} />
               </a>
             </div>
@@ -38,9 +38,9 @@ export default function Footer() {
           <div>
             <h4 className="font-black text-xs tracking-widest text-amber-400 uppercase mb-6">Empresa</h4>
             <ul className="space-y-4 text-sm lg:text-base text-white font-bold">
-              <li><Link to="/sobre-nos" className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">Sobre Nós</Link></li>
-              <li><Link to="/como-funciona" className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">Como Funciona</Link></li>
-              <li><a href="/#planos" className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">Planos</a></li>
+              <li><Link to="/sobre-nos" onClick={(e) => e.preventDefault()} className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">Sobre Nós</Link></li>
+              <li><Link to="/como-funciona" onClick={(e) => e.preventDefault()} className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">Como Funciona</Link></li>
+              <li><a href="/#planos" onClick={(e) => e.preventDefault()} className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">Planos</a></li>
             </ul>
           </div>
 
@@ -51,9 +51,9 @@ export default function Footer() {
           <div>
             <h4 className="font-black text-xs tracking-widest text-amber-400 uppercase mb-6">Suporte</h4>
             <ul className="space-y-4 text-sm lg:text-base text-white font-bold">
-              <li><Link to="/central-ajuda" className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">Central de Ajuda</Link></li>
-              <li><Link to="/faq" className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">FAQ</Link></li>
-              <li><Link to="/video-tutorial" className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">Vídeo Tutorial</Link></li>
+              <li><Link to="/central-ajuda" onClick={(e) => e.preventDefault()} className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">Central de Ajuda</Link></li>
+              <li><Link to="/faq" onClick={(e) => e.preventDefault()} className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">FAQ</Link></li>
+              <li><Link to="/video-tutorial" onClick={(e) => e.preventDefault()} className="hover:text-amber-400 transition-all hover:translate-x-2 inline-block">Vídeo Tutorial</Link></li>
             </ul>
           </div>
 
