@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { GraduationCap, Landmark, CreditCard, HeartPulse, Zap, ShieldCheck, Check, Repeat, LayoutGrid, UserCheck, Brain, Users, Flame, ShieldAlert, PlayCircle, Play, X, Volume2, Maximize2, Share2, Sparkles } from "lucide-react";
+import { GraduationCap, Landmark, CreditCard, HeartPulse, Zap, ShieldCheck, Check, Repeat, LayoutGrid, UserCheck, Brain, Users, Flame, ShieldAlert, PlayCircle, Play, X, Volume2, Maximize2, Share2, Sparkles, Languages } from "lucide-react";
 import ThreeDCarousel from "../components/ThreeDCarousel";
 import DownloadModal from "../components/DownloadModal";
 import PlanActivationModal from "../components/PlanActivationModal";
@@ -169,17 +169,18 @@ export default function Home() {
       {/* Features Bar */}
       <section className="bg-gray-50 border-y border-gray-100 py-8">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6 lg:gap-8">
             {[
               { icon: UserCheck, label: "BI como Endereço" },
               { icon: ShieldCheck, label: "Canais Verificados" },
               { icon: Zap, label: "Notificação Digital" },
               { icon: Brain, label: "Suporte com IA" },
-              { icon: Users, label: "Círculo de Confiança" }
+              { icon: Users, label: "Círculo de Confiança" },
+              { icon: Languages, label: "Línguas Nacionais" }
             ].map((f, i) => (
               <div 
                 key={i} 
-                className="flex-initial w-[130px] sm:w-[150px] md:w-[170px] lg:w-auto flex flex-col items-center gap-4 group p-4 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-xl hover:shadow-red-600/5 hover:-translate-y-2 cursor-default"
+                className="w-full flex flex-col items-center gap-4 group p-4 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-xl hover:shadow-red-600/5 hover:-translate-y-2 cursor-default"
               >
                 <div className="w-14 h-14 rounded-2xl bg-white border border-gray-200 flex items-center justify-center text-red-600 transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:rotate-6 group-hover:scale-110 shadow-sm">
                   <f.icon size={24} className="transition-transform duration-300 group-hover:scale-110" />
