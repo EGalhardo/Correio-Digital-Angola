@@ -67,7 +67,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 hover:text-amber-400 transition-colors">
                 <div className="p-1.5 bg-red-600 rounded-lg shrink-0"><Mail size={16} /></div> 
-                <span className="truncate">suporte@facilitascan.ao</span>
+                <span className="truncate">suporte@correiodigital.ao</span>
               </li>
               <li className="flex items-center gap-3 hover:text-amber-400 transition-colors">
                 <div className="p-1.5 bg-red-600 rounded-lg shrink-0"><MapPin size={16} /></div> 
