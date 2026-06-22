@@ -21,9 +21,9 @@ const BASE_SPEED = 48; // seconds per full rotation
 export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: ThreeDCarouselProps) {
   const [currentAngle, setCurrentAngle] = useState(0);
   const [activeCard, setActiveCard] = useState(0);
-  const [radius, setRadius] = useState(360);
-  const [cardW, setCardW] = useState(236);
-  const [cardH, setCardH] = useState(420);
+  const [radius, setRadius] = useState(354);
+  const [cardW, setCardW] = useState(201);
+  const [cardH, setCardH] = useState(357);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<number | null>(null);
@@ -36,29 +36,29 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
   const updateRadius = useCallback(() => {
     const w = window.innerWidth;
     if (w < 370) {
+      setCardW(99);
+      setCardH(175);
+      setRadius(81);
+    } else if (w < 430) {
       setCardW(116);
       setCardH(206);
-      setRadius(95);
-    } else if (w < 430) {
-      setCardW(136);
-      setCardH(242);
-      setRadius(115);
+      setRadius(98);
     } else if (w < 540) {
-      setCardW(166);
-      setCardH(295);
-      setRadius(140);
+      setCardW(141);
+      setCardH(251);
+      setRadius(119);
     } else if (w < 640) {
-      setCardW(186);
-      setCardH(330);
-      setRadius(175);
+      setCardW(158);
+      setCardH(281);
+      setRadius(149);
     } else if (w < 900) {
-      setCardW(206);
-      setCardH(366);
-      setRadius(250);
+      setCardW(175);
+      setCardH(311);
+      setRadius(213);
     } else {
-      setCardW(236);
-      setCardH(420);
-      setRadius(416);
+      setCardW(201);
+      setCardH(357);
+      setRadius(354);
     }
   }, []);
 
@@ -206,9 +206,9 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
             <div className={`absolute inset-0 rounded-full border border-white/60 pointer-events-none ${isPlayingAudio ? "animate-ping" : "group-hover:animate-ping"}`} />
             <div className={`absolute -inset-2 sm:-inset-3 rounded-full border border-red-500/40 pointer-events-none ${isPlayingAudio ? "animate-pulse [animation-duration:1s]" : "group-hover:animate-pulse [animation-duration:1.5s]"}`} />
             {isPlayingAudio ? (
-              <Pause size={cardW < 140 ? 22 : cardW < 180 ? 28 : 38} fill="currentColor" className="text-white transition-transform duration-300 group-hover:scale-115" />
+              <Pause size={cardW < 120 ? 22 : cardW < 155 ? 28 : 38} fill="currentColor" className="text-white transition-transform duration-300 group-hover:scale-115" />
             ) : (
-              <Play size={cardW < 140 ? 22 : cardW < 180 ? 28 : 38} fill="currentColor" className="translate-x-[2px] sm:translate-x-[3px] text-white transition-transform duration-300 group-hover:scale-115" />
+              <Play size={cardW < 120 ? 22 : cardW < 155 ? 28 : 38} fill="currentColor" className="translate-x-[2px] sm:translate-x-[3px] text-white transition-transform duration-300 group-hover:scale-115" />
             )}
           </button>
         )}
