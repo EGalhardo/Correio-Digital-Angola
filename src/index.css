@@ -32,11 +32,11 @@
   }
 
   .sector-card {
-    @apply border-2 border-gray-100 rounded-3xl p-6 bg-white transition-all duration-300 hover:border-red-600 hover:shadow-2xl hover:shadow-red-600/10 hover:-translate-y-1.5;
+    @apply border-2 border-gray-300 rounded-3xl p-6 bg-white transition-all duration-300 hover:border-red-600 hover:shadow-2xl hover:shadow-red-600/10 hover:-translate-y-1.5;
   }
 
   .how-card {
-    @apply bg-white/5 rounded-3xl p-8 text-white backdrop-blur-xl transition-all duration-300 cursor-pointer hover:bg-white/15 hover:scale-[1.03] hover:shadow-2xl hover:shadow-red-950/40 border border-white/5;
+    @apply bg-white/5 rounded-3xl p-6 md:p-7 text-white backdrop-blur-xl transition-all duration-300 cursor-pointer hover:bg-white/15 hover:scale-[1.03] hover:shadow-2xl hover:shadow-red-950/40 border border-white/5;
   }
 
   section[id] {

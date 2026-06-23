@@ -214,7 +214,7 @@ export default function Home() {
       </section>
 
       {/* How it Works Summary */}
-      <section id="como-funciona" className="py-24 bg-brand-main text-white relative overflow-hidden">
+      <section id="como-funciona" className="pt-24 pb-44 md:pb-56 bg-brand-main text-white relative overflow-hidden">
         {/* Main Background Image with referrerPolicy to bypass cross-origin restrictions */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -225,28 +225,28 @@ export default function Home() {
           />
         </div>
         <div className="max-w-6xl mx-auto px-6 relative z-10">
-          <h2 className="text-4xl md:text-5xl font-black text-center mb-20 tracking-tight uppercase">Como Funciona</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <h2 className="text-4xl md:text-5xl font-black text-center mb-16 tracking-tight uppercase">Como Funciona</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="how-card group">
-              <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-8 text-white shadow-xl group-hover:scale-110 transition-transform">
-                <UserCheck size={28} />
+              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-white shadow-xl group-hover:scale-110 transition-transform">
+                <UserCheck size={24} />
               </div>
-              <h3 className="text-2xl font-black mb-4 uppercase tracking-wide">1. Registo e Acesso</h3>
-              <p className="text-red-100/90 text-lg leading-relaxed">Associe a sua conta ao Número do Bilhete de Identidade com validação facial ou PIN.</p>
+              <h3 className="text-xl font-black mb-3 uppercase tracking-wide">1. Registo e Acesso</h3>
+              <p className="text-red-100/90 text-base leading-relaxed">Associe a sua conta ao Número do Bilhete de Identidade com validação facial ou PIN.</p>
             </div>
             <div className="how-card group">
-              <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-8 text-white shadow-xl group-hover:scale-110 transition-transform">
-                <LayoutGrid size={28} />
+              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-white shadow-xl group-hover:scale-110 transition-transform">
+                <LayoutGrid size={24} />
               </div>
-              <h3 className="text-2xl font-black mb-4 uppercase tracking-wide">2. Caixa de Entrada</h3>
-              <p className="text-red-100/90 text-lg leading-relaxed">Receba documentos e notificações oficiais e interaja com canais de comunicação verificados.</p>
+              <h3 className="text-xl font-black mb-3 uppercase tracking-wide">2. Caixa de Entrada</h3>
+              <p className="text-red-100/90 text-base leading-relaxed">Receba documentos e notificações oficiais e interaja com canais de comunicação verificados.</p>
             </div>
             <div className="how-card group">
-              <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-8 text-white shadow-xl group-hover:scale-110 transition-transform">
-                <Brain size={28} />
+              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-white shadow-xl group-hover:scale-110 transition-transform">
+                <Brain size={24} />
               </div>
-              <h3 className="text-2xl font-black mb-4 uppercase tracking-wide">3. Suporte com IA</h3>
-              <p className="text-red-100/90 text-lg leading-relaxed">Utilize o auxílio de IA inteligente com suporte por voz para traduzir termos administrativos complexos.</p>
+              <h3 className="text-xl font-black mb-3 uppercase tracking-wide">3. Suporte com IA</h3>
+              <p className="text-red-100/90 text-base leading-relaxed">Utilize o auxílio de IA inteligente com suporte por voz para traduzir termos administrativos complexos.</p>
             </div>
           </div>
         </div>
@@ -270,8 +270,8 @@ export default function Home() {
                 ${activePlanIndex === i 
                   ? "bg-red-600 border-red-600 text-white shadow-2xl shadow-red-600/30" 
                   : p.popular 
-                    ? "bg-white border-gray-200 hover:border-red-650 shadow-2xl shadow-red-650/10" 
-                    : "bg-white border-gray-100 hover:border-red-400"
+                    ? "bg-white border-gray-300 hover:border-red-650 shadow-2xl shadow-red-650/10" 
+                    : "bg-white border-gray-300 hover:border-red-400"
                 }`}
             >
               {p.popular && (
