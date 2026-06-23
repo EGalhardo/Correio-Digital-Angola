@@ -362,7 +362,7 @@ export default function Home() {
               "Junte-se ao novo paradigma de governação digital e inclusão cidadã através de uma comunicação oficial célere, inteligente e totalmente segura."
             </p>
             <a 
-              href="https://correio-digital-angola-oficial-h43yw2hil-edlasios-projects.vercel.app/"
+              href="https://correio-digital-angola-oficial.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full inline-flex items-center justify-center gap-4 bg-red-600 text-white font-black text-xl px-10 py-6 rounded-3xl hover:bg-red-700 transition-all shadow-2xl shadow-red-600/40 hover:scale-105 active:scale-95 tracking-wide uppercase cursor-pointer text-center"
