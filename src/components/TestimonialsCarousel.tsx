@@ -120,8 +120,8 @@ export default function TestimonialsCarousel() {
     const isSmallMobile = windowWidth < 380;
     const isMobile = windowWidth < 640;
     const isTablet = windowWidth < 1024;
-    const xOffset = isSmallMobile ? 45 : isMobile ? 65 : isTablet ? 180 : 280;
-    const xOffset2 = isSmallMobile ? 85 : isMobile ? 125 : isTablet ? 320 : 480;
+    const xOffset = isSmallMobile ? 36 : isMobile ? 52 : isTablet ? 144 : 224;
+    const xOffset2 = isSmallMobile ? 68 : isMobile ? 100 : isTablet ? 256 : 384;
 
     if (abs === 1) {
       return {
@@ -150,7 +150,7 @@ export default function TestimonialsCarousel() {
   };
 
   return (
-    <div id="testemunhas" className="relative w-full overflow-hidden bg-brand-main py-24">
+    <div id="testemunhas" className="relative w-full overflow-hidden bg-brand-main py-16 md:py-20">
       {/* Main Background Image with referrerPolicy to bypass cross-origin restrictions */}
       <div className="absolute inset-0 z-0">
         <img 
@@ -165,30 +165,30 @@ export default function TestimonialsCarousel() {
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-red-500/5 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2 z-10" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight uppercase">DEPOIMENTOS</h2>
-          <p className="text-amber-400 text-lg uppercase tracking-widest font-bold">Líderes angolanos que confiam no Correio Digital</p>
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight uppercase">DEPOIMENTOS</h2>
+          <p className="text-amber-400 text-sm md:text-base uppercase tracking-widest font-bold">Líderes angolanos que confiam no Correio Digital</p>
         </div>
 
-        <div className="relative flex items-center justify-center h-[340px] min-[380px]:h-[400px] min-[440px]:h-[440px] sm:h-[520px] perspective-1000">
+        <div className="relative flex items-center justify-center h-[272px] min-[380px]:h-[320px] min-[440px]:h-[352px] sm:h-[416px] perspective-1000">
           {/* Navigation Buttons */}
           <button 
             onClick={prev}
-            className="absolute left-2 sm:left-4 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/80 backdrop-blur-md shadow-xl flex items-center justify-center text-red-650 hover:bg-white hover:scale-110 transition-all active:scale-95"
+            className="absolute left-1.5 sm:left-3 z-40 w-8.5 h-8.5 sm:w-10 sm:h-10 rounded-full bg-white/80 backdrop-blur-md shadow-xl flex items-center justify-center text-red-650 hover:bg-white hover:scale-110 transition-all active:scale-95"
           >
-            <ChevronLeft size={20} className="sm:hidden" />
-            <ChevronLeft size={24} className="hidden sm:block" />
+            <ChevronLeft size={16} className="sm:hidden" />
+            <ChevronLeft size={20} className="hidden sm:block" />
           </button>
           <button 
             onClick={next}
-            className="absolute right-2 sm:right-4 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/80 backdrop-blur-md shadow-xl flex items-center justify-center text-red-650 hover:bg-white hover:scale-110 transition-all active:scale-95"
+            className="absolute right-1.5 sm:right-3 z-40 w-8.5 h-8.5 sm:w-10 sm:h-10 rounded-full bg-white/80 backdrop-blur-md shadow-xl flex items-center justify-center text-red-650 hover:bg-white hover:scale-110 transition-all active:scale-95"
           >
-            <ChevronRight size={20} className="sm:hidden" />
-            <ChevronRight size={24} className="hidden sm:block" />
+            <ChevronRight size={16} className="sm:hidden" />
+            <ChevronRight size={20} className="hidden sm:block" />
           </button>
 
           {/* Cards Track */}
-          <div className="relative w-[220px] min-[380px]:w-[260px] min-[440px]:w-[300px] sm:w-[340px] h-[260px] min-[380px]:h-[310px] min-[440px]:h-[360px] sm:h-[480px] preserve-3d">
+          <div className="relative w-[176px] min-[380px]:w-[208px] min-[440px]:w-[240px] sm:w-[272px] h-[208px] min-[380px]:h-[248px] min-[440px]:h-[288px] sm:h-[384px] preserve-3d">
             {SLIDES.map((slide, i) => {
               const pos = getPositionStyle(i);
               const isActive = i === current;

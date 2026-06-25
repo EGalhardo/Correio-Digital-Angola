@@ -36,29 +36,29 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
   const updateRadius = useCallback(() => {
     const w = window.innerWidth;
     if (w < 370) {
-      setCardW(99);
-      setCardH(175);
-      setRadius(81);
+      setCardW(79);
+      setCardH(140);
+      setRadius(65);
     } else if (w < 430) {
-      setCardW(116);
-      setCardH(206);
-      setRadius(98);
+      setCardW(93);
+      setCardH(165);
+      setRadius(78);
     } else if (w < 540) {
-      setCardW(141);
-      setCardH(251);
-      setRadius(119);
+      setCardW(113);
+      setCardH(201);
+      setRadius(95);
     } else if (w < 640) {
-      setCardW(158);
-      setCardH(281);
-      setRadius(149);
+      setCardW(126);
+      setCardH(225);
+      setRadius(119);
     } else if (w < 900) {
-      setCardW(175);
-      setCardH(311);
-      setRadius(213);
+      setCardW(140);
+      setCardH(249);
+      setRadius(170);
     } else {
-      setCardW(201);
-      setCardH(357);
-      setRadius(354);
+      setCardW(161);
+      setCardH(285);
+      setRadius(283);
     }
   }, []);
 

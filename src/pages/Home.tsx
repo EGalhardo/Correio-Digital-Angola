@@ -147,7 +147,7 @@ export default function Home() {
   return (
     <div id="top" className="flex flex-col w-full">
       {/* Hero Section */}
-      <section id="inicio" className="bg-brand-main relative overflow-hidden pt-28 pb-32 px-6">
+      <section id="inicio" className="bg-brand-main relative overflow-hidden pt-20 pb-24 px-5">
         {/* Main Background Image with referrerPolicy to bypass cross-origin restrictions */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -158,18 +158,18 @@ export default function Home() {
           />
         </div>
         {/* Decorative elements */}
-        <div className="absolute top-[-80px] left-[-100px] w-[420px] h-[420px] rounded-full bg-red-650/10 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-[-60px] right-[-80px] w-[380px] h-[380px] rounded-full bg-red-500/5 blur-3xl pointer-events-none" />
+        <div className="absolute top-[-64px] left-[-80px] w-[336px] h-[336px] rounded-full bg-red-650/10 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-[-48px] right-[-64px] w-[304px] h-[304px] rounded-full bg-red-500/5 blur-3xl pointer-events-none" />
         
-        <div className="max-w-6xl mx-auto w-full flex flex-col items-center text-center z-10 relative pt-12">
+        <div className="max-w-5xl mx-auto w-full flex flex-col items-center text-center z-10 relative pt-10">
           <ThreeDCarousel isPlayingAudio={isPlayingAudio} onPlayClick={handlePlayAudio} />
         </div>
       </section>
 
       {/* Features Bar */}
-      <section className="bg-gray-50 border-y border-gray-100 py-8">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6 lg:gap-8">
+      <section className="bg-gray-50 border-y border-gray-100 py-5">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3 lg:gap-5">
             {[
               { icon: UserCheck, label: "BI como Endereço" },
               { icon: ShieldCheck, label: "Canais Verificados" },
@@ -180,12 +180,12 @@ export default function Home() {
             ].map((f, i) => (
               <div 
                 key={i} 
-                className="w-full flex flex-col items-center gap-4 group p-4 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-xl hover:shadow-red-600/5 hover:-translate-y-2 cursor-default"
+                className="w-full flex flex-col items-center gap-2.5 group p-2.5 rounded-xl transition-all duration-300 hover:bg-white hover:shadow-xl hover:shadow-red-600/5 hover:-translate-y-1 cursor-default"
               >
-                <div className="w-14 h-14 rounded-2xl bg-white border border-gray-200 flex items-center justify-center text-red-600 transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:rotate-6 group-hover:scale-110 shadow-sm">
-                  <f.icon size={24} className="transition-transform duration-300 group-hover:scale-110" />
+                <div className="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-red-600 transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:rotate-6 group-hover:scale-110 shadow-sm">
+                  <f.icon size={16} className="transition-transform duration-300 group-hover:scale-110" />
                 </div>
-                <span className="text-sm font-bold text-gray-700 group-hover:text-red-600 transition-colors uppercase tracking-tight text-center">
+                <span className="text-[11px] font-bold text-gray-700 group-hover:text-red-600 transition-colors uppercase tracking-tight text-center">
                   {f.label}
                 </span>
               </div>
@@ -195,26 +195,26 @@ export default function Home() {
       </section>
 
       {/* Sectors */}
-      <section id="sectores" className="py-24 max-w-6xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6 tracking-tight uppercase">SECTORES INTEGRADOS</h2>
-          <p className="text-gray-700 text-lg max-w-2xl mx-auto">Modernização e comunicação inteligente adaptada à realidade angolana.</p>
+      <section id="sectores" className="py-12 md:py-16 max-w-4xl mx-auto px-6">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-3 tracking-tight uppercase">SECTORES INTEGRADOS</h2>
+          <p className="text-gray-600 text-xs md:text-sm max-w-xl mx-auto">Modernização e comunicação inteligente adaptada à realidade angolana.</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {SECTORS.map((s, i) => (
              <div key={i} className="sector-card group">
-               <div className="w-12 h-12 bg-white border border-gray-200 rounded-2xl flex items-center justify-center mb-6 text-red-600 shadow-sm transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:scale-110">
-                 <s.icon size={24} className="transition-transform duration-300 group-hover:scale-110" />
+               <div className="w-8 h-8 bg-white border border-gray-200 rounded-lg flex items-center justify-center mb-4 text-red-600 shadow-sm transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:scale-110">
+                 <s.icon size={16} className="transition-transform duration-300 group-hover:scale-110" />
                </div>
-               <h3 className="font-extrabold text-gray-900 text-xl mb-3 tracking-tight uppercase">{s.title}</h3>
-               <p className="text-gray-800 text-base leading-relaxed">{s.desc}</p>
+               <h3 className="font-extrabold text-gray-900 text-base mb-2 tracking-tight uppercase">{s.title}</h3>
+               <p className="text-gray-600 text-xs leading-relaxed">{s.desc}</p>
              </div>
           ))}
         </div>
       </section>
 
       {/* How it Works Summary */}
-      <section id="como-funciona" className="pt-24 pb-44 md:pb-56 bg-brand-main text-white relative overflow-hidden">
+      <section id="como-funciona" className="pt-12 pb-40 md:pt-16 md:pb-52 lg:pb-60 bg-brand-main text-white relative overflow-hidden">
         {/* Main Background Image with referrerPolicy to bypass cross-origin restrictions */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -224,41 +224,41 @@ export default function Home() {
             referrerPolicy="no-referrer"
           />
         </div>
-        <div className="max-w-6xl mx-auto px-6 relative z-10">
-          <h2 className="text-4xl md:text-5xl font-black text-center mb-16 tracking-tight uppercase">Como Funciona</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="max-w-4xl mx-auto px-6 relative z-10">
+          <h2 className="text-2xl md:text-3xl font-black text-center mb-10 tracking-tight uppercase">COMO FUNCIONA</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
             <div className="how-card group">
-              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-white shadow-xl group-hover:scale-110 transition-transform">
-                <UserCheck size={24} />
+              <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center mb-4 text-white shadow-xl group-hover:scale-110 transition-transform">
+                <UserCheck size={16} />
               </div>
-              <h3 className="text-xl font-black mb-3 uppercase tracking-wide">1. Registo e Acesso</h3>
-              <p className="text-red-100/90 text-base leading-relaxed">Associe a sua conta ao Número do Bilhete de Identidade com validação facial ou PIN.</p>
+              <h3 className="text-base font-black mb-2 uppercase tracking-wide">1. REGISTO E ACESSO</h3>
+              <p className="text-red-100/90 text-xs leading-relaxed">Associe a sua conta ao Número do Bilhete de Identidade com validação facial ou PIN.</p>
             </div>
             <div className="how-card group">
-              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-white shadow-xl group-hover:scale-110 transition-transform">
-                <LayoutGrid size={24} />
+              <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center mb-4 text-white shadow-xl group-hover:scale-110 transition-transform">
+                <LayoutGrid size={16} />
               </div>
-              <h3 className="text-xl font-black mb-3 uppercase tracking-wide">2. Caixa de Entrada</h3>
-              <p className="text-red-100/90 text-base leading-relaxed">Receba documentos e notificações oficiais e interaja com canais de comunicação verificados.</p>
+              <h3 className="text-base font-black mb-2 uppercase tracking-wide">2. CAIXA DE ENTRADA</h3>
+              <p className="text-red-100/90 text-xs leading-relaxed">Receba documentos e notificações oficiais e interaja com canais de comunicação verificados.</p>
             </div>
             <div className="how-card group">
-              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-white shadow-xl group-hover:scale-110 transition-transform">
-                <Brain size={24} />
+              <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center mb-4 text-white shadow-xl group-hover:scale-110 transition-transform">
+                <Brain size={16} />
               </div>
-              <h3 className="text-xl font-black mb-3 uppercase tracking-wide">3. Suporte com IA</h3>
-              <p className="text-red-100/90 text-base leading-relaxed">Utilize o auxílio de IA inteligente com suporte por voz para traduzir termos administrativos complexos.</p>
+              <h3 className="text-base font-black mb-2 uppercase tracking-wide">3. SUPORTE COM IA</h3>
+              <p className="text-red-100/90 text-xs leading-relaxed">Utilize o auxílio de IA inteligente com suporte por voz para traduzir termos administrativos complexos.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Plans */}
-      <section id="planos" className="py-24 max-w-6xl mx-auto px-6">
-        <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6 tracking-tight uppercase">PARCERIAS & ADESÃO</h2>
-          <p className="text-gray-700 text-xl max-w-2xl mx-auto">Sustentabilidade e inclusão digital real para todos.</p>
+      <section id="planos" className="py-12 md:py-16 max-w-4xl mx-auto px-6">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-3 tracking-tight uppercase">PARCERIAS & ADESÃO</h2>
+          <p className="text-gray-600 text-sm max-w-xl mx-auto">Sustentabilidade e inclusão digital real para todos.</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 max-w-6xl mx-auto px-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6.5 max-w-4xl mx-auto px-2">
           {PLANS.map((p, i) => (
             <div 
               key={i} 
@@ -266,7 +266,7 @@ export default function Home() {
                 setActivePlanIndex(i);
                 openPlanModal(p);
               }}
-              className={`group border-2 rounded-3xl sm:rounded-[40px] p-6 md:p-5 lg:p-10 transition-all hover:-translate-y-3 hover:shadow-3xl relative cursor-pointer
+              className={`group border-2 rounded-xl sm:rounded-[26px] p-4 md:p-5 lg:p-6.5 transition-all hover:-translate-y-2 hover:shadow-3xl relative cursor-pointer
                 ${activePlanIndex === i 
                   ? "bg-red-600 border-red-600 text-white shadow-2xl shadow-red-600/30" 
                   : p.popular 
@@ -275,7 +275,7 @@ export default function Home() {
                 }`}
             >
               {p.popular && (
-                <div className={`absolute -top-5 left-1/2 -translate-x-1/2 text-xs font-black px-8 py-2 rounded-full shadow-xl tracking-widest uppercase transition-colors duration-300
+                <div className={`absolute -top-3.5 left-1/2 -translate-x-1/2 text-[9px] font-black px-5 py-1 rounded-full shadow-xl tracking-widest uppercase transition-colors duration-300
                   ${activePlanIndex === i 
                     ? "bg-white text-red-600 border border-white" 
                     : "bg-red-600 text-white"
@@ -284,39 +284,39 @@ export default function Home() {
                   MAIS POPULAR
                 </div>
               )}
-              <div className="text-center mb-10">
-                <h3 className={`text-2xl font-black mb-6 uppercase tracking-wider transition-colors duration-300
+              <div className="text-center mb-6">
+                <h3 className={`text-lg font-black mb-3 uppercase tracking-wider transition-colors duration-300
                   ${activePlanIndex === i ? "text-white" : "text-gray-900"}`}
                 >
-                  {p.name}
+                  {p.name.toUpperCase()}
                 </h3>
-                <div className="flex items-baseline justify-center gap-2">
+                <div className="flex items-baseline justify-center gap-1.5">
                   {p.price === "0" ? (
-                    <span className={`text-4xl font-black transition-colors duration-300
+                    <span className={`text-2xl font-black transition-colors duration-300
                       ${activePlanIndex === i ? "text-white" : "text-red-600"}`}
                     >
                       Gratuito
                     </span>
                   ) : p.price === "Estatal" ? (
-                    <span className={`text-3xl font-black uppercase tracking-tight transition-colors duration-300
+                    <span className={`text-xl font-black uppercase tracking-tight transition-colors duration-300
                       ${activePlanIndex === i ? "text-white" : "text-red-600"}`}
                     >
                       Acordo Estatal
                     </span>
                   ) : (
                     <>
-                      <span className={`text-5xl font-black transition-colors duration-300
+                      <span className={`text-3xl font-black transition-colors duration-300
                         ${activePlanIndex === i ? "text-white" : "text-red-600"}`}
                       >
                         {p.price}
                       </span>
                       <div className="text-left">
-                        <span className={`block font-bold text-sm transition-colors duration-300
+                        <span className={`block font-bold text-[11px] leading-none transition-colors duration-300
                           ${activePlanIndex === i ? "text-white" : "text-gray-900"}`}
                         >
                           Kz
                         </span>
-                        <span className={`font-bold text-xs uppercase tracking-tight transition-colors duration-300
+                        <span className={`font-bold text-[9px] uppercase tracking-tight transition-colors duration-300
                           ${activePlanIndex === i ? "text-red-100" : "text-gray-500"}`}
                         >
                           /mês
@@ -326,13 +326,13 @@ export default function Home() {
                   )}
                 </div>
               </div>
-              <ul className="space-y-5 mb-4">
+              <ul className="space-y-3 mb-1.5">
                 {p.features.map((f, fi) => (
-                  <li key={fi} className={`flex gap-4 text-base font-bold transition-colors duration-300
+                  <li key={fi} className={`flex gap-2.5 text-xs font-bold transition-colors duration-300
                     ${activePlanIndex === i ? "text-white" : "text-gray-800"}`}
                   >
                     <Check 
-                      size={20} 
+                      size={15} 
                       className={`shrink-0 rounded-full p-0.5 animate-pulse transition-colors duration-300
                         ${activePlanIndex === i 
                           ? "text-red-600 bg-white" 
@@ -354,18 +354,18 @@ export default function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-24 bg-white border-t border-gray-100">
+      <section className="py-16 md:py-20 bg-white border-t border-gray-100">
         <div className="max-w-3xl mx-auto px-6 text-center flex flex-col items-center">
-          <h2 className="text-5xl font-black text-red-650 mb-8 tracking-tight uppercase">Pronto para o Futuro de Angola?</h2>
-          <div className="max-w-2xl w-full">
-            <p className="text-gray-800 text-xl mb-12 leading-relaxed font-semibold italic">
-              "Junte-se ao novo paradigma de governação digital e inclusão cidadã através de uma comunicação oficial célere, inteligente e totalmente segura."
+          <h2 className="text-3xl md:text-4xl font-black text-red-600 mb-6 tracking-tight uppercase">PRONTO PARA O FUTURO DE ANGOLA?</h2>
+          <div className="max-w-2xl w-full flex flex-col items-center">
+            <p className="text-gray-700 text-base md:text-lg mb-8 leading-relaxed font-semibold italic max-w-xl">
+              “Junte-se ao novo paradigma de governação digital e inclusão cidadã através de uma comunicação oficial célere, inteligente e totalmente segura.”
             </p>
             <a 
               href="https://correio-digital-angola-oficial.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full inline-flex items-center justify-center gap-4 bg-red-600 text-white font-black text-xl px-10 py-6 rounded-3xl hover:bg-red-700 transition-all shadow-2xl shadow-red-600/40 hover:scale-105 active:scale-95 tracking-wide uppercase cursor-pointer text-center"
+              className="max-w-xs w-full inline-flex items-center justify-center gap-3 bg-red-600 text-white font-extrabold text-base px-8 py-4 rounded-2xl hover:bg-red-700 transition-all shadow-xl shadow-red-600/30 hover:scale-105 active:scale-95 tracking-wide uppercase cursor-pointer text-center"
             >
               Entrar
             </a>

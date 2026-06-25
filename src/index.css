@@ -24,41 +24,41 @@
 
 @layer components {
   .nav-active {
-    @apply bg-red-600 text-white rounded-lg px-4 py-2 font-bold text-sm shadow-md shadow-red-600/20;
+    @apply bg-red-600 text-white rounded-lg px-3 py-1.5 font-bold text-xs shadow-md shadow-red-600/20;
   }
   
   .nav-link {
-    @apply text-gray-900 hover:text-red-600 px-4 py-2 font-semibold text-sm transition-all;
+    @apply text-gray-900 hover:text-red-600 px-3 py-1.5 font-semibold text-xs transition-all;
   }
 
   .sector-card {
-    @apply border-2 border-gray-300 rounded-3xl p-6 bg-white transition-all duration-300 hover:border-red-600 hover:shadow-2xl hover:shadow-red-600/10 hover:-translate-y-1.5;
+    @apply border-2 border-gray-300/95 rounded-2xl p-4 bg-white transition-all duration-300 hover:border-red-600 hover:shadow-2xl hover:shadow-red-600/10 hover:-translate-y-1.5;
   }
 
   .how-card {
-    @apply bg-white/5 rounded-3xl p-6 md:p-7 text-white backdrop-blur-xl transition-all duration-300 cursor-pointer hover:bg-white/15 hover:scale-[1.03] hover:shadow-2xl hover:shadow-red-950/40 border border-white/5;
+    @apply bg-white/5 rounded-2xl p-4 md:p-5 text-white backdrop-blur-xl transition-all duration-300 cursor-pointer hover:bg-white/15 hover:scale-[1.03] hover:shadow-2xl hover:shadow-red-950/40 border border-white/5;
   }
 
   section[id] {
-    scroll-margin-top: 120px;
+    scroll-margin-top: 100px;
   }
 
   /* 3D Carousel Styles */
   .pentagon-stage {
-    @apply relative w-full h-[255px] min-[380px]:h-[300px] min-[440px]:h-[355px] sm:h-[410px] md:h-[450px] flex items-center justify-center;
+    @apply relative w-full h-[204px] min-[380px]:h-[240px] min-[440px]:h-[284px] sm:h-[328px] md:h-[360px] flex items-center justify-center;
     perspective: 1200px;
     perspective-origin: 50% 50%;
   }
 
   .penta-card {
-    @apply absolute w-[201px] h-[357px] rounded-[30px] overflow-hidden transition-shadow duration-300;
+    @apply absolute w-[161px] h-[285px] rounded-[24px] overflow-hidden transition-shadow duration-300;
     transform-style: preserve-3d;
     box-shadow: 0 12px 48px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
   }
 
   .penta-card::before {
     content: '';
-    @apply absolute inset-0 rounded-[30px] border border-white/20 z-10 pointer-events-none;
+    @apply absolute inset-0 rounded-[24px] border border-white/20 z-10 pointer-events-none;
   }
 
   .penta-dot {

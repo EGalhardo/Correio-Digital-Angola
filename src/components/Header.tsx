@@ -142,22 +142,22 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-3 group" onClick={(e) => handleNavClick(e, "top")}>
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2.5 group" onClick={(e) => handleNavClick(e, "top")}>
           <img
             src="https://i.postimg.cc/P572qh2f/Icone-Correio-Angola.jpg"
             alt="Correio Digital Angola Logo"
-            className="h-11 w-auto rounded-xl object-cover transition-transform group-hover:scale-110"
+            className="h-9 w-auto rounded-xl object-cover transition-transform group-hover:scale-110"
             referrerPolicy="no-referrer"
           />
           <div>
-            <div className="font-black text-lg text-gray-900 leading-tight tracking-tighter">Correio Digital Angola</div>
-            <div className="text-[10px] text-red-600 font-black tracking-widest uppercase">Plataforma Oficial</div>
+            <div className="font-black text-base text-gray-900 leading-tight tracking-tighter">Correio Digital Angola</div>
+            <div className="text-[9px] text-red-600 font-black tracking-widest uppercase">Plataforma Oficial</div>
           </div>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-0.5">
           {navLinks.map((link) => (
             <Link
               key={link.name}
@@ -172,10 +172,10 @@ export default function Header() {
 
         {/* Mobile menu button */}
         <button
-          className="lg:hidden p-2 rounded-xl bg-gray-50 text-gray-900 hover:bg-gray-100 transition-colors"
+          className="lg:hidden p-1.5 rounded-xl bg-gray-50 text-gray-900 hover:bg-gray-100 transition-colors"
           onClick={() => setIsOpen(!isOpen)}
         >
-          {isOpen ? <X size={26} /> : <Menu size={26} />}
+          {isOpen ? <X size={21} /> : <Menu size={21} />}
         </button>
       </div>
 
@@ -198,7 +198,7 @@ export default function Header() {
                 >
                   <Link
                     to={link.path}
-                    className={`flex items-center justify-between py-4 px-5 rounded-2xl transition-all ${
+                    className={`flex items-center justify-between py-3 px-4 rounded-xl transition-all ${
                       isActive(link) 
                         ? "bg-red-600 text-white font-black shadow-lg shadow-red-600/30" 
                         : "text-gray-900 font-bold hover:bg-gray-50"
