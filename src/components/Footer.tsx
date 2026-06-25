@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer id="contacto" className="bg-brand-footer text-white pt-12 pb-12 md:pt-14 md:pb-18 lg:pt-18 lg:pb-24 xl:pt-20 xl:pb-28 border-t-[7px] border-red-650 relative overflow-hidden">
+    <footer id="contacto" className="bg-brand-footer text-white pt-14 pb-14 md:pt-24 md:pb-28 lg:pt-36 lg:pb-44 xl:pt-48 xl:pb-56 border-t-[7px] border-red-650 relative overflow-hidden">
       {/* Main Background Image with referrerPolicy to bypass cross-origin restrictions */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img 
