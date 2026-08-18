@@ -239,43 +239,43 @@ export default function Home() {
             </h2>
           </div>
 
-          {/* 3 Centered Step Cards */}
+          {/* 3 Centered Step Cards styled like the 3D Carousel Play button */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 lg:gap-7 w-full max-w-4xl mx-auto">
             {/* Step 1 */}
-            <div className="how-card group backdrop-blur-md bg-black/45 hover:bg-black/60 border border-white/15 rounded-2xl p-6 sm:p-7 shadow-2xl transition-all duration-300 flex flex-col items-start text-left">
-              <div className="w-9 h-9 bg-red-600/40 border border-red-400/50 rounded-xl flex items-center justify-center mb-4 text-red-300 shadow-lg group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
-                <UserCheck size={18} />
+            <div className="how-card group bg-white/15 hover:bg-white/25 border-[2px] sm:border-[3px] border-white backdrop-blur-md text-white rounded-2xl p-6 sm:p-7 shadow-[0_0_40px_rgba(255,255,255,0.25)] hover:shadow-[0_0_55px_rgba(255,255,255,0.45)] hover:scale-[1.02] transition-all duration-300 flex flex-col items-start text-left">
+              <div className="w-10 h-10 bg-white/20 border-2 border-white/80 rounded-xl flex items-center justify-center mb-4 text-white shadow-lg group-hover:scale-110 group-hover:bg-white group-hover:text-red-600 transition-all duration-300">
+                <UserCheck size={19} />
               </div>
-              <h3 className="text-base sm:text-lg font-black mb-2 uppercase tracking-wide text-white">
+              <h3 className="text-base sm:text-lg font-black mb-2 uppercase tracking-wide text-white drop-shadow-md">
                 1. REGISTO E ACESSO
               </h3>
-              <p className="text-red-100/90 text-xs sm:text-sm leading-relaxed">
+              <p className="text-white/95 text-xs sm:text-sm leading-relaxed font-medium">
                 Associe a sua conta ao Número do Bilhete de Identidade com validação facial ou PIN.
               </p>
             </div>
 
             {/* Step 2 */}
-            <div className="how-card group backdrop-blur-md bg-black/45 hover:bg-black/60 border border-white/15 rounded-2xl p-6 sm:p-7 shadow-2xl transition-all duration-300 flex flex-col items-start text-left">
-              <div className="w-9 h-9 bg-red-600/40 border border-red-400/50 rounded-xl flex items-center justify-center mb-4 text-red-300 shadow-lg group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
-                <LayoutGrid size={18} />
+            <div className="how-card group bg-white/15 hover:bg-white/25 border-[2px] sm:border-[3px] border-white backdrop-blur-md text-white rounded-2xl p-6 sm:p-7 shadow-[0_0_40px_rgba(255,255,255,0.25)] hover:shadow-[0_0_55px_rgba(255,255,255,0.45)] hover:scale-[1.02] transition-all duration-300 flex flex-col items-start text-left">
+              <div className="w-10 h-10 bg-white/20 border-2 border-white/80 rounded-xl flex items-center justify-center mb-4 text-white shadow-lg group-hover:scale-110 group-hover:bg-white group-hover:text-red-600 transition-all duration-300">
+                <LayoutGrid size={19} />
               </div>
-              <h3 className="text-base sm:text-lg font-black mb-2 uppercase tracking-wide text-white">
+              <h3 className="text-base sm:text-lg font-black mb-2 uppercase tracking-wide text-white drop-shadow-md">
                 2. CAIXA DE ENTRADA
               </h3>
-              <p className="text-red-100/90 text-xs sm:text-sm leading-relaxed">
+              <p className="text-white/95 text-xs sm:text-sm leading-relaxed font-medium">
                 Receba documentos e notificações oficiais e interaja com canais de comunicação verificados.
               </p>
             </div>
 
             {/* Step 3 */}
-            <div className="how-card group backdrop-blur-md bg-black/45 hover:bg-black/60 border border-white/15 rounded-2xl p-6 sm:p-7 shadow-2xl transition-all duration-300 flex flex-col items-start text-left">
-              <div className="w-9 h-9 bg-red-600/40 border border-red-400/50 rounded-xl flex items-center justify-center mb-4 text-red-300 shadow-lg group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
-                <Brain size={18} />
+            <div className="how-card group bg-white/15 hover:bg-white/25 border-[2px] sm:border-[3px] border-white backdrop-blur-md text-white rounded-2xl p-6 sm:p-7 shadow-[0_0_40px_rgba(255,255,255,0.25)] hover:shadow-[0_0_55px_rgba(255,255,255,0.45)] hover:scale-[1.02] transition-all duration-300 flex flex-col items-start text-left">
+              <div className="w-10 h-10 bg-white/20 border-2 border-white/80 rounded-xl flex items-center justify-center mb-4 text-white shadow-lg group-hover:scale-110 group-hover:bg-white group-hover:text-red-600 transition-all duration-300">
+                <Brain size={19} />
               </div>
-              <h3 className="text-base sm:text-lg font-black mb-2 uppercase tracking-wide text-white">
+              <h3 className="text-base sm:text-lg font-black mb-2 uppercase tracking-wide text-white drop-shadow-md">
                 3. SUPORTE COM IA
               </h3>
-              <p className="text-red-100/90 text-xs sm:text-sm leading-relaxed">
+              <p className="text-white/95 text-xs sm:text-sm leading-relaxed font-medium">
                 Utilize o auxílio de IA inteligente com suporte por voz para traduzir termos administrativos complexos.
               </p>
             </div>
