@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function FAQ() {
   return (
-    <main id="faq-container" className="flex-grow max-w-4xl mx-auto w-full px-6 py-16">
+    <main id="faq-container" className="flex-grow max-w-7xl mx-auto w-full px-6 py-16">
       <div className="mb-12">
         <Link id="faq-back-link" to="/" className="text-red-600 font-bold flex items-center gap-2 mb-8 hover:text-red-700 transition-colors">
           <ArrowLeft size={18} />

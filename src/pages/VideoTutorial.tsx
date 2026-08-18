@@ -91,7 +91,7 @@ export default function VideoTutorial() {
   };
 
   return (
-    <main id="videotutorial-container" className="flex-grow max-w-6xl mx-auto w-full px-6 pt-12 pb-24 min-h-screen">
+    <main id="videotutorial-container" className="flex-grow max-w-7xl mx-auto w-full px-6 pt-12 pb-24 min-h-screen">
       <div className="mb-10 flex items-center gap-4">
         <button 
           onClick={() => navigate("/")}
