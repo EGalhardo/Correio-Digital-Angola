@@ -170,47 +170,49 @@ export default function TestimonialsCarousel() {
           <p className="text-amber-400 text-sm md:text-base uppercase tracking-widest font-bold">Líderes angolanos que confiam no Correio Digital</p>
         </div>
 
-        <div className="relative flex items-center justify-center h-[272px] min-[380px]:h-[320px] min-[440px]:h-[352px] sm:h-[416px] perspective-1000">
+        <div className="relative flex items-center justify-center h-[300px] min-[380px]:h-[340px] min-[440px]:h-[380px] sm:h-[440px] md:h-[480px] perspective-1000">
           {/* Navigation Buttons */}
           <button 
             onClick={prev}
-            className="absolute left-1.5 sm:left-3 z-40 w-8.5 h-8.5 sm:w-10 sm:h-10 rounded-full bg-white/80 backdrop-blur-md shadow-xl flex items-center justify-center text-red-650 hover:bg-white hover:scale-110 transition-all active:scale-95"
+            className="absolute left-1.5 sm:left-4 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 backdrop-blur-md shadow-xl flex items-center justify-center text-red-650 hover:bg-white hover:scale-110 transition-all active:scale-95"
+            aria-label="Depoimento Anterior"
           >
-            <ChevronLeft size={16} className="sm:hidden" />
-            <ChevronLeft size={20} className="hidden sm:block" />
+            <ChevronLeft size={18} className="sm:hidden" />
+            <ChevronLeft size={22} className="hidden sm:block" />
           </button>
           <button 
             onClick={next}
-            className="absolute right-1.5 sm:right-3 z-40 w-8.5 h-8.5 sm:w-10 sm:h-10 rounded-full bg-white/80 backdrop-blur-md shadow-xl flex items-center justify-center text-red-650 hover:bg-white hover:scale-110 transition-all active:scale-95"
+            className="absolute right-1.5 sm:right-4 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 backdrop-blur-md shadow-xl flex items-center justify-center text-red-650 hover:bg-white hover:scale-110 transition-all active:scale-95"
+            aria-label="Próximo Depoimento"
           >
-            <ChevronRight size={16} className="sm:hidden" />
-            <ChevronRight size={20} className="hidden sm:block" />
+            <ChevronRight size={18} className="sm:hidden" />
+            <ChevronRight size={22} className="hidden sm:block" />
           </button>
 
-          {/* Cards Track */}
-          <div className="relative w-[176px] min-[380px]:w-[208px] min-[440px]:w-[240px] sm:w-[272px] h-[208px] min-[380px]:h-[248px] min-[440px]:h-[288px] sm:h-[384px] preserve-3d">
+          {/* Cards Track - Optimized 4:5 Portrait ratio */}
+          <div className="relative w-[190px] min-[380px]:w-[220px] min-[440px]:w-[250px] sm:w-[290px] md:w-[320px] h-[240px] min-[380px]:h-[280px] min-[440px]:h-[320px] sm:h-[370px] md:h-[410px] preserve-3d">
             {SLIDES.map((slide, i) => {
               const pos = getPositionStyle(i);
               const isActive = i === current;
               return (
                 <div
                   key={i}
-                  className="absolute inset-0 rounded-[32px] overflow-hidden cursor-pointer transition-all duration-1000 ease-[cubic-bezier(0.77,0,0.175,1)] bg-white"
+                  className="absolute inset-0 rounded-[28px] sm:rounded-[32px] overflow-hidden cursor-pointer transition-all duration-1000 ease-[cubic-bezier(0.77,0,0.175,1)] bg-white"
                   style={{
                     ...pos,
                     transformStyle: "preserve-3d",
-                    boxShadow: isActive ? "0 30px 60px -12px rgba(0,0,0,0.3)" : "0 10px 30px -10px rgba(0,0,0,0.2)"
+                    boxShadow: isActive ? "0 30px 60px -12px rgba(0,0,0,0.4)" : "0 10px 30px -10px rgba(0,0,0,0.2)"
                   }}
                   onClick={() => !isActive && goTo(i)}
                 >
                   <div 
-                    className={`absolute inset-0 bg-contain bg-no-repeat bg-center transition-transform duration-500 ${isActive ? "scale-102" : "scale-100"}`}
+                    className={`absolute inset-0 bg-cover bg-no-repeat bg-center transition-transform duration-500 ${isActive ? "scale-102" : "scale-100"}`}
                     style={{ backgroundImage: `url(${slide.img})` }}
                   />
 
                   {/* Counter */}
                   {isActive && (
-                    <div className="absolute top-6 right-6 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-black text-white tracking-widest uppercase">
+                    <div className="absolute top-4 right-4 sm:top-5 sm:right-5 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-black text-white tracking-widest uppercase border border-white/10">
                       {String(i + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
                     </div>
                   )}

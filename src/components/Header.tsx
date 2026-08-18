@@ -143,16 +143,18 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2.5 group" onClick={(e) => handleNavClick(e, "top")}>
-          <img
-            src="https://i.postimg.cc/P572qh2f/Icone-Correio-Angola.jpg"
-            alt="Correio Digital Angola Logo"
-            className="h-9 w-auto rounded-xl object-cover transition-transform group-hover:scale-110"
-            referrerPolicy="no-referrer"
-          />
-          <div>
-            <div className="font-black text-base text-gray-900 leading-tight tracking-tighter">Correio Digital Angola</div>
-            <div className="text-[9px] text-red-600 font-black tracking-widest uppercase">Plataforma Oficial</div>
+        <Link to="/" className="flex items-center gap-3 group shrink-0" onClick={(e) => handleNavClick(e, "top")}>
+          <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0 shadow-sm border border-gray-100 flex items-center justify-center bg-gray-50">
+            <img
+              src="https://i.postimg.cc/P572qh2f/Icone-Correio-Angola.jpg"
+              alt="Correio Digital Angola Logo"
+              className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-black text-base md:text-lg text-gray-900 leading-tight tracking-tight">Correio Digital Angola</span>
+            <span className="text-[10px] text-red-600 font-extrabold tracking-widest uppercase">Plataforma Oficial</span>
           </div>
         </Link>
 
