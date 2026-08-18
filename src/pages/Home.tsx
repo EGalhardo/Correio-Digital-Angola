@@ -219,51 +219,65 @@ export default function Home() {
       </section>
 
       {/* How it Works Summary */}
-      <section id="como-funciona" className="pt-14 pb-44 sm:pt-16 sm:pb-52 md:pt-20 md:pb-60 lg:pt-24 lg:pb-72 bg-brand-main text-white relative overflow-hidden flex flex-col justify-between min-h-[580px] md:min-h-[660px] lg:min-h-[720px]">
-        {/* Main Background Image with optimal top alignment to keep the app logo completely visible */}
-        <div className="absolute inset-0 z-0 flex items-center justify-center">
+      <section id="como-funciona" className="py-20 sm:py-24 md:py-28 lg:py-36 bg-brand-main text-white relative overflow-hidden flex items-center justify-center min-h-[620px] md:min-h-[700px] lg:min-h-[760px]">
+        {/* Main Background Image with centered fitting */}
+        <div className="absolute inset-0 z-0">
           <img 
             src="https://i.postimg.cc/ZnFjVdPt/Logomarca-Correio-Digital-Angola-Site.jpg" 
             alt="Correio Digital Angola Background" 
-            className="w-full h-full object-cover object-top sm:object-[center_top] md:object-top opacity-100 filter brightness-[1.2] contrast-[1.03]"
+            className="w-full h-full object-cover object-center opacity-100 filter brightness-[1.15] contrast-[1.03]"
             referrerPolicy="no-referrer"
           />
         </div>
 
-        {/* Top Header with title badge that does not obstruct the background logo */}
-        <div className="max-w-5xl mx-auto px-6 relative z-10 w-full text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/15 mb-4 shadow-lg">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-            <span className="text-xs font-black uppercase tracking-widest text-red-200">Plataforma Nacional</span>
+        {/* Central Content Box - Centered vertically and horizontally for maximum visual harmony */}
+        <div className="max-w-5xl mx-auto px-6 relative z-10 w-full flex flex-col items-center justify-center my-auto">
+          {/* Centered Heading */}
+          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] text-white">
+              COMO FUNCIONA
+            </h2>
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-center mb-6 md:mb-8 tracking-tight uppercase drop-shadow-md">
-            COMO FUNCIONA
-          </h2>
-        </div>
 
-        {/* 3 Step Cards positioned cleanly to frame the background branding */}
-        <div className="max-w-5xl mx-auto px-6 relative z-10 w-full mt-auto mb-6 md:mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 max-w-4xl mx-auto">
-            <div className="how-card group backdrop-blur-lg bg-black/45 border border-white/10 hover:bg-black/60 shadow-2xl">
-              <div className="w-8 h-8 bg-red-600/30 border border-red-500/40 rounded-lg flex items-center justify-center mb-3 text-red-400 shadow-xl group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
-                <UserCheck size={16} />
+          {/* 3 Centered Step Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 lg:gap-7 w-full max-w-4xl mx-auto">
+            {/* Step 1 */}
+            <div className="how-card group backdrop-blur-md bg-black/45 hover:bg-black/60 border border-white/15 rounded-2xl p-6 sm:p-7 shadow-2xl transition-all duration-300 flex flex-col items-start text-left">
+              <div className="w-9 h-9 bg-red-600/40 border border-red-400/50 rounded-xl flex items-center justify-center mb-4 text-red-300 shadow-lg group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
+                <UserCheck size={18} />
               </div>
-              <h3 className="text-sm sm:text-base font-black mb-1.5 uppercase tracking-wide">1. REGISTO E ACESSO</h3>
-              <p className="text-red-100/85 text-xs leading-relaxed">Associe a sua conta ao Número do Bilhete de Identidade com validação facial ou PIN.</p>
+              <h3 className="text-base sm:text-lg font-black mb-2 uppercase tracking-wide text-white">
+                1. REGISTO E ACESSO
+              </h3>
+              <p className="text-red-100/90 text-xs sm:text-sm leading-relaxed">
+                Associe a sua conta ao Número do Bilhete de Identidade com validação facial ou PIN.
+              </p>
             </div>
-            <div className="how-card group backdrop-blur-lg bg-black/45 border border-white/10 hover:bg-black/60 shadow-2xl">
-              <div className="w-8 h-8 bg-red-600/30 border border-red-500/40 rounded-lg flex items-center justify-center mb-3 text-red-400 shadow-xl group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
-                <LayoutGrid size={16} />
+
+            {/* Step 2 */}
+            <div className="how-card group backdrop-blur-md bg-black/45 hover:bg-black/60 border border-white/15 rounded-2xl p-6 sm:p-7 shadow-2xl transition-all duration-300 flex flex-col items-start text-left">
+              <div className="w-9 h-9 bg-red-600/40 border border-red-400/50 rounded-xl flex items-center justify-center mb-4 text-red-300 shadow-lg group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
+                <LayoutGrid size={18} />
               </div>
-              <h3 className="text-sm sm:text-base font-black mb-1.5 uppercase tracking-wide">2. CAIXA DE ENTRADA</h3>
-              <p className="text-red-100/85 text-xs leading-relaxed">Receba documentos e notificações oficiais e interaja com canais de comunicação verificados.</p>
+              <h3 className="text-base sm:text-lg font-black mb-2 uppercase tracking-wide text-white">
+                2. CAIXA DE ENTRADA
+              </h3>
+              <p className="text-red-100/90 text-xs sm:text-sm leading-relaxed">
+                Receba documentos e notificações oficiais e interaja com canais de comunicação verificados.
+              </p>
             </div>
-            <div className="how-card group backdrop-blur-lg bg-black/45 border border-white/10 hover:bg-black/60 shadow-2xl">
-              <div className="w-8 h-8 bg-red-600/30 border border-red-500/40 rounded-lg flex items-center justify-center mb-3 text-red-400 shadow-xl group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
-                <Brain size={16} />
+
+            {/* Step 3 */}
+            <div className="how-card group backdrop-blur-md bg-black/45 hover:bg-black/60 border border-white/15 rounded-2xl p-6 sm:p-7 shadow-2xl transition-all duration-300 flex flex-col items-start text-left">
+              <div className="w-9 h-9 bg-red-600/40 border border-red-400/50 rounded-xl flex items-center justify-center mb-4 text-red-300 shadow-lg group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all">
+                <Brain size={18} />
               </div>
-              <h3 className="text-sm sm:text-base font-black mb-1.5 uppercase tracking-wide">3. SUPORTE COM IA</h3>
-              <p className="text-red-100/85 text-xs leading-relaxed">Utilize o auxílio de IA inteligente com suporte por voz para traduzir termos administrativos complexos.</p>
+              <h3 className="text-base sm:text-lg font-black mb-2 uppercase tracking-wide text-white">
+                3. SUPORTE COM IA
+              </h3>
+              <p className="text-red-100/90 text-xs sm:text-sm leading-relaxed">
+                Utilize o auxílio de IA inteligente com suporte por voz para traduzir termos administrativos complexos.
+              </p>
             </div>
           </div>
         </div>
