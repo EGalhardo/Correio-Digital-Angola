@@ -209,13 +209,11 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
             {SECTORS.map((s, i) => (
                <div key={i} className="sector-card group">
-                 <div>
-                   <div className="w-10 h-10 bg-red-50 border border-red-100 rounded-xl flex items-center justify-center mb-5 text-red-600 shadow-sm transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:scale-110">
-                     <s.icon size={18} className="transition-transform duration-300 group-hover:scale-110" />
-                   </div>
-                   <h3 className="font-extrabold text-gray-900 text-base sm:text-lg mb-2.5 tracking-tight uppercase">{s.title}</h3>
-                   <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{s.desc}</p>
+                 <div className="w-8 h-8 bg-white border border-gray-200 rounded-lg flex items-center justify-center mb-4 text-red-600 shadow-sm transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:scale-110">
+                   <s.icon size={16} className="transition-transform duration-300 group-hover:scale-110" />
                  </div>
+                 <h3 className="font-extrabold text-gray-900 text-base mb-2 tracking-tight uppercase">{s.title}</h3>
+                 <p className="text-gray-600 text-xs leading-relaxed">{s.desc}</p>
                </div>
             ))}
           </div>
