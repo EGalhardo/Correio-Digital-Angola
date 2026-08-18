@@ -396,19 +396,19 @@ export default function Home() {
             <p className="text-gray-700 text-base md:text-lg mb-8 leading-relaxed font-semibold italic max-w-xl">
               “Junte-se ao novo paradigma de governação digital e inclusão cidadã através de uma comunicação oficial célere, inteligente e totalmente segura.”
             </p>
-            <div className="flex flex-row items-center justify-center gap-3.5 sm:gap-5 w-full">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full">
               <a 
                 href="https://correio-digital-angola-oficial.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-36 sm:w-44 md:w-48 inline-flex items-center justify-center gap-2.5 bg-red-600 text-white font-extrabold text-sm sm:text-base px-6 py-3.5 sm:py-4 rounded-2xl hover:bg-red-700 transition-all shadow-xl shadow-red-600/30 hover:scale-105 active:scale-95 tracking-wide uppercase cursor-pointer text-center"
+                className="w-full max-w-[320px] sm:w-80 md:w-96 inline-flex items-center justify-center gap-3 bg-red-600 text-white font-black text-base sm:text-lg px-8 py-4 sm:py-4.5 rounded-2xl hover:bg-red-700 transition-all shadow-xl shadow-red-600/30 hover:scale-105 active:scale-95 tracking-wider uppercase cursor-pointer text-center"
               >
                 Entrar
               </a>
               <button 
                 type="button"
                 onClick={() => setIsVideoOpen(true)}
-                className="w-36 sm:w-44 md:w-48 inline-flex items-center justify-center gap-2.5 bg-black text-white font-extrabold text-sm sm:text-base px-6 py-3.5 sm:py-4 rounded-2xl hover:bg-neutral-800 transition-all shadow-xl shadow-black/25 hover:scale-105 active:scale-95 tracking-wide uppercase cursor-pointer text-center"
+                className="w-full max-w-[320px] sm:w-80 md:w-96 inline-flex items-center justify-center gap-3 bg-black text-white font-black text-base sm:text-lg px-8 py-4 sm:py-4.5 rounded-2xl hover:bg-neutral-800 transition-all shadow-xl shadow-black/25 hover:scale-105 active:scale-95 tracking-wider uppercase cursor-pointer text-center"
               >
                 Vídeo
               </button>
