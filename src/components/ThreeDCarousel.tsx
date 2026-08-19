@@ -35,34 +35,35 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
 
   const updateRadius = useCallback(() => {
     const w = window.innerWidth;
+    // Dimensionamento calibrado na proporção vertical 9:16 (0.5625) dos mockups mobile
     if (w < 370) {
-      setCardW(86);
-      setCardH(152);
-      setRadius(72);
+      setCardW(100);
+      setCardH(178);
+      setRadius(84);
     } else if (w < 430) {
-      setCardW(98);
-      setCardH(174);
-      setRadius(86);
+      setCardW(114);
+      setCardH(203);
+      setRadius(98);
     } else if (w < 540) {
-      setCardW(118);
-      setCardH(210);
-      setRadius(106);
-    } else if (w < 640) {
       setCardW(132);
-      setCardH(234);
-      setRadius(132);
-    } else if (w < 900) {
+      setCardH(235);
+      setRadius(120);
+    } else if (w < 640) {
       setCardW(148);
       setCardH(263);
-      setRadius(182);
+      setRadius(146);
+    } else if (w < 900) {
+      setCardW(168);
+      setCardH(299);
+      setRadius(198);
     } else if (w < 1200) {
-      setCardW(170);
-      setCardH(302);
-      setRadius(292);
+      setCardW(190);
+      setCardH(338);
+      setRadius(298);
     } else {
-      setCardW(184);
-      setCardH(327);
-      setRadius(324);
+      setCardW(208);
+      setCardH(370);
+      setRadius(336);
     }
   }, []);
 
@@ -182,7 +183,7 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
           {CARDS.map((card, i) => (
             <div
               key={i}
-               className={`penta-card ${i === activeCard ? "shadow-2xl shadow-black/50 scale-105" : ""}`}
+              className={`penta-card bg-neutral-950 flex items-center justify-center ${i === activeCard ? "shadow-2xl shadow-black/70 scale-105" : ""}`}
               style={{
                 width: `${cardW}px`,
                 height: `${cardH}px`,
@@ -194,7 +195,7 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
               <img 
                 src={card.img} 
                 alt={card.label} 
-                className="w-full h-full object-contain object-center select-none pointer-events-none bg-neutral-900/60" 
+                className="w-full h-full object-cover object-center select-none pointer-events-none block" 
                 loading="lazy" 
                 referrerPolicy="no-referrer" 
               />
