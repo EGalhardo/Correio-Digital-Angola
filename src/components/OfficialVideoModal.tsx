@@ -19,8 +19,8 @@ interface OfficialVideoModalProps {
 }
 
 export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoModalProps) {
-  // Primary video source matching the available institutional presentation video
-  const defaultVideoSrc = "/Apresentacao%20Correio%20Digital%20Angola.mp4";
+  // Primary video source
+  const defaultVideoSrc = "/Correio%20Digital%20Angola.mp4";
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(66.7);
@@ -243,8 +243,9 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
                 onEnded={() => setIsPlaying(false)}
                 className="w-full h-full object-contain cursor-pointer"
               >
-                <source src="/Apresentacao%20Correio%20Digital%20Angola.mp4" type="video/mp4" />
+                <source src="/Correio%20Digital%20Angola.mp4" type="video/mp4" />
                 <source src="/Correio%20Digital%20Angola%20(online-video-cutter.com).mp4" type="video/mp4" />
+                <source src="/Apresentacao%20Correio%20Digital%20Angola.mp4" type="video/mp4" />
                 O seu navegador não suporta a reprodução de vídeo HTML5.
               </video>
 
