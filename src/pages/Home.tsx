@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { GraduationCap, Landmark, CreditCard, HeartPulse, Zap, ShieldCheck, Check, Repeat, LayoutGrid, UserCheck, Brain, Users, Flame, ShieldAlert, PlayCircle, Play, X, Volume2, Maximize2, Share2, Sparkles, Languages } from "lucide-react";
 import ThreeDCarousel from "../components/ThreeDCarousel";
 import DownloadModal from "../components/DownloadModal";
-import PlanActivationModal from "../components/PlanActivationModal";
 import TestimonialsCarousel from "../components/TestimonialsCarousel";
 import OfficialVideoModal from "../components/OfficialVideoModal";
 
@@ -68,9 +67,6 @@ const PLANS: Plan[] = [
 export default function Home() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<typeof PLANS[0] | null>(null);
-  const [activePlanIndex, setActivePlanIndex] = useState<number | null>(null);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [demoStep, setDemoStep] = useState(0);
 
@@ -137,11 +133,6 @@ export default function Home() {
       return () => clearTimeout(timer);
     }
   }, []);
-
-  const openPlanModal = (plan: typeof PLANS[0]) => {
-    setSelectedPlan(plan);
-    setIsPlanModalOpen(true);
-  };
 
   return (
     <div id="top" className="flex flex-col w-full">
@@ -290,63 +281,40 @@ export default function Home() {
             {PLANS.map((p, i) => (
               <div 
                 key={i} 
-                onClick={() => {
-                  setActivePlanIndex(i);
-                  openPlanModal(p);
-                }}
-                className={`group border-2 rounded-xl sm:rounded-[26px] p-5 md:p-6 lg:p-7 transition-all hover:-translate-y-2 hover:shadow-3xl relative cursor-pointer
-                  ${activePlanIndex === i 
-                    ? "bg-red-600 border-red-600 text-white shadow-2xl shadow-red-600/30" 
-                    : p.popular 
-                      ? "bg-white border-gray-300 hover:border-red-650 shadow-2xl shadow-red-650/10" 
-                      : "bg-white border-gray-300 hover:border-red-400"
+                className={`border-2 rounded-xl sm:rounded-[26px] p-5 md:p-6 lg:p-7 relative transition-all duration-300
+                  ${p.popular 
+                    ? "bg-white border-red-650 shadow-2xl shadow-red-650/10" 
+                    : "bg-white border-gray-300 shadow-sm"
                   }`}
               >
                 {p.popular && (
-                  <div className={`absolute -top-3.5 left-1/2 -translate-x-1/2 text-[9px] font-black px-5 py-1 rounded-full shadow-xl tracking-widest uppercase transition-colors duration-300
-                    ${activePlanIndex === i 
-                      ? "bg-white text-red-600 border border-white" 
-                      : "bg-red-600 text-white"
-                    }`}
-                  >
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[9px] font-black px-5 py-1 rounded-full shadow-xl tracking-widest uppercase bg-red-600 text-white">
                     MAIS POPULAR
                   </div>
                 )}
                 <div className="text-center mb-6">
-                  <h3 className={`text-lg font-black mb-3 uppercase tracking-wider transition-colors duration-300
-                    ${activePlanIndex === i ? "text-white" : "text-gray-900"}`}
-                  >
+                  <h3 className="text-lg font-black mb-3 uppercase tracking-wider text-gray-900">
                     {p.name.toUpperCase()}
                   </h3>
                   <div className="flex items-baseline justify-center gap-1.5">
                     {p.price === "0" ? (
-                      <span className={`text-2xl font-black transition-colors duration-300
-                        ${activePlanIndex === i ? "text-white" : "text-red-600"}`}
-                      >
+                      <span className="text-2xl font-black text-red-600">
                         Gratuito
                       </span>
                     ) : p.price === "Estatal" ? (
-                      <span className={`text-xl font-black uppercase tracking-tight transition-colors duration-300
-                        ${activePlanIndex === i ? "text-white" : "text-red-600"}`}
-                      >
+                      <span className="text-xl font-black uppercase tracking-tight text-red-600">
                         Acordo Estatal
                       </span>
                     ) : (
                       <>
-                        <span className={`text-3xl font-black transition-colors duration-300
-                          ${activePlanIndex === i ? "text-white" : "text-red-600"}`}
-                        >
+                        <span className="text-3xl font-black text-red-600">
                           {p.price}
                         </span>
                         <div className="text-left">
-                          <span className={`block font-bold text-[11px] leading-none transition-colors duration-300
-                            ${activePlanIndex === i ? "text-white" : "text-gray-900"}`}
-                          >
+                          <span className="block font-bold text-[11px] leading-none text-gray-900">
                             Kz
                           </span>
-                          <span className={`font-bold text-[9px] uppercase tracking-tight transition-colors duration-300
-                            ${activePlanIndex === i ? "text-red-100" : "text-gray-500"}`}
-                          >
+                          <span className="font-bold text-[9px] uppercase tracking-tight text-gray-500">
                             /mês
                           </span>
                         </div>
@@ -356,16 +324,10 @@ export default function Home() {
                 </div>
                 <ul className="space-y-3 mb-1.5">
                   {p.features.map((f, fi) => (
-                    <li key={fi} className={`flex gap-2.5 text-xs font-bold transition-colors duration-300
-                      ${activePlanIndex === i ? "text-white" : "text-gray-800"}`}
-                    >
+                    <li key={fi} className="flex gap-2.5 text-xs font-bold text-gray-800">
                       <Check 
                         size={15} 
-                        className={`shrink-0 rounded-full p-0.5 animate-pulse transition-colors duration-300
-                          ${activePlanIndex === i 
-                            ? "text-red-600 bg-white" 
-                            : "text-red-600 bg-red-50"
-                          }`} 
+                        className="shrink-0 rounded-full p-0.5 animate-pulse text-red-600 bg-red-50" 
                       />
                       {f}
                     </li>
@@ -412,14 +374,6 @@ export default function Home() {
       </section>
 
       <DownloadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      {selectedPlan && (
-        <PlanActivationModal 
-          isOpen={isPlanModalOpen} 
-          onClose={() => setIsPlanModalOpen(false)} 
-          planName={selectedPlan.name} 
-          planPrice={selectedPlan.price} 
-        />
-      )}
 
       {/* Official Video Presentation Modal */}
       <OfficialVideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
