@@ -39,8 +39,8 @@
     @apply bg-white/5 rounded-2xl p-4 md:p-5 text-white backdrop-blur-xl transition-all duration-300 cursor-pointer hover:bg-white/15 hover:scale-[1.03] hover:shadow-2xl hover:shadow-red-950/40 border border-white/5;
   }
 
-  section[id] {
-    scroll-margin-top: 100px;
+  section[id], div[id], footer[id] {
+    scroll-margin-top: 85px;
   }
 
   /* 3D Carousel Styles */

@@ -24,43 +24,50 @@ export default function Header() {
     isManualScrollRef.current = true;
 
     if (id === "top") {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-      window.history.pushState(null, "", "/");
-    } else {
-      const element = document.getElementById(id);
-      if (element) {
-        const headerOffset = 90;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      try {
+        window.history.pushState(null, "", "/");
+      } catch {
+        // ignore
+      }
+      setTimeout(() => {
+        isManualScrollRef.current = false;
+      }, 700);
+      return;
+    }
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth"
-        });
+    const element = document.getElementById(id);
+    if (element) {
+      // scrollIntoView works consistently across all mobile viewports
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      try {
         window.history.pushState(null, "", `/#${id}`);
+      } catch {
+        // ignore
+      }
+    } else {
+      // Fallback calculation
+      const section = document.querySelector(`[id="${id}"]`);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
 
     setTimeout(() => {
       isManualScrollRef.current = false;
-    }, 850);
+    }, 700);
   };
 
-  const handleNavClick = (e: MouseEvent | TouchEvent, id: string) => {
-    e.preventDefault();
+  const handleNavClick = (id: string) => {
     setIsOpen(false);
 
     if (location.pathname === "/") {
       scrollToSection(id);
     } else {
-      // If on another route (e.g. /sobre-nos, /faq), navigate to Home and scroll to anchor
       navigate(id === "top" ? "/" : `/#${id}`);
       setTimeout(() => {
         scrollToSection(id);
-      }, 150);
+      }, 200);
     }
   };
 
@@ -147,7 +154,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-3 group shrink-0" onClick={(e) => handleNavClick(e, "top")}>
+        <Link to="/" className="flex items-center gap-3 group shrink-0" onClick={() => handleNavClick("top")}>
           <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0 shadow-sm border border-gray-100 flex items-center justify-center bg-gray-50">
             <img
               src="https://i.postimg.cc/P572qh2f/Icone-Correio-Angola.jpg"
@@ -169,7 +176,10 @@ export default function Header() {
               key={link.name}
               to={link.path}
               className={isActive(link) ? "nav-active" : "nav-link"}
-              onClick={(e) => handleNavClick(e, link.id)}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(link.id);
+              }}
             >
               {link.name}
             </Link>
@@ -210,13 +220,12 @@ export default function Header() {
                   >
                     <button
                       type="button"
-                      className={`w-full flex items-center justify-between py-3.5 px-4 rounded-xl text-left transition-all select-none active:scale-[0.98] ${
+                      className={`w-full flex items-center justify-between py-3.5 px-4 rounded-xl text-left transition-all select-none active:scale-[0.98] cursor-pointer ${
                         active 
                           ? "bg-red-600 text-white font-black shadow-md shadow-red-600/30" 
                           : "text-gray-900 font-bold hover:bg-gray-50 active:bg-gray-100"
                       }`}
-                      onClick={(e) => handleNavClick(e, link.id)}
-                      onTouchEnd={(e) => handleNavClick(e, link.id)}
+                      onClick={() => handleNavClick(link.id)}
                     >
                       <span className="text-sm tracking-wide">{link.name}</span>
                       {active && (
