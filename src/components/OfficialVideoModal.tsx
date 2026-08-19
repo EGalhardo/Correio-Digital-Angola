@@ -212,19 +212,6 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
                   </p>
                 </div>
               </div>
-
-              {/* Primary Close Button */}
-              <div className="flex items-center gap-2 sm:gap-3">
-                <button
-                  onClick={handleClose}
-                  className="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-red-650 hover:bg-red-700 text-white flex items-center gap-1.5 font-bold text-xs sm:text-sm shadow-lg shadow-red-650/30 transition-all cursor-pointer hover:scale-105 active:scale-95"
-                  title="Fechar Janela (ESC)"
-                  id="close-official-video-btn"
-                >
-                  <X size={16} className="stroke-[3]" />
-                  <span>Fechar</span>
-                </button>
-              </div>
             </div>
 
             {/* Main Video Viewport */}
