@@ -19,7 +19,9 @@ export default function Header() {
     { name: "Contacto", path: "/#contacto", id: "contacto" },
   ];
 
-  const scrollToSection = (id: string) => {
+  const pendingScrollIdRef = useRef<string | null>(null);
+
+  const performSmoothScroll = (id: string) => {
     setActiveSection(id);
     isManualScrollRef.current = true;
 
@@ -38,18 +40,19 @@ export default function Header() {
 
     const element = document.getElementById(id);
     if (element) {
-      // scrollIntoView works consistently across all mobile viewports
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      const headerOffset = 90;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: "smooth"
+      });
+
       try {
         window.history.pushState(null, "", `/#${id}`);
       } catch {
         // ignore
-      }
-    } else {
-      // Fallback calculation
-      const section = document.querySelector(`[id="${id}"]`);
-      if (section) {
-        section.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
 
@@ -58,16 +61,39 @@ export default function Header() {
     }, 700);
   };
 
-  const handleNavClick = (id: string) => {
-    setIsOpen(false);
-
-    if (location.pathname === "/") {
-      scrollToSection(id);
+  const handleNavClick = (id: string, isMobile = false) => {
+    if (isMobile) {
+      // 1. Armazenar a secção destino
+      pendingScrollIdRef.current = id;
+      // 2. Fechar primeiro o menu Hambúrguer
+      setIsOpen(false);
+      // Se não estiver na home, redireciona
+      if (location.pathname !== "/") {
+        navigate(id === "top" ? "/" : `/#${id}`);
+      }
     } else {
-      navigate(id === "top" ? "/" : `/#${id}`);
-      setTimeout(() => {
-        scrollToSection(id);
-      }, 200);
+      if (location.pathname === "/") {
+        performSmoothScroll(id);
+      } else {
+        navigate(id === "top" ? "/" : `/#${id}`);
+        setTimeout(() => {
+          performSmoothScroll(id);
+        }, 150);
+      }
+    }
+  };
+
+  const handleMenuExitComplete = () => {
+    // Chamado pelo onExitComplete do AnimatePresence após o menu estar 100% fechado
+    if (pendingScrollIdRef.current) {
+      const targetId = pendingScrollIdRef.current;
+      pendingScrollIdRef.current = null;
+      // Pequeno delay para garantir estabilização do layout do DOM
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          performSmoothScroll(targetId);
+        }, 30);
+      });
     }
   };
 
@@ -77,7 +103,7 @@ export default function Header() {
       const hash = location.hash.replace("#", "");
       if (hash) {
         setTimeout(() => {
-          scrollToSection(hash);
+          performSmoothScroll(hash);
         }, 100);
       } else {
         setActiveSection("top");
@@ -199,13 +225,13 @@ export default function Header() {
       </div>
 
       {/* Mobile Nav Dropdown */}
-      <AnimatePresence>
+      <AnimatePresence onExitComplete={handleMenuExitComplete}>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
+            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
             className="lg:hidden bg-white border-t border-gray-100 shadow-xl overflow-hidden relative z-50"
           >
             <div className="px-6 py-5 flex flex-col gap-2">
@@ -216,7 +242,7 @@ export default function Header() {
                     key={link.name}
                     initial={{ x: -15, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: index * 0.04 }}
+                    transition={{ delay: index * 0.03 }}
                   >
                     <button
                       type="button"
@@ -225,7 +251,7 @@ export default function Header() {
                           ? "bg-red-600 text-white font-black shadow-md shadow-red-600/30" 
                           : "text-gray-900 font-bold hover:bg-gray-50 active:bg-gray-100"
                       }`}
-                      onClick={() => handleNavClick(link.id)}
+                      onClick={() => handleNavClick(link.id, true)}
                     >
                       <span className="text-sm tracking-wide">{link.name}</span>
                       {active && (
