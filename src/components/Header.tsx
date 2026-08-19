@@ -1,5 +1,5 @@
-import { useState, useEffect, MouseEvent, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect, MouseEvent, TouchEvent, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -8,6 +8,7 @@ export default function Header() {
   const [activeSection, setActiveSection] = useState("top");
   const isManualScrollRef = useRef(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navLinks = [
     { name: "Início", path: "/", id: "top" },
@@ -18,36 +19,20 @@ export default function Header() {
     { name: "Contacto", path: "/#contacto", id: "contacto" },
   ];
 
-  const handleNavClick = (e: MouseEvent, id: string) => {
-    if (location.pathname === "/") {
-      e.preventDefault();
-      isManualScrollRef.current = true;
-      setActiveSection(id);
-      
-      // Specific reinforcement requested:
-      // 1. Inicio -> Sectores: second activation after 100ms
-      // 2. Contacto -> Testemunhas: second activation after 100ms
-      const isSectoresFromInicio = activeSection === "top" && id === "sectores";
-      const isTestemunhasFromContacto = activeSection === "contacto" && id === "testemunhas";
+  const scrollToSection = (id: string) => {
+    setActiveSection(id);
+    isManualScrollRef.current = true;
 
-      if (isSectoresFromInicio || isTestemunhasFromContacto) {
-        // First activation
-        setActiveSection(id);
-        // Second activation after 100ms (as requested)
-        setTimeout(() => {
-          setActiveSection(id);
-        }, 100);
-      } else {
-        setActiveSection(id);
-        // Reinforcement for others too
-        setTimeout(() => {
-          setActiveSection(id);
-        }, 100);
-      }
-
+    if (id === "top") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+      window.history.pushState(null, "", "/");
+    } else {
       const element = document.getElementById(id);
       if (element) {
-        const headerOffset = 120;
+        const headerOffset = 90;
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -55,26 +40,45 @@ export default function Header() {
           top: offsetPosition,
           behavior: "smooth"
         });
-        
-        // Update hash without jumping
-        window.history.pushState(null, "", id === "top" ? "/" : `/#${id}`);
+        window.history.pushState(null, "", `/#${id}`);
       }
-      setIsOpen(false);
-      
-      // Release lock after scroll ends (smooth scroll usually takes 500-800ms)
+    }
+
+    setTimeout(() => {
+      isManualScrollRef.current = false;
+    }, 850);
+  };
+
+  const handleNavClick = (e: MouseEvent | TouchEvent, id: string) => {
+    e.preventDefault();
+    setIsOpen(false);
+
+    if (location.pathname === "/") {
+      scrollToSection(id);
+    } else {
+      // If on another route (e.g. /sobre-nos, /faq), navigate to Home and scroll to anchor
+      navigate(id === "top" ? "/" : `/#${id}`);
       setTimeout(() => {
-        isManualScrollRef.current = false;
-      }, 1000);
-    } 
+        scrollToSection(id);
+      }, 150);
+    }
   };
 
   useEffect(() => {
-    // Ao carregar a página inicial pela primeira vez
+    // Handle initial load with hash or route change
     if (location.pathname === "/") {
-      setActiveSection("top");
-      window.scrollTo(0, 0);
+      const hash = location.hash.replace("#", "");
+      if (hash) {
+        setTimeout(() => {
+          scrollToSection(hash);
+        }, 100);
+      } else {
+        setActiveSection("top");
+      }
+    } else {
+      setActiveSection("");
     }
-  }, [location.pathname]);
+  }, [location.pathname, location.hash]);
 
   useEffect(() => {
     // Scroll observation only on landing page
@@ -174,10 +178,13 @@ export default function Header() {
 
         {/* Mobile menu button */}
         <button
-          className="lg:hidden p-1.5 rounded-xl bg-gray-50 text-gray-900 hover:bg-gray-100 transition-colors"
+          type="button"
+          aria-label={isOpen ? "Fechar menu de navegação" : "Abrir menu de navegação"}
+          aria-expanded={isOpen}
+          className="lg:hidden p-2 rounded-xl bg-gray-50 text-gray-900 hover:bg-gray-100 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-red-600/30"
           onClick={() => setIsOpen(!isOpen)}
         >
-          {isOpen ? <X size={21} /> : <Menu size={21} />}
+          {isOpen ? <X size={22} className="text-red-600" /> : <Menu size={22} />}
         </button>
       </div>
 
@@ -188,38 +195,40 @@ export default function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white border-t border-gray-100 overflow-hidden"
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="lg:hidden bg-white border-t border-gray-100 shadow-xl overflow-hidden relative z-50"
           >
-            <div className="px-6 py-6 flex flex-col gap-2">
-              {navLinks.map((link, index) => (
-                <motion.div
-                  key={link.name}
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Link
-                    to={link.path}
-                    className={`flex items-center justify-between py-3 px-4 rounded-xl transition-all ${
-                      isActive(link) 
-                        ? "bg-red-600 text-white font-black shadow-lg shadow-red-600/30" 
-                        : "text-gray-900 font-bold hover:bg-gray-50"
-                    }`}
-                    onClick={(e) => handleNavClick(e, link.id)}
+            <div className="px-6 py-5 flex flex-col gap-2">
+              {navLinks.map((link, index) => {
+                const active = isActive(link);
+                return (
+                  <motion.div
+                    key={link.name}
+                    initial={{ x: -15, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: index * 0.04 }}
                   >
-                    <span>{link.name}</span>
-                    {isActive(link) && (
-                      <motion.div 
-                        layoutId="activeCircle"
-                        className="w-2 h-2 rounded-full bg-white"
-                      />
-                    )}
-                  </Link>
-                </motion.div>
-              ))}
+                    <button
+                      type="button"
+                      className={`w-full flex items-center justify-between py-3.5 px-4 rounded-xl text-left transition-all select-none active:scale-[0.98] ${
+                        active 
+                          ? "bg-red-600 text-white font-black shadow-md shadow-red-600/30" 
+                          : "text-gray-900 font-bold hover:bg-gray-50 active:bg-gray-100"
+                      }`}
+                      onClick={(e) => handleNavClick(e, link.id)}
+                      onTouchEnd={(e) => handleNavClick(e, link.id)}
+                    >
+                      <span className="text-sm tracking-wide">{link.name}</span>
+                      {active && (
+                        <div className="w-2.5 h-2.5 rounded-full bg-white shadow-sm" />
+                      )}
+                    </button>
+                  </motion.div>
+                );
+              })}
               
-              <div className="mt-4 pt-4 border-t border-gray-100">
-                <p className="text-[10px] font-black tracking-widest text-gray-400 text-center">
+              <div className="mt-3 pt-3 border-t border-gray-100">
+                <p className="text-[10px] font-black tracking-widest text-gray-400 text-center uppercase">
                   Correio Digital Angola © 2026
                 </p>
               </div>
