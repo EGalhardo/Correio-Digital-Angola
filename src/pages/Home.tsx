@@ -281,10 +281,10 @@ export default function Home() {
             {PLANS.map((p, i) => (
               <div 
                 key={i} 
-                className={`border-2 rounded-xl sm:rounded-[26px] p-5 md:p-6 lg:p-7 relative transition-all duration-300
+                className={`group border-2 rounded-xl sm:rounded-[26px] p-5 md:p-6 lg:p-7 transition-all hover:-translate-y-1.5 hover:shadow-2xl relative select-none
                   ${p.popular 
-                    ? "bg-white border-red-650 shadow-2xl shadow-red-650/10" 
-                    : "bg-white border-gray-300 shadow-sm"
+                    ? "bg-white border-red-600 shadow-xl shadow-red-600/10" 
+                    : "bg-white border-gray-300 hover:border-red-400"
                   }`}
               >
                 {p.popular && (
