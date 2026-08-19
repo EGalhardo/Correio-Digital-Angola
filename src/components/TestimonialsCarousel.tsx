@@ -158,6 +158,8 @@ export default function TestimonialsCarousel() {
           alt="Correio Digital Angola Background" 
           className="w-full h-full object-cover opacity-100 filter brightness-[1.1] contrast-[1.01]"
           referrerPolicy="no-referrer"
+          loading="lazy"
+          decoding="async"
         />
       </div>
       {/* Decorative Blobs */}

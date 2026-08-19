@@ -185,8 +185,12 @@ export default function Header() {
             <img
               src="https://i.postimg.cc/P572qh2f/Icone-Correio-Angola.jpg"
               alt="Correio Digital Angola Logo"
+              width="40"
+              height="40"
               className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
               referrerPolicy="no-referrer"
+              decoding="async"
+              fetchPriority="high"
             />
           </div>
           <div className="flex flex-col">

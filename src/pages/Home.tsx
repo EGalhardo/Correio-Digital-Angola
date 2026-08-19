@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "motion/react";
-import { GraduationCap, Landmark, CreditCard, HeartPulse, Zap, ShieldCheck, Check, Repeat, LayoutGrid, UserCheck, Brain, Users, Flame, ShieldAlert, PlayCircle, Play, X, Volume2, Maximize2, Share2, Sparkles, Languages } from "lucide-react";
+import { GraduationCap, Landmark, CreditCard, HeartPulse, Zap, ShieldCheck, Check, LayoutGrid, UserCheck, Brain, Users, ShieldAlert, Languages } from "lucide-react";
 import ThreeDCarousel from "../components/ThreeDCarousel";
-import DownloadModal from "../components/DownloadModal";
 import TestimonialsCarousel from "../components/TestimonialsCarousel";
-import OfficialVideoModal from "../components/OfficialVideoModal";
+
+// Carregamento dinâmico dos modais para não pesar no carregamento inicial da página
+const DownloadModal = lazy(() => import("../components/DownloadModal"));
+const OfficialVideoModal = lazy(() => import("../components/OfficialVideoModal"));
 
 const SECTORS = [
   { icon: UserCheck, title: "Identificação Civil", desc: "Monitore e receba alertas instantâneos quando o seu Bilhete de Identidade ou Passaporte de Angola estiver pronto." },
@@ -138,13 +139,16 @@ export default function Home() {
     <div id="top" className="flex flex-col w-full">
       {/* Hero Section */}
       <section id="inicio" className="bg-brand-main relative overflow-hidden pt-20 pb-24 w-full">
-        {/* Main Background Image with referrerPolicy to bypass cross-origin restrictions */}
+        {/* Main Background Image with high priority for Instant First Paint */}
         <div className="absolute inset-0 z-0">
           <img 
             src="https://i.postimg.cc/ZnFjVdPt/Logomarca-Correio-Digital-Angola-Site.jpg" 
             alt="Correio Digital Angola Background" 
             className="w-full h-full object-cover opacity-100 filter brightness-[1.25] contrast-[1.02]"
             referrerPolicy="no-referrer"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
           />
         </div>
         {/* Decorative elements */}
@@ -214,6 +218,8 @@ export default function Home() {
             alt="Correio Digital Angola Background" 
             className="w-full h-full object-cover object-center opacity-100 filter brightness-[1.15] contrast-[1.03]"
             referrerPolicy="no-referrer"
+            loading="lazy"
+            decoding="async"
           />
         </div>
 
@@ -373,10 +379,11 @@ export default function Home() {
         </div>
       </section>
 
-      <DownloadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
-      {/* Official Video Presentation Modal */}
-      <OfficialVideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
+      {/* Modais com Suspense para carregamento sob demanda ultra-rápido */}
+      <Suspense fallback={null}>
+        {isModalOpen && <DownloadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />}
+        {isVideoOpen && <OfficialVideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />}
+      </Suspense>
     </div>
   );
 }

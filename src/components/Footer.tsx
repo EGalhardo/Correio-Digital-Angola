@@ -11,6 +11,8 @@ export default function Footer() {
           alt="Correio Digital Angola Background" 
           className="w-full h-full object-cover object-center opacity-100 filter brightness-[1.25] contrast-[1.02] select-none"
           referrerPolicy="no-referrer"
+          loading="lazy"
+          decoding="async"
         />
       </div>
       <div className="max-w-7xl mx-auto px-6 relative z-10">
