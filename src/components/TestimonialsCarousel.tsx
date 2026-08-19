@@ -189,7 +189,7 @@ export default function TestimonialsCarousel() {
             <ChevronRight size={22} className="hidden sm:block" />
           </button>
 
-          {/* Cards Track - Optimized 4:5 Portrait ratio */}
+          {/* Cards Track - Optimized Aspect Ratio for Full Image Visibility */}
           <div className="relative w-[190px] min-[380px]:w-[220px] min-[440px]:w-[250px] sm:w-[290px] md:w-[320px] h-[240px] min-[380px]:h-[280px] min-[440px]:h-[320px] sm:h-[370px] md:h-[410px] preserve-3d">
             {SLIDES.map((slide, i) => {
               const pos = getPositionStyle(i);
@@ -197,22 +197,25 @@ export default function TestimonialsCarousel() {
               return (
                 <div
                   key={i}
-                  className="absolute inset-0 rounded-[28px] sm:rounded-[32px] overflow-hidden cursor-pointer transition-all duration-1000 ease-[cubic-bezier(0.77,0,0.175,1)] bg-white"
+                  className="absolute inset-0 rounded-[24px] sm:rounded-[28px] overflow-hidden cursor-pointer transition-all duration-1000 ease-[cubic-bezier(0.77,0,0.175,1)] bg-neutral-900 shadow-2xl"
                   style={{
                     ...pos,
                     transformStyle: "preserve-3d",
-                    boxShadow: isActive ? "0 30px 60px -12px rgba(0,0,0,0.4)" : "0 10px 30px -10px rgba(0,0,0,0.2)"
+                    boxShadow: isActive ? "0 30px 60px -12px rgba(0,0,0,0.5)" : "0 10px 30px -10px rgba(0,0,0,0.3)"
                   }}
                   onClick={() => !isActive && goTo(i)}
                 >
                   <div 
-                    className={`absolute inset-0 bg-cover bg-no-repeat bg-center transition-transform duration-500 ${isActive ? "scale-102" : "scale-100"}`}
+                    className={`absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-500 ${isActive ? "scale-100" : "scale-98"}`}
                     style={{ backgroundImage: `url(${slide.img})` }}
                   />
 
+                  {/* Subtle inner highlight border */}
+                  <div className="absolute inset-0 rounded-[24px] sm:rounded-[28px] border border-white/10 pointer-events-none" />
+
                   {/* Counter */}
                   {isActive && (
-                    <div className="absolute top-4 right-4 sm:top-5 sm:right-5 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-black text-white tracking-widest uppercase border border-white/10">
+                    <div className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 px-2.5 py-0.5 bg-black/70 backdrop-blur-md rounded-full text-[9px] sm:text-[10px] font-black text-white tracking-widest uppercase border border-white/20 z-10">
                       {String(i + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
                     </div>
                   )}

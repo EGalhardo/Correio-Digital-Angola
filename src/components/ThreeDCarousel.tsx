@@ -36,33 +36,33 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
   const updateRadius = useCallback(() => {
     const w = window.innerWidth;
     if (w < 370) {
-      setCardW(84);
-      setCardH(148);
-      setRadius(70);
+      setCardW(86);
+      setCardH(152);
+      setRadius(72);
     } else if (w < 430) {
-      setCardW(96);
-      setCardH(170);
-      setRadius(84);
+      setCardW(98);
+      setCardH(174);
+      setRadius(86);
     } else if (w < 540) {
-      setCardW(116);
-      setCardH(206);
-      setRadius(104);
+      setCardW(118);
+      setCardH(210);
+      setRadius(106);
     } else if (w < 640) {
-      setCardW(130);
-      setCardH(230);
-      setRadius(130);
+      setCardW(132);
+      setCardH(234);
+      setRadius(132);
     } else if (w < 900) {
-      setCardW(146);
-      setCardH(260);
-      setRadius(180);
+      setCardW(148);
+      setCardH(263);
+      setRadius(182);
     } else if (w < 1200) {
-      setCardW(168);
-      setCardH(298);
-      setRadius(290);
+      setCardW(170);
+      setCardH(302);
+      setRadius(292);
     } else {
-      setCardW(180);
-      setCardH(320);
-      setRadius(320);
+      setCardW(184);
+      setCardH(327);
+      setRadius(324);
     }
   }, []);
 
@@ -191,7 +191,13 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
               }}
               onClick={() => snapToCard(i)}
             >
-              <img src={card.img} alt={card.label} className="w-full h-full object-cover select-none pointer-events-none" loading="lazy" referrerPolicy="no-referrer" />
+              <img 
+                src={card.img} 
+                alt={card.label} 
+                className="w-full h-full object-contain object-center select-none pointer-events-none bg-neutral-900/60" 
+                loading="lazy" 
+                referrerPolicy="no-referrer" 
+              />
             </div>
           ))}
         </div>
