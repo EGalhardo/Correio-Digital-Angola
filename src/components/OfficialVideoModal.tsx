@@ -19,8 +19,8 @@ interface OfficialVideoModalProps {
 }
 
 export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoModalProps) {
-  // Primary video source
-  const defaultVideoSrc = "/Correio%20Digital%20Angola.mp4";
+  // Primary video source matching the available institutional presentation video
+  const defaultVideoSrc = "/Apresentacao%20Correio%20Digital%20Angola.mp4";
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(66.7);
@@ -68,13 +68,24 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
   useEffect(() => {
     if (isOpen && videoRef.current) {
       videoRef.current.currentTime = 0;
+      // Tentativa de reprodução automática imediata
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
         playPromise
-          .then(() => setIsPlaying(true))
+          .then(() => {
+            setIsPlaying(true);
+          })
           .catch(() => {
-            // Autoplay with audio was restricted by browser policy; user can click to play
-            setIsPlaying(false);
+            // Se o navegador bloquear autoplay com som, muta e inicia automaticamente garantindo exibição
+            if (videoRef.current) {
+              videoRef.current.muted = true;
+              setIsMuted(true);
+              videoRef.current.play().then(() => {
+                setIsPlaying(true);
+              }).catch(() => {
+                setIsPlaying(false);
+              });
+            }
           });
       }
     } else if (!isOpen && videoRef.current) {
@@ -232,10 +243,8 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
                 onEnded={() => setIsPlaying(false)}
                 className="w-full h-full object-contain cursor-pointer"
               >
-                <source src="/Correio%20Digital%20Angola.mp4" type="video/mp4" />
-                <source src="/Correio%20Digital%20Angola%20(online-video-cutter.com).mp4" type="video/mp4" />
-                <source src="/video.mp4" type="video/mp4" />
                 <source src="/Apresentacao%20Correio%20Digital%20Angola.mp4" type="video/mp4" />
+                <source src="/Correio%20Digital%20Angola%20(online-video-cutter.com).mp4" type="video/mp4" />
                 O seu navegador não suporta a reprodução de vídeo HTML5.
               </video>
 
