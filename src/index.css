@@ -45,7 +45,7 @@
 
   /* 3D Carousel Styles */
   .pentagon-stage {
-    @apply relative w-full h-[220px] min-[380px]:h-[250px] min-[440px]:h-[295px] sm:h-[340px] md:h-[380px] lg:h-[420px] flex items-center justify-center;
+    @apply relative w-full h-[200px] min-[380px]:h-[225px] min-[440px]:h-[265px] sm:h-[305px] md:h-[345px] lg:h-[380px] flex items-center justify-center;
     perspective: 1200px;
     perspective-origin: 50% 50%;
   }

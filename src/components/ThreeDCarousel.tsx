@@ -35,35 +35,35 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
 
   const updateRadius = useCallback(() => {
     const w = window.innerWidth;
-    // Dimensionamento calibrado na proporção vertical 9:16 (0.5625) dos mockups mobile
+    // Dimensionamento reduzido em 10% mantendo rigorosamente a proporção 9:16
     if (w < 370) {
-      setCardW(100);
-      setCardH(178);
-      setRadius(84);
+      setCardW(90);
+      setCardH(160);
+      setRadius(76);
     } else if (w < 430) {
-      setCardW(114);
-      setCardH(203);
-      setRadius(98);
+      setCardW(103);
+      setCardH(183);
+      setRadius(88);
     } else if (w < 540) {
-      setCardW(132);
-      setCardH(235);
-      setRadius(120);
+      setCardW(119);
+      setCardH(212);
+      setRadius(108);
     } else if (w < 640) {
-      setCardW(148);
-      setCardH(263);
-      setRadius(146);
+      setCardW(133);
+      setCardH(237);
+      setRadius(131);
     } else if (w < 900) {
-      setCardW(168);
-      setCardH(299);
-      setRadius(198);
+      setCardW(151);
+      setCardH(269);
+      setRadius(178);
     } else if (w < 1200) {
-      setCardW(190);
-      setCardH(338);
-      setRadius(298);
+      setCardW(171);
+      setCardH(304);
+      setRadius(268);
     } else {
-      setCardW(208);
-      setCardH(370);
-      setRadius(336);
+      setCardW(187);
+      setCardH(333);
+      setRadius(302);
     }
   }, []);
 
