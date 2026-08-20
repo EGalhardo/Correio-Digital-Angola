@@ -161,9 +161,20 @@ export default function Home() {
       </section>
 
       {/* Features Bar */}
-      <section className="bg-gray-50 border-y border-gray-100 py-6 w-full">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-6 w-full">
+      <section className="bg-brand-main relative overflow-hidden py-7 w-full border-y border-red-800/40">
+        {/* Main Background Image with centered fitting */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img 
+            src="https://i.postimg.cc/ZnFjVdPt/Logomarca-Correio-Digital-Angola-Site.jpg" 
+            alt="Correio Digital Angola Background" 
+            className="w-full h-full object-cover object-center opacity-100 filter brightness-[1.15] contrast-[1.03]"
+            referrerPolicy="no-referrer"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 w-full">
             {[
               { icon: UserCheck, label: "BI como Endereço" },
               { icon: ShieldCheck, label: "Canais Verificados" },
@@ -174,12 +185,12 @@ export default function Home() {
             ].map((f, i) => (
               <div 
                 key={i} 
-                className="w-full flex flex-col items-center gap-2.5 group p-3 rounded-2xl border-[2px] sm:border-[3px] border-transparent transition-all duration-300 hover:bg-white/25 hover:border-white hover:backdrop-blur-md hover:shadow-[0_0_40px_rgba(255,255,255,0.45)] hover:scale-[1.02] cursor-default"
+                className="w-full flex flex-col items-center gap-3 group p-4 rounded-2xl bg-white/10 border-[2px] sm:border-[3px] border-white/40 backdrop-blur-md text-white transition-all duration-300 hover:bg-white/30 hover:border-white hover:shadow-[0_0_45px_rgba(255,255,255,0.6)] hover:scale-[1.05] cursor-pointer"
               >
-                <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-red-600 transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:rotate-6 group-hover:scale-110 shadow-sm">
-                  <f.icon size={16} className="transition-transform duration-300 group-hover:scale-110" />
+                <div className="w-11 h-11 rounded-xl bg-white/20 border-2 border-white/80 flex items-center justify-center text-white shadow-lg transition-all duration-300 group-hover:bg-white group-hover:text-red-600 group-hover:rotate-6 group-hover:scale-115">
+                  <f.icon size={18} className="transition-transform duration-300 group-hover:scale-110" />
                 </div>
-                <span className="text-[11px] font-bold text-gray-700 group-hover:text-red-600 transition-colors uppercase tracking-tight text-center">
+                <span className="text-[11px] font-black text-white/95 group-hover:text-white transition-colors uppercase tracking-tight text-center drop-shadow-md">
                   {f.label}
                 </span>
               </div>
