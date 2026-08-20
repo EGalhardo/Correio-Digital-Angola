@@ -199,13 +199,13 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
             {/* Modal Top Header Bar */}
             <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-neutral-800 bg-neutral-900/95 relative z-30">
               <div className="flex items-center gap-3 sm:gap-3.5">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shrink-0 shadow-lg shadow-red-650/20 border border-red-500/30 bg-neutral-950 flex items-center justify-center p-0.5 group">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shrink-0 shadow-lg shadow-red-650/20 border border-red-500/30 bg-neutral-950 flex items-center justify-center p-1 group">
                   <img
                     src="https://i.postimg.cc/P572qh2f/Icone-Correio-Angola.jpg"
                     alt="Correio Digital Angola Logomarca"
                     width="40"
                     height="40"
-                    className="w-full h-full object-cover object-center rounded-lg transition-transform duration-300 group-hover:scale-110"
+                    className="w-full h-full object-contain object-center rounded-md transition-transform duration-300 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                     decoding="async"
                     fetchPriority="high"
