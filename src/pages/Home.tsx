@@ -174,9 +174,9 @@ export default function Home() {
             ].map((f, i) => (
               <div 
                 key={i} 
-                className="w-full flex flex-col items-center gap-2.5 group p-3 rounded-xl transition-all duration-300 hover:bg-white hover:shadow-xl hover:shadow-red-600/5 hover:-translate-y-1 cursor-default"
+                className="w-full flex flex-col items-center gap-2.5 group p-3 rounded-2xl border-[2px] sm:border-[3px] border-transparent transition-all duration-300 hover:bg-white/25 hover:border-white hover:backdrop-blur-md hover:shadow-[0_0_40px_rgba(255,255,255,0.45)] hover:scale-[1.02] cursor-default"
               >
-                <div className="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-red-600 transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:rotate-6 group-hover:scale-110 shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-red-600 transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:rotate-6 group-hover:scale-110 shadow-sm">
                   <f.icon size={16} className="transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <span className="text-[11px] font-bold text-gray-700 group-hover:text-red-600 transition-colors uppercase tracking-tight text-center">
