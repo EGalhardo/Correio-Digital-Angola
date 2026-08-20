@@ -161,9 +161,9 @@ export default function Home() {
       </section>
 
       {/* Features Bar */}
-      <section className="bg-gray-50 border-y border-gray-100 py-6 w-full">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-6 w-full">
+      <section className="bg-gray-50/80 border-y border-gray-150 py-7 w-full relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 w-full">
             {[
               { icon: UserCheck, label: "BI como Endereço" },
               { icon: ShieldCheck, label: "Canais Verificados" },
@@ -174,12 +174,20 @@ export default function Home() {
             ].map((f, i) => (
               <div 
                 key={i} 
-                className="w-full flex flex-col items-center gap-2.5 group p-3 rounded-2xl border-[2px] sm:border-[3px] border-transparent transition-all duration-300 hover:bg-red-600/15 hover:border-red-600 hover:backdrop-blur-md hover:shadow-[0_0_35px_rgba(226,26,34,0.25)] hover:scale-[1.02] cursor-default"
+                className="relative w-full flex flex-col items-center gap-3 group p-4 rounded-2xl border-2 border-transparent transition-all duration-300 ease-out hover:bg-gradient-to-b hover:from-red-600/20 hover:to-red-700/10 hover:border-red-600/60 hover:backdrop-blur-xl hover:shadow-[0_8px_32px_0_rgba(220,38,38,0.22),inset_0_1px_1px_0_rgba(255,255,255,0.4)] hover:-translate-y-1 hover:scale-[1.03] cursor-default overflow-hidden"
               >
-                <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-red-600 transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-transparent group-hover:rotate-6 group-hover:scale-110 shadow-sm">
-                  <f.icon size={16} className="transition-transform duration-300 group-hover:scale-110" />
+                {/* Subtle top glass highlight on hover */}
+                <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+                {/* Inner radial red glow */}
+                <div className="absolute inset-0 bg-radial-gradient from-red-600/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+                {/* Icon Container with frosted glass transition */}
+                <div className="relative z-10 w-11 h-11 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-red-600 transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:border-red-500 group-hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] group-hover:scale-110 shadow-sm">
+                  <f.icon size={18} className="transition-transform duration-300 group-hover:scale-110" />
                 </div>
-                <span className="text-[11px] font-bold text-gray-700 group-hover:text-red-600 transition-colors uppercase tracking-tight text-center">
+
+                <span className="relative z-10 text-[11px] sm:text-xs font-black text-gray-800 group-hover:text-red-650 transition-colors uppercase tracking-tight text-center leading-tight">
                   {f.label}
                 </span>
               </div>
