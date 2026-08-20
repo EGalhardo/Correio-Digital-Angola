@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { 
   Play, 
   Pause, 
-  X, 
   Volume2, 
   VolumeX, 
   RotateCcw, 
@@ -55,11 +54,17 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
       }
     };
 
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
     window.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
     document.body.style.overflow = "hidden";
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
