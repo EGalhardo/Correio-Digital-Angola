@@ -8,13 +8,22 @@ import {
   RotateCcw, 
   Maximize2, 
   Minimize2, 
-  CheckCircle2 
+  CheckCircle2,
+  X,
+  RefreshCw
 } from "lucide-react";
 
 interface OfficialVideoModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const VIDEO_SOURCES = [
+  "/correio-digital-angola.mp4",
+  "/Correio%20Digital%20Angola.mp4",
+  "/Correio%20Digital%20Angola%20(online-video-cutter.com).mp4",
+  "/Apresentacao%20Correio%20Digital%20Angola.mp4"
+];
 
 export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoModalProps) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -24,6 +33,8 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [videoSrcIndex, setVideoSrcIndex] = useState(0);
+  const [hasError, setHasError] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -69,29 +80,40 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
 
   // Handle Video AutoPlay whenever modal opens
   useEffect(() => {
-    if (isOpen && videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.muted = isMuted;
+    if (isOpen) {
+      setHasError(false);
+      setVideoSrcIndex(0);
       
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            setIsPlaying(true);
-          })
-          .catch(() => {
-            // Se o navegador bloquear autoplay com som, muta e inicia automaticamente garantindo exibição
-            if (videoRef.current) {
-              videoRef.current.muted = true;
-              setIsMuted(true);
-              videoRef.current.play().then(() => {
+      const timer = setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.currentTime = 0;
+          videoRef.current.muted = isMuted;
+          
+          const playPromise = videoRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
                 setIsPlaying(true);
-              }).catch(() => {
-                setIsPlaying(false);
+              })
+              .catch(() => {
+                // Se o navegador bloquear autoplay com som, inicia mutado
+                if (videoRef.current) {
+                  videoRef.current.muted = true;
+                  setIsMuted(true);
+                  videoRef.current.play()
+                    .then(() => {
+                      setIsPlaying(true);
+                    })
+                    .catch(() => {
+                      setIsPlaying(false);
+                    });
+                }
               });
-            }
-          });
-      }
+          }
+        }
+      }, 50);
+
+      return () => clearTimeout(timer);
     } else if (!isOpen && videoRef.current) {
       videoRef.current.pause();
       setIsPlaying(false);
@@ -118,6 +140,7 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
   const handleLoadedMetadata = () => {
     if (videoRef.current) {
       setDuration(videoRef.current.duration || 66.7);
+      setHasError(false);
     }
   };
 
@@ -144,11 +167,32 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
     const nextMuted = !isMuted;
     setIsMuted(nextMuted);
     videoRef.current.muted = nextMuted;
+    if (!nextMuted && (volume === 0 || videoRef.current.volume === 0)) {
+      setVolume(1);
+      videoRef.current.volume = 1;
+    }
   };
 
   const handleRestart = () => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
+      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+    }
+  };
+
+  const handleVideoError = () => {
+    if (videoSrcIndex < VIDEO_SOURCES.length - 1) {
+      setVideoSrcIndex((prev) => prev + 1);
+    } else {
+      setHasError(true);
+    }
+  };
+
+  const retryPlayback = () => {
+    setHasError(false);
+    setVideoSrcIndex(0);
+    if (videoRef.current) {
+      videoRef.current.load();
       videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
     }
   };
@@ -226,33 +270,63 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
                   </p>
                 </div>
               </div>
+
+              {/* Close (X) button at top right */}
+              <button
+                onClick={handleClose}
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-neutral-800/80 hover:bg-red-600 text-gray-300 hover:text-white flex items-center justify-center transition-all cursor-pointer border border-neutral-700/60 shadow-md active:scale-95 group"
+                aria-label="Fechar Vídeo"
+                title="Fechar (Esc)"
+              >
+                <X size={18} className="group-hover:rotate-90 transition-transform duration-200" />
+              </button>
             </div>
 
             {/* Main Video Viewport */}
             <div className="relative aspect-video w-full bg-black overflow-hidden flex items-center justify-center group">
-              <video
-                ref={videoRef}
-                playsInline
-                autoPlay
-                preload="auto"
-                controls={false}
-                onClick={togglePlay}
-                onTimeUpdate={handleTimeUpdate}
-                onLoadedMetadata={handleLoadedMetadata}
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                onEnded={() => setIsPlaying(false)}
-                className="w-full h-full object-contain cursor-pointer"
-              >
-                <source src="/correio-digital-angola.mp4" type="video/mp4" />
-                <source src="/Correio%20Digital%20Angola.mp4" type="video/mp4" />
-                <source src="/Correio%20Digital%20Angola%20(online-video-cutter.com).mp4" type="video/mp4" />
-                <source src="/Apresentacao%20Correio%20Digital%20Angola.mp4" type="video/mp4" />
-                O seu navegador não suporta a reprodução de vídeo HTML5.
-              </video>
+              {hasError ? (
+                <div className="text-center p-8 text-white/70 flex flex-col items-center justify-center gap-3">
+                  <p className="text-red-500 font-black text-sm uppercase tracking-widest">
+                    Erro ao carregar o vídeo
+                  </p>
+                  <p className="text-xs text-gray-400 max-w-md">
+                    Não foi possível reproduzir a stream de vídeo automaticamente.
+                  </p>
+                  <button
+                    onClick={retryPlayback}
+                    className="mt-2 px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs flex items-center gap-2 shadow-lg transition-all cursor-pointer"
+                  >
+                    <RefreshCw size={14} />
+                    <span>Tentar Novamente</span>
+                  </button>
+                </div>
+              ) : (
+                <video
+                  ref={videoRef}
+                  src={VIDEO_SOURCES[videoSrcIndex]}
+                  playsInline
+                  autoPlay
+                  preload="auto"
+                  controls={false}
+                  onClick={togglePlay}
+                  onTimeUpdate={handleTimeUpdate}
+                  onLoadedMetadata={handleLoadedMetadata}
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  onEnded={() => setIsPlaying(false)}
+                  onError={handleVideoError}
+                  className="w-full h-full object-contain cursor-pointer"
+                >
+                  <source src="/correio-digital-angola.mp4" type="video/mp4" />
+                  <source src="/Correio%20Digital%20Angola.mp4" type="video/mp4" />
+                  <source src="/Correio%20Digital%20Angola%20(online-video-cutter.com).mp4" type="video/mp4" />
+                  <source src="/Apresentacao%20Correio%20Digital%20Angola.mp4" type="video/mp4" />
+                  O seu navegador não suporta a reprodução de vídeo HTML5.
+                </video>
+              )}
 
               {/* Muted Autoplay Warning / Unmute Helper */}
-              {isMuted && isPlaying && !hasUserInteracted && (
+              {isMuted && isPlaying && !hasUserInteracted && !hasError && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -267,7 +341,7 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
               )}
 
               {/* Center Play/Pause Overlay Button when paused */}
-              {!isPlaying && (
+              {!isPlaying && !hasError && (
                 <div 
                   onClick={togglePlay}
                   className="absolute inset-0 flex items-center justify-center bg-black/40 cursor-pointer backdrop-blur-[2px] transition-all"
