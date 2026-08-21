@@ -161,7 +161,7 @@ export default function Home() {
       </section>
 
       {/* Features Bar */}
-      <section className="bg-black/50 py-7 w-full relative overflow-hidden backdrop-blur-sm">
+      <section className="bg-black py-7 w-full relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 w-full">
             {[
