@@ -364,7 +364,7 @@ export default function Home() {
           <div className="max-w-3xl w-full flex flex-col items-center">
             <h2 className="text-3xl md:text-4xl font-black text-red-600 mb-6 tracking-tight uppercase">PRONTO PARA O FUTURO DE ANGOLA?</h2>
             <p className="text-gray-700 text-base md:text-lg mb-8 leading-relaxed font-semibold italic max-w-xl">
-              Faça parte do Futuro!
+              Faça Parte da Transformação Digital de Angola!
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full">
               <a 
