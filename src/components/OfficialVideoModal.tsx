@@ -17,14 +17,13 @@ interface OfficialVideoModalProps {
 }
 
 export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoModalProps) {
-  // Primary video source
-  const defaultVideoSrc = "/Correio%20Digital%20Angola.mp4";
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(66.7);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -72,7 +71,8 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
   useEffect(() => {
     if (isOpen && videoRef.current) {
       videoRef.current.currentTime = 0;
-      // Tentativa de reprodução automática imediata
+      videoRef.current.muted = isMuted;
+      
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
         playPromise
@@ -100,6 +100,7 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
 
   const togglePlay = () => {
     if (!videoRef.current) return;
+    setHasUserInteracted(true);
     if (videoRef.current.paused) {
       videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
     } else {
@@ -231,9 +232,9 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
             <div className="relative aspect-video w-full bg-black overflow-hidden flex items-center justify-center group">
               <video
                 ref={videoRef}
-                src={defaultVideoSrc}
                 playsInline
                 autoPlay
+                preload="auto"
                 controls={false}
                 onClick={togglePlay}
                 onTimeUpdate={handleTimeUpdate}
@@ -243,11 +244,27 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
                 onEnded={() => setIsPlaying(false)}
                 className="w-full h-full object-contain cursor-pointer"
               >
+                <source src="/correio-digital-angola.mp4" type="video/mp4" />
                 <source src="/Correio%20Digital%20Angola.mp4" type="video/mp4" />
                 <source src="/Correio%20Digital%20Angola%20(online-video-cutter.com).mp4" type="video/mp4" />
                 <source src="/Apresentacao%20Correio%20Digital%20Angola.mp4" type="video/mp4" />
                 O seu navegador não suporta a reprodução de vídeo HTML5.
               </video>
+
+              {/* Muted Autoplay Warning / Unmute Helper */}
+              {isMuted && isPlaying && !hasUserInteracted && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleMute();
+                    setHasUserInteracted(true);
+                  }}
+                  className="absolute top-4 right-4 z-20 px-3 py-1.5 rounded-full bg-red-600/90 hover:bg-red-600 text-white text-xs font-bold flex items-center gap-2 shadow-lg backdrop-blur-sm transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                >
+                  <VolumeX size={15} />
+                  <span>Activar Som</span>
+                </button>
+              )}
 
               {/* Center Play/Pause Overlay Button when paused */}
               {!isPlaying && (

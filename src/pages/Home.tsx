@@ -161,7 +161,7 @@ export default function Home() {
       </section>
 
       {/* Features Bar */}
-      <section className="bg-black py-7 w-full relative overflow-hidden">
+      <section className="bg-gray-200/90 border-t border-gray-300/80 py-7 w-full relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 w-full">
             {[
@@ -187,7 +187,7 @@ export default function Home() {
                   <f.icon size={18} className="transition-transform duration-300 group-hover:scale-110" />
                 </div>
 
-                <span className="relative z-10 text-[11px] sm:text-xs font-black text-white group-hover:text-white transition-colors uppercase tracking-tight text-center leading-tight">
+                <span className="relative z-10 text-[11px] sm:text-xs font-black text-gray-800 group-hover:text-red-650 transition-colors uppercase tracking-tight text-center leading-tight">
                   {f.label}
                 </span>
               </div>

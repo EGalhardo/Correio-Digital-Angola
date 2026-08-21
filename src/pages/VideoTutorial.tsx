@@ -6,64 +6,73 @@ import { motion, AnimatePresence } from "motion/react";
 const TUTORIALS = [
   {
     id: 1,
+    title: "Apresentação Oficial • Correio Digital Angola",
+    description: "Conheça a plataforma oficial de correspondência e inclusão digital para todos os cidadãos e instituições de Angola.",
+    videoUrl: "/correio-digital-angola.mp4",
+    duration: "1:07",
+    color: "red",
+    featured: true,
+    thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
+  },
+  {
+    id: 2,
     title: "Como Activar e Associar o seu BI",
     description: "Siga o passo a passo para associar o seu número de BI de forma segura e rápida.",
-    videoUrl: "/Activacao Oficial.mp4",
+    videoUrl: "/correio-digital-angola.mp4",
     duration: "1:10",
     color: "red",
     thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
   },
   {
-    id: 2,
+    id: 3,
     title: "Como Importar a Sua Licença ou Token",
     description: "Aprenda a carregar o ficheiro de licença (.lic) recebido pelo suporte técnico oficial.",
-    videoUrl: "/Activacao Via Ficheiro Oficial.mp4",
+    videoUrl: "/correio-digital-angola.mp4",
     duration: "0:22",
     color: "orange",
     thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
   },
   {
-    id: 3,
+    id: 4,
     title: "Como Configurar Canais e Notificações",
     description: "Crie ou parametrise canais dedicados para receber notificações de forma organizada.",
-    videoUrl: "/Criar Modelo Oficial .mp4",
+    videoUrl: "/correio-digital-angola.mp4",
     duration: "2:41",
     color: "rose",
-    featured: true,
     thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
   },
   {
-    id: 4,
+    id: 5,
     title: "Como Obter a Sua Licença Especial",
     description: "Saiba como solicitar o acesso a recursos avançados e canais exclusivos integrados.",
-    videoUrl: "/Obtencao da Licenca Oficial.mp4",
+    videoUrl: "/correio-digital-angola.mp4",
     duration: "0:24",
     color: "amber",
     thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
   },
   {
-    id: 5,
+    id: 6,
     title: "Consulta de Correspondência em Lote",
     description: "Aumente a facilidade na gestão local de múltiplas guias e notificações oficiais.",
-    videoUrl: "/Pagina Extracao Oficial.mp4",
+    videoUrl: "/correio-digital-angola.mp4",
     duration: "2:41",
     color: "orange",
     thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
   },
   {
-    id: 6,
+    id: 7,
     title: "Visão Geral do Painel de Controlo",
     description: "Conheça todas as ferramentas de monitorização, canais de órgãos e logs seguros.",
-    videoUrl: "/Pagina Painel Oficial.mp4",
+    videoUrl: "/correio-digital-angola.mp4",
     duration: "2:10",
     color: "rose",
     thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
   },
   {
-    id: 7,
+    id: 8,
     title: "Segurança de Acesso e Biometria",
     description: "Actualize os dados de emparelhamento do seu dispositivo móvel e preferências de PIN.",
-    videoUrl: "/Pagina Perfil Oficial.mp4",
+    videoUrl: "/correio-digital-angola.mp4",
     duration: "0:43",
     color: "amber",
     thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
@@ -279,13 +288,18 @@ export default function VideoTutorial() {
                 ) : (
                   <video 
                     key={selectedTutorial.id}
-                    src={selectedTutorial.videoUrl}
                     className="w-full h-full relative z-10 block"
                     controls
                     autoPlay
+                    preload="auto"
                     playsInline
                     onError={() => setVideoError(true)}
-                  />
+                  >
+                    <source src={selectedTutorial.videoUrl} type="video/mp4" />
+                    <source src="/correio-digital-angola.mp4" type="video/mp4" />
+                    <source src="/Correio%20Digital%20Angola.mp4" type="video/mp4" />
+                    <source src="/Correio%20Digital%20Angola%20(online-video-cutter.com).mp4" type="video/mp4" />
+                  </video>
                 )}
               </div>
 
