@@ -92,9 +92,15 @@ const COLOR_MAP: Record<string, { bg: string, text: string }> = {
 export default function VideoTutorial() {
   const navigate = useNavigate();
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [selectedTutorial, setSelectedTutorial] = useState(TUTORIALS[0]);
 
   const featuredTutorial = TUTORIALS.find(t => t.featured) || TUTORIALS[0];
   const otherTutorials = TUTORIALS.filter(t => t.id !== featuredTutorial.id);
+
+  const openTutorialVideo = (tutorial: typeof TUTORIALS[0]) => {
+    setSelectedTutorial(tutorial);
+    setIsVideoOpen(true);
+  };
 
   return (
     <main id="videotutorial-container" className="flex-grow max-w-7xl mx-auto w-full px-6 pt-12 pb-24 min-h-screen">
@@ -138,7 +144,7 @@ export default function VideoTutorial() {
                 </div>
                 <button 
                   type="button"
-                  onClick={() => setIsVideoOpen(true)}
+                  onClick={() => openTutorialVideo(featuredTutorial)}
                   className="bg-gray-900 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-600 transition-all active:scale-95 flex items-center gap-2 cursor-pointer shadow-md"
                 >
                   <Play size={14} fill="currentColor" /> Assistir Agora
@@ -148,7 +154,7 @@ export default function VideoTutorial() {
           </div>
 
           <div 
-            onClick={() => setIsVideoOpen(true)}
+            onClick={() => openTutorialVideo(featuredTutorial)}
             className="relative aspect-video rounded-[32px] overflow-hidden bg-neutral-900 group shadow-inner border-2 border-gray-200 cursor-pointer"
           >
             <img 
@@ -183,10 +189,10 @@ export default function VideoTutorial() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="bg-white rounded-[32px] border-2 border-gray-200 overflow-hidden flex flex-col hover:border-gray-300 hover:shadow-2xl transition-all group"
+                  className="bg-white rounded-[32px] border-2 border-gray-200 overflow-hidden flex flex-col hover:border-gray-300 hover:shadow-2xl transition-all group cursor-pointer"
+                  onClick={() => openTutorialVideo(tutorial)}
                 >
                   <div 
-                    onClick={() => setIsVideoOpen(true)}
                     className="relative aspect-video overflow-hidden bg-neutral-900 cursor-pointer"
                   >
                     <img 
@@ -228,7 +234,13 @@ export default function VideoTutorial() {
 
       {/* Official Video Modal for Correio Digital Angola */}
       {isVideoOpen && (
-        <OfficialVideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
+        <OfficialVideoModal 
+          isOpen={isVideoOpen} 
+          onClose={() => setIsVideoOpen(false)}
+          title={selectedTutorial.title}
+          subtitle={selectedTutorial.description}
+          videoUrl={selectedTutorial.videoUrl}
+        />
       )}
     </main>
   );

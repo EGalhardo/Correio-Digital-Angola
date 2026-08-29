@@ -16,16 +16,26 @@ import {
 interface OfficialVideoModalProps {
   isOpen: boolean;
   onClose: () => void;
+  title?: string;
+  subtitle?: string;
+  videoUrl?: string;
 }
 
-const VIDEO_SOURCES = [
+const DEFAULT_VIDEO_SOURCES = [
   "/correio-digital-angola.mp4",
-  "/Correio%20Digital%20Angola.mp4",
-  "/Correio%20Digital%20Angola%20(online-video-cutter.com).mp4",
-  "/Apresentacao%20Correio%20Digital%20Angola.mp4"
+  "/Correio Digital Angola.mp4",
+  "/correio_digital_angola.mp4",
+  "/Apresentacao Correio Digital Angola.mp4",
+  "/Correio Digital Angola (online-video-cutter.com).mp4"
 ];
 
-export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoModalProps) {
+export default function OfficialVideoModal({ 
+  isOpen, 
+  onClose,
+  title = "Vídeo Oficial • Correio Digital Angola",
+  subtitle = "Apresentação Institucional & Inclusão Tecnológica",
+  videoUrl
+}: OfficialVideoModalProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(66.7);
@@ -38,6 +48,10 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const videoSources = videoUrl 
+    ? [videoUrl, ...DEFAULT_VIDEO_SOURCES.filter(s => s !== videoUrl)]
+    : DEFAULT_VIDEO_SOURCES;
 
   // Close handler that safely stops playback
   const handleClose = () => {
@@ -187,7 +201,7 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
   };
 
   const handleVideoError = () => {
-    if (videoSrcIndex < VIDEO_SOURCES.length - 1) {
+    if (videoSrcIndex < videoSources.length - 1) {
       setVideoSrcIndex((prev) => prev + 1);
     } else {
       setHasError(true);
@@ -264,15 +278,15 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-white font-extrabold text-xs sm:text-sm tracking-wide uppercase">
-                      Vídeo Oficial • Correio Digital Angola
+                    <h3 className="text-white font-extrabold text-xs sm:text-sm tracking-wide uppercase line-clamp-1">
+                      {title}
                     </h3>
-                    <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-red-600/20 border border-red-500/30 text-red-400 text-[10px] font-bold uppercase tracking-wider">
+                    <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-red-600/20 border border-red-500/30 text-red-400 text-[10px] font-bold uppercase tracking-wider shrink-0">
                       HD Oficial
                     </span>
                   </div>
-                  <p className="text-gray-400 text-[10px] sm:text-[11px] font-medium hidden sm:block">
-                    Apresentação Institucional & Inclusão Tecnológica
+                  <p className="text-gray-400 text-[10px] sm:text-[11px] font-medium hidden sm:block line-clamp-1">
+                    {subtitle}
                   </p>
                 </div>
               </div>
@@ -280,7 +294,7 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
               {/* Close (X) button at top right */}
               <button
                 onClick={handleClose}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-neutral-800/80 hover:bg-red-600 text-gray-300 hover:text-white flex items-center justify-center transition-all cursor-pointer border border-neutral-700/60 shadow-md active:scale-95 group"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-neutral-800/80 hover:bg-red-600 text-gray-300 hover:text-white flex items-center justify-center transition-all cursor-pointer border border-neutral-700/60 shadow-md active:scale-95 group shrink-0"
                 aria-label="Fechar Vídeo"
                 title="Fechar (Esc)"
               >
@@ -309,7 +323,7 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
               ) : (
                 <video
                   ref={videoRef}
-                  src={VIDEO_SOURCES[videoSrcIndex]}
+                  src={videoSources[videoSrcIndex]}
                   playsInline
                   autoPlay
                   preload="auto"
