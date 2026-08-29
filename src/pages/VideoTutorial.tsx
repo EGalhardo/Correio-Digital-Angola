@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { PlayCircle, ArrowLeft, Play, X } from "lucide-react";
+import { PlayCircle, ArrowLeft, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 
 const TUTORIALS = [
   {
@@ -88,16 +87,9 @@ const COLOR_MAP: Record<string, { bg: string, text: string }> = {
 
 export default function VideoTutorial() {
   const navigate = useNavigate();
-  const [selectedTutorial, setSelectedTutorial] = useState<typeof TUTORIALS[0] | null>(null);
-  const [videoError, setVideoError] = useState(false);
 
   const featuredTutorial = TUTORIALS.find(t => t.featured) || TUTORIALS[0];
   const otherTutorials = TUTORIALS.filter(t => t.id !== featuredTutorial.id);
-
-  const openVideo = (tutorial: typeof TUTORIALS[0]) => {
-    setSelectedTutorial(tutorial);
-    setVideoError(false);
-  };
 
   return (
     <main id="videotutorial-container" className="flex-grow max-w-7xl mx-auto w-full px-6 pt-12 pb-24 min-h-screen">
@@ -140,8 +132,8 @@ export default function VideoTutorial() {
                   <p className="text-gray-900 font-black text-lg">{featuredTutorial.duration}</p>
                 </div>
                 <button 
-                  onClick={() => openVideo(featuredTutorial)}
-                  className="bg-gray-900 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-600 transition-all active:scale-95 flex items-center gap-2"
+                  type="button"
+                  className="bg-gray-900 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all flex items-center gap-2"
                 >
                   <Play size={14} fill="currentColor" /> Assistir Agora
                 </button>
@@ -150,8 +142,7 @@ export default function VideoTutorial() {
           </div>
 
           <div 
-            onClick={() => openVideo(featuredTutorial)}
-            className="relative aspect-video rounded-[32px] overflow-hidden bg-gray-100 group cursor-pointer shadow-inner border border-gray-100"
+            className="relative aspect-video rounded-[32px] overflow-hidden bg-gray-100 group shadow-inner border border-gray-100"
           >
             <img 
               src={featuredTutorial.thumbnail} 
@@ -188,8 +179,7 @@ export default function VideoTutorial() {
                   className="bg-white rounded-[32px] border border-gray-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all group"
                 >
                   <div 
-                    onClick={() => openVideo(tutorial)}
-                    className="relative aspect-video overflow-hidden bg-gray-100 cursor-pointer"
+                    className="relative aspect-video overflow-hidden bg-gray-100"
                   >
                     <img 
                       src={tutorial.thumbnail} 
@@ -227,92 +217,6 @@ export default function VideoTutorial() {
           </div>
         </div>
       </div>
-
-      {/* Video Modal Player */}
-      <AnimatePresence>
-        {selectedTutorial && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedTutorial(null)}
-              className="absolute inset-0 bg-gray-900/95 backdrop-blur-sm"
-            />
-            
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-5xl bg-black rounded-[40px] overflow-hidden shadow-2xl border border-white/10"
-            >
-              {/* Header */}
-              <div className="absolute top-0 inset-x-0 p-6 flex justify-between items-center z-20 bg-gradient-to-b from-black/80 to-transparent">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white">
-                    <PlayCircle size={20} />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-black text-sm leading-none mb-1">{selectedTutorial.title}</h4>
-                    <p className="text-gray-400 text-[10px] uppercase font-bold tracking-widest">{selectedTutorial.duration} • Original Tutorial</p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setSelectedTutorial(null)}
-                  className="w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-all group active:scale-90"
-                >
-                  <X size={24} className="group-hover:rotate-90 transition-transform" />
-                </button>
-              </div>
-
-              {/* Video Player */}
-              <div className="aspect-video bg-black flex items-center justify-center relative overflow-hidden">
-                {videoError ? (
-                  <div className="video-error-msg text-center p-12 text-white/50 flex flex-col items-center justify-center">
-                    <div className="mb-6 opacity-20">
-                      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M10.29 3.86T1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                        <line x1="12" y1="9" x2="12" y2="13"></line>
-                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                      </svg>
-                    </div>
-                    <p className="font-black uppercase tracking-[0.3em] text-[10px] mb-4 text-red-500">Vídeo não encontrado</p>
-                    <p className="text-xs max-w-sm mx-auto leading-relaxed font-medium">
-                      O ficheiro <span className="text-white font-mono bg-white/10 px-2 py-1 rounded">{selectedTutorial.videoUrl}</span> não está presente na pasta <span className="text-white font-bold">public/</span>.
-                    </p>
-                    <div className="mt-8 px-5 py-3 bg-white/5 rounded-2xl border border-white/10">
-                      <p className="text-[9px] uppercase font-black text-gray-500 tracking-widest mb-1">Dica para o Desenvolvedor</p>
-                      <p className="text-[10px]">Arraste os ficheiros MP4 para a pasta <b>public/</b> no explorador de arquivos.</p>
-                    </div>
-                  </div>
-                ) : (
-                  <video 
-                    key={selectedTutorial.id}
-                    className="w-full h-full relative z-10 block"
-                    controls
-                    autoPlay
-                    preload="auto"
-                    playsInline
-                    onError={() => setVideoError(true)}
-                  >
-                    <source src={selectedTutorial.videoUrl} type="video/mp4" />
-                    <source src="/correio-digital-angola.mp4" type="video/mp4" />
-                    <source src="/Correio%20Digital%20Angola.mp4" type="video/mp4" />
-                    <source src="/Correio%20Digital%20Angola%20(online-video-cutter.com).mp4" type="video/mp4" />
-                  </video>
-                )}
-              </div>
-
-              {/* Footer Info */}
-              <div className="p-8 bg-gray-900 border-t border-white/5">
-                <p className="text-gray-400 font-medium text-sm leading-relaxed italic">
-                  "{selectedTutorial.description}"
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </main>
   );
 }
