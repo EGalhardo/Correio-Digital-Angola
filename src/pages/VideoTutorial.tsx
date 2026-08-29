@@ -116,7 +116,7 @@ export default function VideoTutorial() {
 
       <div className="space-y-12">
         {/* Featured Video Card */}
-        <section className="bg-white rounded-[40px] border border-gray-100 p-8 shadow-xl shadow-gray-200/20">
+        <section className="bg-white rounded-[40px] border-2 border-gray-200 p-8 shadow-xl shadow-gray-200/20 hover:border-gray-300 transition-colors">
           <div className="mb-8">
             <div className="inline-flex items-center gap-1.5 bg-red-50 text-red-650 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-6 border border-red-100">
               <span className="text-xs">✦</span> Recomendado para iniciantes
@@ -131,7 +131,7 @@ export default function VideoTutorial() {
                   <p className="text-gray-500 font-medium max-w-xl">{featuredTutorial.description}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-6 shrink-0 bg-gray-50 px-6 py-4 rounded-[30px] border border-gray-100">
+              <div className="flex items-center gap-6 shrink-0 bg-gray-50 px-6 py-4 rounded-[30px] border-2 border-gray-200">
                 <div className="text-center">
                   <p className="text-gray-400 text-[9px] font-black uppercase tracking-widest mb-0.5">Duração</p>
                   <p className="text-gray-900 font-black text-lg">{featuredTutorial.duration}</p>
@@ -149,7 +149,7 @@ export default function VideoTutorial() {
 
           <div 
             onClick={() => setIsVideoOpen(true)}
-            className="relative aspect-video rounded-[32px] overflow-hidden bg-neutral-900 group shadow-inner border border-gray-100 cursor-pointer"
+            className="relative aspect-video rounded-[32px] overflow-hidden bg-neutral-900 group shadow-inner border-2 border-gray-200 cursor-pointer"
           >
             <img 
               src={featuredTutorial.thumbnail} 
@@ -183,7 +183,7 @@ export default function VideoTutorial() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="bg-white rounded-[32px] border border-gray-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all group"
+                  className="bg-white rounded-[32px] border-2 border-gray-200 overflow-hidden flex flex-col hover:border-gray-300 hover:shadow-2xl transition-all group"
                 >
                   <div 
                     onClick={() => setIsVideoOpen(true)}
