@@ -72,28 +72,12 @@ export default function Home() {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const handlePlayAudio = () => {
-    if (isPlayingAudio) {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
+  const handlePlayClick = () => {
+    if (audioRef.current && isPlayingAudio) {
+      audioRef.current.pause();
       setIsPlayingAudio(false);
-    } else {
-      if (!audioRef.current) {
-        audioRef.current = new Audio("/Apresentacao Correio Digital Angola.mp3");
-        audioRef.current.onended = () => {
-          setIsPlayingAudio(false);
-        };
-      }
-
-      audioRef.current.play()
-        .then(() => {
-          setIsPlayingAudio(true);
-        })
-        .catch((error) => {
-          console.error("Erro ao reproduzir o áudio:", error);
-        });
     }
+    setIsVideoOpen(true);
   };
 
   useEffect(() => {
@@ -154,7 +138,7 @@ export default function Home() {
         <div className="absolute bottom-[-48px] right-[-64px] w-[304px] h-[304px] rounded-full bg-red-500/5 blur-3xl pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-6 w-full flex flex-col items-center text-center z-10 relative pt-10">
-          <ThreeDCarousel isPlayingAudio={isPlayingAudio} onPlayClick={handlePlayAudio} />
+          <ThreeDCarousel isPlayingAudio={isVideoOpen} onPlayClick={handlePlayClick} />
         </div>
       </section>
 
@@ -375,7 +359,7 @@ export default function Home() {
               </a>
               <button 
                 type="button"
-                onClick={() => setIsVideoOpen(true)}
+                onClick={() => navigate("/video-tutorial")}
                 className="w-full max-w-[320px] sm:w-80 md:w-96 inline-flex items-center justify-center gap-3 bg-black text-white font-black text-base sm:text-lg px-8 py-4 sm:py-4.5 rounded-2xl hover:bg-neutral-800 transition-all shadow-xl shadow-black/25 hover:scale-105 active:scale-95 tracking-wider uppercase cursor-pointer text-center"
               >
                 Vídeo
