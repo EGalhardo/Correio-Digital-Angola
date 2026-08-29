@@ -87,6 +87,7 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
       const timer = setTimeout(() => {
         if (videoRef.current) {
           videoRef.current.currentTime = 0;
+          videoRef.current.volume = volume;
           videoRef.current.muted = isMuted;
           
           const playPromise = videoRef.current.play();
@@ -95,8 +96,8 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
               .then(() => {
                 setIsPlaying(true);
               })
-              .catch(() => {
-                // Se o navegador bloquear autoplay com som, inicia mutado
+              .catch((err) => {
+                console.log("Unmuted autoplay restricted, attempting muted playback...", err);
                 if (videoRef.current) {
                   videoRef.current.muted = true;
                   setIsMuted(true);
@@ -104,14 +105,15 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
                     .then(() => {
                       setIsPlaying(true);
                     })
-                    .catch(() => {
+                    .catch((e) => {
+                      console.log("Autoplay paused by browser policy:", e);
                       setIsPlaying(false);
                     });
                 }
               });
           }
         }
-      }, 50);
+      }, 60);
 
       return () => clearTimeout(timer);
     } else if (!isOpen && videoRef.current) {
@@ -124,6 +126,10 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
     if (!videoRef.current) return;
     setHasUserInteracted(true);
     if (videoRef.current.paused) {
+      if (isMuted && !hasUserInteracted) {
+        videoRef.current.muted = false;
+        setIsMuted(false);
+      }
       videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
     } else {
       videoRef.current.pause();
@@ -316,13 +322,7 @@ export default function OfficialVideoModal({ isOpen, onClose }: OfficialVideoMod
                   onEnded={() => setIsPlaying(false)}
                   onError={handleVideoError}
                   className="w-full h-full object-contain cursor-pointer"
-                >
-                  <source src="/correio-digital-angola.mp4" type="video/mp4" />
-                  <source src="/Correio%20Digital%20Angola.mp4" type="video/mp4" />
-                  <source src="/Correio%20Digital%20Angola%20(online-video-cutter.com).mp4" type="video/mp4" />
-                  <source src="/Apresentacao%20Correio%20Digital%20Angola.mp4" type="video/mp4" />
-                  O seu navegador não suporta a reprodução de vídeo HTML5.
-                </video>
+                />
               )}
 
               {/* Muted Autoplay Warning / Unmute Helper */}
