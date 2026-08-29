@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { PlayCircle, ArrowLeft, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
+import OfficialVideoModal from "../components/OfficialVideoModal";
+
+const LOGO_CORREIO_ANGOLA = "https://i.postimg.cc/ZnFjVdPt/Logomarca-Correio-Digital-Angola-Site.jpg";
 
 const TUTORIALS = [
   {
@@ -11,7 +15,7 @@ const TUTORIALS = [
     duration: "1:07",
     color: "red",
     featured: true,
-    thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
+    thumbnail: LOGO_CORREIO_ANGOLA
   },
   {
     id: 2,
@@ -20,7 +24,7 @@ const TUTORIALS = [
     videoUrl: "/correio-digital-angola.mp4",
     duration: "1:10",
     color: "red",
-    thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
+    thumbnail: LOGO_CORREIO_ANGOLA
   },
   {
     id: 3,
@@ -29,7 +33,7 @@ const TUTORIALS = [
     videoUrl: "/correio-digital-angola.mp4",
     duration: "0:22",
     color: "orange",
-    thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
+    thumbnail: LOGO_CORREIO_ANGOLA
   },
   {
     id: 4,
@@ -38,7 +42,7 @@ const TUTORIALS = [
     videoUrl: "/correio-digital-angola.mp4",
     duration: "2:41",
     color: "rose",
-    thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
+    thumbnail: LOGO_CORREIO_ANGOLA
   },
   {
     id: 5,
@@ -47,7 +51,7 @@ const TUTORIALS = [
     videoUrl: "/correio-digital-angola.mp4",
     duration: "0:24",
     color: "amber",
-    thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
+    thumbnail: LOGO_CORREIO_ANGOLA
   },
   {
     id: 6,
@@ -56,7 +60,7 @@ const TUTORIALS = [
     videoUrl: "/correio-digital-angola.mp4",
     duration: "2:41",
     color: "orange",
-    thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
+    thumbnail: LOGO_CORREIO_ANGOLA
   },
   {
     id: 7,
@@ -65,7 +69,7 @@ const TUTORIALS = [
     videoUrl: "/correio-digital-angola.mp4",
     duration: "2:10",
     color: "rose",
-    thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
+    thumbnail: LOGO_CORREIO_ANGOLA
   },
   {
     id: 8,
@@ -74,7 +78,7 @@ const TUTORIALS = [
     videoUrl: "/correio-digital-angola.mp4",
     duration: "0:43",
     color: "amber",
-    thumbnail: "https://i.postimg.cc/t4DsrvjV/Imagem-video.jpg"
+    thumbnail: LOGO_CORREIO_ANGOLA
   }
 ];
 
@@ -87,6 +91,7 @@ const COLOR_MAP: Record<string, { bg: string, text: string }> = {
 
 export default function VideoTutorial() {
   const navigate = useNavigate();
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   const featuredTutorial = TUTORIALS.find(t => t.featured) || TUTORIALS[0];
   const otherTutorials = TUTORIALS.filter(t => t.id !== featuredTutorial.id);
@@ -133,7 +138,8 @@ export default function VideoTutorial() {
                 </div>
                 <button 
                   type="button"
-                  className="bg-gray-900 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all flex items-center gap-2"
+                  onClick={() => setIsVideoOpen(true)}
+                  className="bg-gray-900 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-600 transition-all active:scale-95 flex items-center gap-2 cursor-pointer shadow-md"
                 >
                   <Play size={14} fill="currentColor" /> Assistir Agora
                 </button>
@@ -142,7 +148,8 @@ export default function VideoTutorial() {
           </div>
 
           <div 
-            className="relative aspect-video rounded-[32px] overflow-hidden bg-gray-100 group shadow-inner border border-gray-100"
+            onClick={() => setIsVideoOpen(true)}
+            className="relative aspect-video rounded-[32px] overflow-hidden bg-neutral-900 group shadow-inner border border-gray-100 cursor-pointer"
           >
             <img 
               src={featuredTutorial.thumbnail} 
@@ -151,10 +158,10 @@ export default function VideoTutorial() {
               loading="lazy"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
+            <div className="absolute inset-0 bg-black/25 group-hover:bg-black/35 transition-colors" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-24 h-24 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center text-white scale-90 group-hover:scale-100 transition-all duration-300 border border-white/30 shadow-2xl">
-                <Play size={40} fill="currentColor" />
+              <div className="w-24 h-24 bg-white/25 backdrop-blur-xl rounded-full flex items-center justify-center text-white scale-90 group-hover:scale-100 transition-all duration-300 border border-white/40 shadow-2xl">
+                <Play size={40} fill="currentColor" className="ml-1" />
               </div>
             </div>
           </div>
@@ -179,17 +186,18 @@ export default function VideoTutorial() {
                   className="bg-white rounded-[32px] border border-gray-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all group"
                 >
                   <div 
-                    className="relative aspect-video overflow-hidden bg-gray-100"
+                    onClick={() => setIsVideoOpen(true)}
+                    className="relative aspect-video overflow-hidden bg-neutral-900 cursor-pointer"
                   >
                     <img 
                       src={tutorial.thumbnail} 
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                       alt={tutorial.title}
                       loading="lazy"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                    <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white px-2 py-1 rounded-lg text-[10px] font-black">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-70 group-hover:opacity-85 transition-opacity" />
+                    <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md text-white px-2.5 py-1 rounded-lg text-[10px] font-black">
                       {tutorial.duration}
                     </div>
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-50 group-hover:scale-100">
@@ -217,6 +225,11 @@ export default function VideoTutorial() {
           </div>
         </div>
       </div>
+
+      {/* Official Video Modal for Correio Digital Angola */}
+      {isVideoOpen && (
+        <OfficialVideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
+      )}
     </main>
   );
 }
