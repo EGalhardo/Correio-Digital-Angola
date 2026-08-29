@@ -1,12 +1,10 @@
-import { useState, useEffect, useRef, lazy, Suspense } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Landmark, CreditCard, HeartPulse, Zap, ShieldCheck, Check, LayoutGrid, UserCheck, Brain, Users, ShieldAlert, Languages } from "lucide-react";
 import ThreeDCarousel from "../components/ThreeDCarousel";
 import TestimonialsCarousel from "../components/TestimonialsCarousel";
-
-// Carregamento dinâmico dos modais para não pesar no carregamento inicial da página
-const DownloadModal = lazy(() => import("../components/DownloadModal"));
-const OfficialVideoModal = lazy(() => import("../components/OfficialVideoModal"));
+import DownloadModal from "../components/DownloadModal";
+import OfficialVideoModal from "../components/OfficialVideoModal";
 
 const SECTORS = [
   { icon: UserCheck, title: "Identificação Civil", desc: "Monitore e receba alertas instantâneos quando o seu Bilhete de Identidade ou Passaporte de Angola estiver pronto." },
@@ -387,11 +385,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Modais com Suspense para carregamento sob demanda ultra-rápido */}
-      <Suspense fallback={null}>
-        {isModalOpen && <DownloadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />}
-        {isVideoOpen && <OfficialVideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />}
-      </Suspense>
+      {/* Modais */}
+      {isModalOpen && <DownloadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />}
+      {isVideoOpen && <OfficialVideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />}
     </div>
   );
 }

@@ -4,17 +4,17 @@
  */
 
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-// Lazy load pages for performance
-const Home = lazy(() => import("./pages/Home"));
-const About = lazy(() => import("./pages/About"));
-const HowItWorks = lazy(() => import("./pages/HowItWorks"));
-const HelpCenter = lazy(() => import("./pages/HelpCenter"));
-const FAQ = lazy(() => import("./pages/FAQ"));
-const VideoTutorial = lazy(() => import("./pages/VideoTutorial"));
+// Page imports
+import Home from "./pages/Home";
+import About from "./pages/About";
+import HowItWorks from "./pages/HowItWorks";
+import HelpCenter from "./pages/HelpCenter";
+import FAQ from "./pages/FAQ";
+import VideoTutorial from "./pages/VideoTutorial";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -51,16 +51,14 @@ export default function App() {
         <ScrollToTop />
         <Header />
         <main className="flex-grow">
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/sobre-nos" element={<About />} />
-              <Route path="/como-funciona" element={<HowItWorks />} />
-              <Route path="/central-ajuda" element={<HelpCenter />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/video-tutorial" element={<VideoTutorial />} />
-            </Routes>
-          </Suspense>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/sobre-nos" element={<About />} />
+            <Route path="/como-funciona" element={<HowItWorks />} />
+            <Route path="/central-ajuda" element={<HelpCenter />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/video-tutorial" element={<VideoTutorial />} />
+          </Routes>
         </main>
         <Footer />
       </div>
