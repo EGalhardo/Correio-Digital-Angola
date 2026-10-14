@@ -15,6 +15,24 @@ async function startServer() {
   const targetVideoPath = path.resolve(publicDir, 'segundo-video-correio-digital.mp4');
   const metadataPath = path.resolve(publicDir, 'segundo-video-info.json');
 
+  // Limite maximo aceite para o video enviado (evita encher o disco).
+  // Configuravel: MAX_VIDEO_MB=800 npm run dev
+  const MAX_VIDEO_BYTES = (Number(process.env.MAX_VIDEO_MB) || 500) * 1024 * 1024;
+
+  // Proteccao dos endpoints que escrevem no disco:
+  //  - Se VIDEO_ADMIN_TOKEN estiver definido, e obrigatorio envia-lo no cabecalho
+  //    "x-video-admin-token".
+  //  - Sem token definido, a escrita so e permitida fora de producao (desenvolvimento).
+  //    Isto impede que qualquer visitante substitua ou apague o video em producao.
+  const ADMIN_TOKEN = process.env.VIDEO_ADMIN_TOKEN;
+  type HeaderBag = Record<string, string | string[] | undefined>;
+  const isWriteAuthorized = (headers: HeaderBag): boolean =>
+    ADMIN_TOKEN ? headers['x-video-admin-token'] === ADMIN_TOKEN : !isProduction;
+  const UNAUTHORIZED_BODY = {
+    success: false,
+    error: 'Operação não autorizada. Defina VIDEO_ADMIN_TOKEN no servidor e envie o cabeçalho x-video-admin-token.',
+  };
+
   // Ensure public directory exists
   if (!fs.existsSync(publicDir)) {
     fs.mkdirSync(publicDir, { recursive: true });
@@ -58,17 +76,81 @@ async function startServer() {
   // 2. API: Stream save video into code (public/segundo-video-correio-digital.mp4)
   app.post('/api/save-video-to-code', (req, res) => {
     try {
+      if (!isWriteAuthorized(req.headers)) {
+        return res.status(403).json(UNAUTHORIZED_BODY);
+      }
+
       const rawOriginalName = req.headers['x-video-name'] as string | undefined;
-      const originalName = rawOriginalName
-        ? decodeURIComponent(rawOriginalName)
-        : 'Segundo Vídeo Correio Digital';
+      let originalName = 'Segundo Vídeo Correio Digital';
+      if (rawOriginalName) {
+        try {
+          originalName = decodeURIComponent(rawOriginalName);
+        } catch {
+          originalName = rawOriginalName; // cabecalho mal codificado: usa o valor original
+        }
+      }
 
-      const writeStream = fs.createWriteStream(targetVideoPath);
+      // Escreve primeiro num ficheiro temporario e so substitui o video final
+      // quando a transferencia termina por completo. Assim um envio interrompido
+      // (ex.: um MP4 grande a meio) nunca deixa o video truncado.
+      const tempVideoPath = `${targetVideoPath}.part`;
 
-      req.pipe(writeStream);
+      let receivedBytes = 0;
+      let settled = false;
+
+      const cleanupTemp = () => {
+        try {
+          if (fs.existsSync(tempVideoPath)) fs.unlinkSync(tempVideoPath);
+        } catch {
+          // limpeza best-effort
+        }
+      };
+
+      const writeStream = fs.createWriteStream(tempVideoPath);
+
+      const abortWith = (status: number, error: string) => {
+        if (settled) return;
+        settled = true;
+        req.unpipe(writeStream);
+        writeStream.destroy();
+        cleanupTemp();
+        res.status(status).json({ success: false, error });
+      };
+
+      // Cliente desligou-se a meio: nao deixa lixo no disco nem corrompe o video.
+      req.on('aborted', () => {
+        if (settled) return;
+        settled = true;
+        req.unpipe(writeStream);
+        writeStream.destroy();
+        cleanupTemp();
+        console.warn('[Video Server] Upload interrompido; ficheiro temporário removido.');
+      });
+
+      // Limite de tamanho: impede que um pedido enorme encha o disco.
+      req.on('data', (chunk: Buffer) => {
+        receivedBytes += chunk.length;
+        if (receivedBytes > MAX_VIDEO_BYTES) {
+          abortWith(
+            413,
+            `O ficheiro excede o limite de ${Math.round(MAX_VIDEO_BYTES / (1024 * 1024))} MB.`
+          );
+        }
+      });
+
+      writeStream.on('error', (err) => {
+        console.error('[Video Server] Stream error saving video:', err);
+        abortWith(500, 'Falha ao guardar ficheiro no servidor.');
+      });
 
       writeStream.on('finish', () => {
+        if (settled) return;
+        settled = true;
+
         try {
+          // Substituicao atomica: o video novo passa a ser o oficial
+          fs.renameSync(tempVideoPath, targetVideoPath);
+
           const stats = fs.statSync(targetVideoPath);
           const meta = {
             originalName,
@@ -83,7 +165,7 @@ async function startServer() {
           if (fs.existsSync(distDir)) {
             try {
               fs.copyFileSync(targetVideoPath, path.resolve(distDir, 'segundo-video-correio-digital.mp4'));
-            } catch (e) {
+            } catch {
               // ignore sync error
             }
           }
@@ -103,15 +185,13 @@ async function startServer() {
             message: 'Vídeo guardado com sucesso no código do projecto!',
           });
         } catch (postErr: unknown) {
+          cleanupTemp();
           const message = postErr instanceof Error ? postErr.message : String(postErr);
           res.status(500).json({ success: false, error: message });
         }
       });
 
-      writeStream.on('error', (err) => {
-        console.error('[Video Server] Stream error saving video:', err);
-        res.status(500).json({ success: false, error: 'Falha ao guardar ficheiro no servidor.' });
-      });
+      req.pipe(writeStream);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
       console.error('[Video Server] Route error:', err);
@@ -120,8 +200,11 @@ async function startServer() {
   });
 
   // 3. API: Delete video from codebase
-  app.delete('/api/save-video-to-code', (_req, res) => {
+  app.delete('/api/save-video-to-code', (req, res) => {
     try {
+      if (!isWriteAuthorized(req.headers)) {
+        return res.status(403).json(UNAUTHORIZED_BODY);
+      }
       if (fs.existsSync(targetVideoPath)) {
         fs.unlinkSync(targetVideoPath);
       }
