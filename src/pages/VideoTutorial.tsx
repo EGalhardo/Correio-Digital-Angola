@@ -5,17 +5,13 @@ import {
   Sparkles, 
   CheckCircle2, 
   Film, 
-  Info, 
   X, 
   ArrowLeft, 
   Upload, 
-  Trash2, 
   Link2, 
   FileVideo,
   AlertCircle,
-  HardDrive,
   Save,
-  ShieldCheck,
   Code2,
   Loader2
 } from "lucide-react";
@@ -38,8 +34,8 @@ export interface VideoItem {
   description: string;
   videoUrl: string;
   duration: string;
-  badge: string;
-  badgeColor: "red" | "amber" | "emerald";
+  badge?: string;
+  badgeColor?: "red" | "amber" | "emerald";
   isAvailable: boolean;
   thumbnail: string;
   isCustom?: boolean;
@@ -68,6 +64,8 @@ export default function VideoTutorial() {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const modalFileInputRef = useRef<HTMLInputElement | null>(null);
+  // Guarda o object URL atualmente em uso para o poder libertar.
+  const objectUrlRef = useRef<string | null>(null);
 
   // Function to save a File or Blob directly into the codebase (public/segundo-video-correio-digital.mp4)
   const saveBlobToCodebase = async (blob: Blob, fileName: string): Promise<boolean> => {
@@ -140,7 +138,6 @@ export default function VideoTutorial() {
 
   // Load video: first check codebase, then local storage
   useEffect(() => {
-    let objectUrl: string | null = null;
     const loadStored = async () => {
       // 1. FIRST: Check if video already exists in the project codebase
       const foundInCodebase = await checkCodebaseStatus();
@@ -163,8 +160,8 @@ export default function VideoTutorial() {
           setStoredLocalName(name);
           const sizeMb = stored.size ? (stored.size / (1024 * 1024)).toFixed(1) : "";
           setCustomVideoSize(sizeMb ? `${sizeMb} MB` : "Ficheiro Local");
-          objectUrl = URL.createObjectURL(stored.blob);
-          setCustomVideoUrl(objectUrl);
+          objectUrlRef.current = URL.createObjectURL(stored.blob);
+          setCustomVideoUrl(objectUrlRef.current);
           setLastSavedText(`Guardado no Armazenamento Local • ${sizeMb} MB`);
           return;
         }
@@ -190,7 +187,7 @@ export default function VideoTutorial() {
     loadStored();
 
     return () => {
-      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
     };
   }, []);
 
@@ -203,29 +200,19 @@ export default function VideoTutorial() {
       description: "Conheça em detalhe a plataforma de correspondência e inclusão digital para todos os cidadãos, empresas e instituições da República de Angola.",
       videoUrl: "/correio-digital-angola.mp4",
       duration: "1:07",
-      badge: "✦ Vídeo Actual • Disponível",
       badgeColor: "red",
       isAvailable: true,
       thumbnail: LOGO_CORREIO_ANGOLA
     },
     {
       id: 2,
-      title: customVideoUrl 
-        ? `Segundo Vídeo • ${customVideoName || "Correio Digital Angola"}`
-        : "Segundo Vídeo Oficial • Correio Digital Angola",
+      title: "Apresentação Oficial • Correio Digital Angola",
       subtitle: isSavedInCodebase 
         ? "Vídeo Integrado no Código • Pronto para Todos"
         : (customVideoUrl ? "Vídeo Carregado • Pronto para Gravar no Código" : "Em Breve • Novo Conteúdo"),
-      description: isSavedInCodebase
-        ? `Vídeo guardado permanentemente no código do projecto (/public/segundo-video-correio-digital.mp4, ${customVideoSize || "Oficial"}). Acessível por qualquer visitante.`
-        : (customVideoUrl
-          ? `Vídeo de ${customVideoSize || "20 MB"} carregado. Clique no botão abaixo para gravar definitivamente no código do projecto e disponibilizar a todos os utilizadores.`
-          : "Espaço reservado para o próximo vídeo da plataforma. Pode carregar o seu ficheiro MP4 (até 20 MB ou mais) directamente ou aguardar o envio oficial."),
+      description: "Apresentação institucional oficial do Correio Digital Angola. Assista à demonstração completa da plataforma de correspondência e inclusão digital que está a transformar a comunicação em Angola — permitindo a cidadãos, empresas e instituições públicas receber, consultar e gerir documentos de forma simples, segura e sem filas de espera.",
       videoUrl: customVideoUrl || "",
       duration: customVideoUrl ? (customVideoSize || "Disponível") : "Brevemente",
-      badge: isSavedInCodebase 
-        ? "✦ Guardado no Código • Oficial" 
-        : (customVideoUrl ? "✦ Vídeo 2 • Carregado & Activo" : "✦ Em Breve • A Adicionar Brevemente"),
       badgeColor: isSavedInCodebase || customVideoUrl ? "emerald" : "amber",
       isAvailable: Boolean(customVideoUrl),
       thumbnail: LOGO_CORREIO_ANGOLA,
@@ -261,7 +248,10 @@ export default function VideoTutorial() {
       // 1. Save into IndexedDB so it's always cached locally
       await savePersistentVideo(file, file.name, SECOND_VIDEO_KEY);
       
+      // Liberta o URL anterior antes de criar o novo (evita fuga de memoria)
+      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
       const newUrl = URL.createObjectURL(file);
+      objectUrlRef.current = newUrl;
       setCustomVideoUrl(newUrl);
       setCustomVideoName(file.name);
       const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
@@ -383,15 +373,6 @@ export default function VideoTutorial() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <button
-            type="button"
-            onClick={() => handleVideoCardClick(videos[0])}
-            className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider px-5 py-3 rounded-2xl shadow-md shadow-red-600/20 active:scale-95 transition-all cursor-pointer"
-          >
-            <Play size={14} fill="currentColor" />
-            Assistir Vídeo Actual
-          </button>
-
           {!customVideoUrl && (
             <button
               type="button"
@@ -494,51 +475,6 @@ export default function VideoTutorial() {
         </div>
       )}
 
-      {/* CASO 2: Vídeo já guardado e integrado no código do projecto */}
-      {isSavedInCodebase && (
-        <div className="mb-8 p-6 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border-2 border-emerald-500 rounded-3xl shadow-xl shadow-emerald-500/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-fade-in">
-          <div className="flex items-start sm:items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md">
-              <ShieldCheck size={28} />
-            </div>
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-base sm:text-lg font-black text-gray-900">
-                  Vídeo Guardado e Integrado no Código
-                </h3>
-                <span className="inline-flex items-center gap-1 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
-                  <CheckCircle2 size={11} />
-                  Código do Projecto • Oficial
-                </span>
-              </div>
-              <p className="text-xs sm:text-sm text-gray-700 mt-1">
-                Ficheiro: <code className="bg-emerald-100/70 text-emerald-900 font-mono font-bold px-1.5 py-0.5 rounded">public/segundo-video-correio-digital.mp4</code> ({customVideoSize}) • <strong>{customVideoName}</strong>. Acessível a todos os utilizadores sem necessidade de upload.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
-            <button
-              type="button"
-              onClick={() => handleVideoCardClick(videos[1])}
-              className="flex-1 md:flex-initial px-6 py-4 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black text-xs uppercase tracking-wider rounded-2xl flex items-center justify-center gap-2 shadow-md cursor-pointer transition-all"
-            >
-              <Play size={15} fill="currentColor" />
-              Assistir Vídeo Guardado
-            </button>
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-4 bg-white hover:bg-gray-100 active:scale-95 text-gray-800 border-2 border-gray-300 font-bold text-xs rounded-2xl flex items-center justify-center gap-2 shadow-sm cursor-pointer transition-all"
-              title="Substituir por outro ficheiro no código"
-            >
-              <Upload size={15} />
-              Substituir
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Grid com exactamente 2 vídeos com bordas cinzentas reforçadas */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
         {videos.map((video, index) => {
@@ -549,25 +485,11 @@ export default function VideoTutorial() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: index * 0.1 }}
-              className={`bg-white rounded-[36px] border-2 ${
-                video.badgeColor === "emerald" 
-                  ? "border-emerald-300 hover:border-emerald-500 shadow-emerald-600/10" 
-                  : "border-gray-300 hover:border-gray-400"
-              } p-6 md:p-8 shadow-xl shadow-gray-200/40 flex flex-col justify-between transition-all duration-300 group hover:-translate-y-1 relative`}
+              className="bg-white rounded-[36px] border-2 border-gray-300 hover:border-gray-400 p-6 md:p-8 shadow-xl shadow-gray-200/40 flex flex-col justify-between transition-all duration-300 group hover:-translate-y-1 relative"
             >
               <div>
-                {/* Header do Card com Badge e Duração */}
-                <div className="flex items-center justify-between gap-3 mb-5">
-                  <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider border ${
-                    video.badgeColor === "red" 
-                      ? "bg-red-50 text-red-650 border-red-200" 
-                      : video.badgeColor === "emerald"
-                      ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                      : "bg-amber-50 text-amber-700 border-amber-200"
-                  }`}>
-                    {video.badge}
-                  </span>
-                  
+                {/* Header do Card • Duração */}
+                <div className="flex items-center justify-end gap-3 mb-5">
                   <span className="inline-flex items-center gap-1.5 bg-gray-100 text-gray-800 text-[11px] font-black px-3 py-1.5 rounded-full border border-gray-200">
                     <Clock size={12} className="text-gray-500" />
                     {video.duration}
@@ -593,7 +515,7 @@ export default function VideoTutorial() {
                   {/* Botão de Play Centralizado */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     {video.isAvailable ? (
-                      <div className={`w-20 h-20 ${video.badgeColor === "emerald" ? "bg-emerald-600 group-hover:bg-emerald-700" : "bg-red-600 group-hover:bg-red-700"} text-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 group-hover:scale-110 border-2 border-white/60`}>
+                      <div className="w-20 h-20 bg-red-600 group-hover:bg-red-700 text-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 group-hover:scale-110 border-2 border-white/60">
                         <Play size={32} fill="currentColor" className="ml-1" />
                       </div>
                     ) : (
@@ -631,57 +553,11 @@ export default function VideoTutorial() {
                     <button 
                       type="button"
                       onClick={() => handleVideoCardClick(video)}
-                      className={`flex-1 w-full ${video.badgeColor === "emerald" ? "bg-emerald-600 hover:bg-emerald-700" : "bg-gray-950 hover:bg-red-600"} text-white py-3.5 px-6 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all shadow-md active:scale-[0.98] cursor-pointer`}
+                      className="flex-1 w-full bg-gray-950 hover:bg-red-600 text-white py-3.5 px-6 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all shadow-md active:scale-[0.98] cursor-pointer"
                     >
                       <Play size={16} fill="currentColor" />
                       Assistir Agora
                     </button>
-                    {!isFirst && customVideoUrl && (
-                      <div className="flex items-center gap-2 w-full sm:w-auto">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (storedLocalBlob && !isSavedInCodebase) {
-                              saveBlobToCodebase(storedLocalBlob, storedLocalName);
-                            } else {
-                              handleConfirmSaveClick();
-                            }
-                          }}
-                          disabled={isSavingToCode}
-                          className={`flex-1 sm:flex-initial px-3.5 py-3 ${
-                            isSavedInCodebase 
-                              ? "bg-emerald-50 hover:bg-emerald-100 text-emerald-850 border-emerald-300"
-                              : "bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-300"
-                          } border rounded-2xl font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer`}
-                          title={isSavedInCodebase ? "Vídeo integrado no código do projecto" : "Gravar no código do projecto"}
-                        >
-                          {isSavingToCode ? (
-                            <Loader2 size={14} className="animate-spin text-amber-600" />
-                          ) : (
-                            <Code2 size={14} className={isSavedInCodebase ? "text-emerald-600" : "text-amber-600"} />
-                          )}
-                          <span>{isSavedInCodebase ? "No Código ✓" : (isSavingToCode ? "A Gravar..." : "Gravar no Código 💾")}</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => fileInputRef.current?.click()}
-                          className="p-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                          title="Substituir por outro vídeo no código"
-                        >
-                          <Upload size={14} />
-                          <span className="sm:hidden">Substituir</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleRemoveCustomVideo}
-                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-2xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                          title="Remover vídeo do código do projecto"
-                        >
-                          <Trash2 size={14} />
-                          <span className="sm:hidden">Remover</span>
-                        </button>
-                      </div>
-                    )}
                   </>
                 ) : (
                   <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full">
