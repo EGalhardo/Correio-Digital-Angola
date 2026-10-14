@@ -99,6 +99,8 @@ export default function VideoTutorial() {
         setCustomVideoSize(`${sizeMb} MB`);
         setLastSavedText(`Guardado no Código do Projecto • ${sizeMb} MB`);
         setStoredLocalBlob(null);
+        // Clear any old indexedDB blob since it's now permanent in codebase
+        deletePersistentVideo(SECOND_VIDEO_KEY).catch(() => {});
         setUploadSuccessMsg(`🎉 O vídeo "${displayName}" (${sizeMb} MB) foi guardado com sucesso no código do projecto (/public/segundo-video-correio-digital.mp4)! Está agora permanente para todos os utilizadores.`);
         return true;
       } else {
@@ -106,8 +108,8 @@ export default function VideoTutorial() {
       }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
-      console.error("Falha ao salvar no código:", err);
-      setUploadErrorMsg(`Aviso ao gravar no código: ${message}. O ficheiro continua guardado em segurança no armazenamento local.`);
+      console.warn("Aviso ao salvar no código:", message);
+      setUploadErrorMsg(`Aviso ao gravar no código: ${message}. O ficheiro continua disponível no sistema.`);
       return false;
     } finally {
       setIsSavingToCode(false);
@@ -140,32 +142,35 @@ export default function VideoTutorial() {
   useEffect(() => {
     let objectUrl: string | null = null;
     const loadStored = async () => {
-      // 1. First check if user has a custom uploaded video in browser IndexedDB
+      // 1. FIRST: Check if video already exists in the project codebase
+      const foundInCodebase = await checkCodebaseStatus();
+      if (foundInCodebase) {
+        // Clean up any obsolete local IndexedDB cache that might cause desync
+        try {
+          await deletePersistentVideo(SECOND_VIDEO_KEY);
+        } catch {
+          // ignore cache cleanup error
+        }
+        return;
+      }
+
+      // 2. If not found in codebase, check browser IndexedDB
       try {
         const stored = await getPersistentVideo(SECOND_VIDEO_KEY);
         if (stored && stored.blob) {
           setStoredLocalBlob(stored.blob);
           const name = stored.name || "Segundo Vídeo • Correio Digital Angola";
           setStoredLocalName(name);
-
-          // Check if server file needs to be updated with this 20MB file
-          const statusRes = await fetch("/api/video2-status");
-          if (statusRes.ok) {
-            const data = await statusRes.json();
-            if (!data.exists || Math.abs(data.size - stored.size) > 1024) {
-              // Automatically stream user's 20MB video into the codebase!
-              await saveBlobToCodebase(stored.blob, name);
-              return;
-            }
-          }
+          const sizeMb = stored.size ? (stored.size / (1024 * 1024)).toFixed(1) : "";
+          setCustomVideoSize(sizeMb ? `${sizeMb} MB` : "Ficheiro Local");
+          objectUrl = URL.createObjectURL(stored.blob);
+          setCustomVideoUrl(objectUrl);
+          setLastSavedText(`Guardado no Armazenamento Local • ${sizeMb} MB`);
+          return;
         }
       } catch (syncErr) {
         console.warn("Aviso ao verificar sincronização local:", syncErr);
       }
-
-      // 2. Check if video is saved directly in the project codebase
-      const foundInCodebase = await checkCodebaseStatus();
-      if (foundInCodebase) return;
 
       // 3. Fallback to localStorage if an online video link was saved
       try {
@@ -277,7 +282,7 @@ export default function VideoTutorial() {
         badgeColor: "emerald"
       });
     } catch (err) {
-      console.error("Falha ao salvar o vídeo:", err);
+      console.warn("Aviso ao processar o vídeo:", err);
       setUploadErrorMsg("Ocorreu um erro ao processar o vídeo. Tente novamente.");
     } finally {
       setIsUploading(false);
