@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, ChangeEvent, FormEvent, MouseEvent } from "react";
+import { useState, useEffect, useRef, ChangeEvent, FormEvent } from "react";
 import { 
   Play, 
   Clock, 
@@ -50,11 +50,9 @@ export default function VideoTutorial() {
   const [customVideoUrl, setCustomVideoUrl] = useState<string | null>(null);
   const [customVideoName, setCustomVideoName] = useState<string>("");
   const [customVideoSize, setCustomVideoSize] = useState<string>("");
-  const [lastSavedText, setLastSavedText] = useState<string>("");
   const [isSavedInCodebase, setIsSavedInCodebase] = useState<boolean>(false);
   const [storedLocalBlob, setStoredLocalBlob] = useState<Blob | null>(null);
   const [storedLocalName, setStoredLocalName] = useState<string>("");
-  const [confirmSaveButtonText, setConfirmSaveButtonText] = useState<string>("Salvo no Código ✓");
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isSavingToCode, setIsSavingToCode] = useState<boolean>(false);
   const [uploadSuccessMsg, setUploadSuccessMsg] = useState<string>("");
@@ -95,7 +93,6 @@ export default function VideoTutorial() {
         setCustomVideoName(displayName);
         const sizeMb = (data.size / (1024 * 1024)).toFixed(1);
         setCustomVideoSize(`${sizeMb} MB`);
-        setLastSavedText(`Guardado no Código do Projecto • ${sizeMb} MB`);
         setStoredLocalBlob(null);
         // Clear any old indexedDB blob since it's now permanent in codebase
         deletePersistentVideo(SECOND_VIDEO_KEY).catch(() => {});
@@ -126,7 +123,6 @@ export default function VideoTutorial() {
           setCustomVideoName(data.originalName || "Segundo Vídeo Oficial");
           const sizeMb = data.size ? (data.size / (1024 * 1024)).toFixed(1) : "";
           setCustomVideoSize(sizeMb ? `${sizeMb} MB` : "Ficheiro Oficial");
-          setLastSavedText(`Integrado no Código do Projecto (public/segundo-video-correio-digital.mp4)`);
           return true;
         }
       }
@@ -162,7 +158,6 @@ export default function VideoTutorial() {
           setCustomVideoSize(sizeMb ? `${sizeMb} MB` : "Ficheiro Local");
           objectUrlRef.current = URL.createObjectURL(stored.blob);
           setCustomVideoUrl(objectUrlRef.current);
-          setLastSavedText(`Guardado no Armazenamento Local • ${sizeMb} MB`);
           return;
         }
       } catch (syncErr) {
@@ -177,7 +172,6 @@ export default function VideoTutorial() {
           setCustomVideoUrl(savedUrl);
           setCustomVideoName(savedUrlName || "Vídeo Online");
           setCustomVideoSize("Link Web");
-          setLastSavedText("Salvo no Sistema");
         }
       } catch (err) {
         console.warn("Erro ao carregar vídeo do armazenamento local:", err);
@@ -218,19 +212,6 @@ export default function VideoTutorial() {
   ];
 
   const [selectedVideo, setSelectedVideo] = useState<VideoItem>(videos[0]);
-
-  // Handle explicit Save confirmation button click
-  const handleConfirmSaveClick = () => {
-    if (storedLocalBlob && !isSavedInCodebase) {
-      saveBlobToCodebase(storedLocalBlob, storedLocalName);
-      return;
-    }
-    setConfirmSaveButtonText("✓ Confirmado & Salvo!");
-    setUploadSuccessMsg(`O vídeo "${customVideoName || 'Vídeo 2'}" está guardado no sistema.`);
-    setTimeout(() => {
-      setConfirmSaveButtonText("Salvo no Código ✓");
-    }, 3000);
-  };
 
   // Handle file selection from user device
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -288,38 +269,9 @@ export default function VideoTutorial() {
     setCustomVideoUrl(trimmed);
     setCustomVideoName("Vídeo Online");
     setCustomVideoSize("Link Web");
-    setLastSavedText("Salvo no Sistema");
     setUploadSuccessMsg("Link do vídeo configurado e salvo com sucesso!");
     setShowUrlField(false);
     setUrlInput("");
-  };
-
-  // Remove custom video from both codebase and local storage
-  const handleRemoveCustomVideo = async (e?: MouseEvent) => {
-    if (e) e.stopPropagation();
-    try {
-      // Remove from server codebase
-      await fetch("/api/save-video-to-code", { method: "DELETE" }).catch(() => {});
-      // Remove from local IndexedDB
-      await deletePersistentVideo(SECOND_VIDEO_KEY);
-      localStorage.removeItem("correio_second_video_url");
-      localStorage.removeItem("correio_second_video_name");
-      if (customVideoUrl && customVideoUrl.startsWith("blob:")) {
-        URL.revokeObjectURL(customVideoUrl);
-      }
-      setIsSavedInCodebase(false);
-      setStoredLocalBlob(null);
-      setStoredLocalName("");
-      setCustomVideoUrl(null);
-      setCustomVideoName("");
-      setCustomVideoSize("");
-      setLastSavedText("");
-      setUploadSuccessMsg("Vídeo removido do código do projecto.");
-      setUploadErrorMsg("");
-      setSelectedVideo(videos[0]);
-    } catch (err) {
-      console.warn("Erro ao remover vídeo:", err);
-    }
   };
 
   const handleVideoCardClick = (video: VideoItem) => {
@@ -369,20 +321,6 @@ export default function VideoTutorial() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {!customVideoUrl && (
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploading}
-              className="inline-flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider px-4 py-3 rounded-2xl shadow-sm border border-neutral-700 active:scale-95 transition-all cursor-pointer"
-              title="Carregar ficheiro de vídeo de 20MB ou mais do seu computador"
-            >
-              <Upload size={14} className="text-amber-400" />
-              {isUploading ? "A Carregar..." : "Carregar Vídeo 2 (MP4)"}
-            </button>
-          )}
-        </div>
       </div>
 
       {/* Mensagem de Erro se houver */}
