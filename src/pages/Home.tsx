@@ -1,6 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { GraduationCap, Landmark, CreditCard, HeartPulse, Zap, ShieldCheck, Check, LayoutGrid, UserCheck, Brain, Users, ShieldAlert, Languages } from "lucide-react";
+import { 
+  GraduationCap, 
+  Landmark, 
+  CreditCard, 
+  HeartPulse, 
+  Zap, 
+  ShieldCheck, 
+  Check, 
+  LayoutGrid, 
+  UserCheck, 
+  Brain, 
+  Users, 
+  ShieldAlert, 
+  Languages
+} from "lucide-react";
 import ThreeDCarousel from "../components/ThreeDCarousel";
 import TestimonialsCarousel from "../components/TestimonialsCarousel";
 import DownloadModal from "../components/DownloadModal";
@@ -73,11 +87,24 @@ export default function Home() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handlePlayClick = () => {
-    if (audioRef.current && isPlayingAudio) {
+    if (!audioRef.current) return;
+
+    if (isPlayingAudio) {
       audioRef.current.pause();
       setIsPlayingAudio(false);
+    } else {
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlayingAudio(true);
+          })
+          .catch((err) => {
+            console.warn("Audio playback error:", err);
+            setIsPlayingAudio(false);
+          });
+      }
     }
-    setIsVideoOpen(true);
   };
 
   useEffect(() => {
@@ -138,7 +165,7 @@ export default function Home() {
         <div className="absolute bottom-[-48px] right-[-64px] w-[304px] h-[304px] rounded-full bg-red-500/5 blur-3xl pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-6 w-full flex flex-col items-center text-center z-10 relative pt-10">
-          <ThreeDCarousel isPlayingAudio={isVideoOpen} onPlayClick={handlePlayClick} />
+          <ThreeDCarousel isPlayingAudio={isPlayingAudio} onPlayClick={handlePlayClick} />
         </div>
       </section>
 
@@ -359,7 +386,7 @@ export default function Home() {
               </a>
               <button 
                 type="button"
-                onClick={() => navigate("/video-tutorial")}
+                onClick={() => navigate("/videos")}
                 className="w-full max-w-[320px] sm:w-80 md:w-96 inline-flex items-center justify-center gap-3 bg-black text-white font-black text-base sm:text-lg px-8 py-4 sm:py-4.5 rounded-2xl hover:bg-neutral-800 transition-all shadow-xl shadow-black/25 hover:scale-105 active:scale-95 tracking-wider uppercase cursor-pointer text-center"
               >
                 Vídeo
@@ -368,6 +395,22 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Elemento de Áudio Oficial */}
+      <audio
+        ref={audioRef}
+        src="/correio-digital-angola.mp3"
+        preload="auto"
+        onPlay={() => setIsPlayingAudio(true)}
+        onPause={() => setIsPlayingAudio(false)}
+        onEnded={() => setIsPlayingAudio(false)}
+        onError={(e) => {
+          console.warn("Audio playback error event:", e);
+          setIsPlayingAudio(false);
+        }}
+      >
+        <source src="/correio-digital-angola.mp3" type="audio/mpeg" />
+      </audio>
 
       {/* Modais */}
       {isModalOpen && <DownloadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />}

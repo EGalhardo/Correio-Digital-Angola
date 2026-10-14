@@ -205,7 +205,7 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
           ))}
         </div>
 
-        {/* Translucent Glass Play Button centered over the cards */}
+        {/* Translucent Glass Play/Pause Audio Button centered over the cards */}
         {onPlayClick && (
           <button 
             type="button"
@@ -213,14 +213,29 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
               e.stopPropagation();
               onPlayClick();
             }}
-            className="absolute z-20 w-16 h-16 min-[380px]:w-20 min-[380px]:h-20 sm:w-28 sm:h-28 bg-white/15 hover:bg-white/30 border-[2px] sm:border-[3px] border-white backdrop-blur-md text-white rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.4)] transition-all duration-300 hover:scale-115 hover:shadow-[0_0_60px_rgba(220,38,38,0.6)] active:scale-95 cursor-pointer group"
-            aria-label="Assistir Vídeo Correio Digital Angola"
-            title="Assistir Vídeo Correio Digital Angola"
+            className={`absolute z-20 w-16 h-16 min-[380px]:w-20 min-[380px]:h-20 sm:w-28 sm:h-28 bg-white/15 hover:bg-white/30 border-[2px] sm:border-[3px] border-white backdrop-blur-md text-white rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.4)] transition-all duration-300 hover:scale-115 hover:shadow-[0_0_60px_rgba(220,38,38,0.6)] active:scale-95 cursor-pointer group ${
+              isPlayingAudio ? "ring-4 ring-red-500/60 shadow-[0_0_60px_rgba(220,38,38,0.7)] scale-105" : ""
+            }`}
+            aria-label={isPlayingAudio ? "Pausar Áudio Oficial - Correio Digital Angola" : "Ouvir Áudio Oficial - Correio Digital Angola"}
+            title={isPlayingAudio ? "Pausar Áudio Oficial - Correio Digital Angola" : "Ouvir Áudio Oficial - Correio Digital Angola"}
           >
             {/* Intensive dual pulsing waves */}
-            <div className="absolute inset-0 rounded-full border border-white/60 pointer-events-none group-hover:animate-ping" />
-            <div className="absolute -inset-2 sm:-inset-3 rounded-full border border-red-500/40 pointer-events-none group-hover:animate-pulse [animation-duration:1.5s]" />
-            <Play size={cardW < 120 ? 22 : cardW < 155 ? 28 : 38} fill="currentColor" className="translate-x-[2px] sm:translate-x-[3px] text-white transition-transform duration-300 group-hover:scale-115" />
+            <div className={`absolute inset-0 rounded-full border border-white/60 pointer-events-none ${isPlayingAudio ? "animate-ping opacity-75" : "group-hover:animate-ping"}`} />
+            <div className={`absolute -inset-2 sm:-inset-3 rounded-full border border-red-500/40 pointer-events-none ${isPlayingAudio ? "animate-pulse" : "group-hover:animate-pulse"} [animation-duration:1.5s]`} />
+            
+            {isPlayingAudio ? (
+              <Pause 
+                size={cardW < 120 ? 22 : cardW < 155 ? 28 : 38} 
+                fill="currentColor" 
+                className="text-white transition-transform duration-300 group-hover:scale-110" 
+              />
+            ) : (
+              <Play 
+                size={cardW < 120 ? 22 : cardW < 155 ? 28 : 38} 
+                fill="currentColor" 
+                className="translate-x-[2px] sm:translate-x-[3px] text-white transition-transform duration-300 group-hover:scale-110" 
+              />
+            )}
           </button>
         )}
       </div>

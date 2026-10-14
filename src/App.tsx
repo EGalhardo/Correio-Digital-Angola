@@ -57,6 +57,7 @@ export default function App() {
             <Route path="/como-funciona" element={<HowItWorks />} />
             <Route path="/central-ajuda" element={<HelpCenter />} />
             <Route path="/faq" element={<FAQ />} />
+            <Route path="/videos" element={<VideoTutorial />} />
             <Route path="/video-tutorial" element={<VideoTutorial />} />
           </Routes>
         </main>

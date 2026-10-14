@@ -22,11 +22,7 @@ interface OfficialVideoModalProps {
 }
 
 const DEFAULT_VIDEO_SOURCES = [
-  "/correio-digital-angola.mp4",
-  "/Correio Digital Angola.mp4",
-  "/correio_digital_angola.mp4",
-  "/Apresentacao Correio Digital Angola.mp4",
-  "/Correio Digital Angola (online-video-cutter.com).mp4"
+  "/correio-digital-angola.mp4"
 ];
 
 export default function OfficialVideoModal({ 
@@ -49,9 +45,18 @@ export default function OfficialVideoModal({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const videoSources = videoUrl 
-    ? [videoUrl, ...DEFAULT_VIDEO_SOURCES.filter(s => s !== videoUrl)]
-    : DEFAULT_VIDEO_SOURCES;
+  const isDedicatedSource = Boolean(
+    videoUrl && (
+      videoUrl.startsWith("blob:") || 
+      videoUrl.startsWith("data:") || 
+      videoUrl.startsWith("http") ||
+      videoUrl.includes("segundo-video")
+    )
+  );
+
+  const videoSources = isDedicatedSource
+    ? [videoUrl!]
+    : (videoUrl ? [videoUrl, ...DEFAULT_VIDEO_SOURCES.filter(s => s !== videoUrl)] : DEFAULT_VIDEO_SOURCES);
 
   // Close handler that safely stops playback
   const handleClose = () => {

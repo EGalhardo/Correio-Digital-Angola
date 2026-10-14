@@ -31,7 +31,10 @@ export function openMediaDB(): Promise<IDBDatabase> {
   });
 }
 
-export async function savePersistentVideo(file: File | Blob, fileName: string): Promise<StoredVideoMeta> {
+export const DEFAULT_OFFICIAL_VIDEO_KEY = "official_video_data";
+export const SECOND_VIDEO_KEY = "second_video_data";
+
+export async function savePersistentVideo(file: File | Blob, fileName: string, key: string = VIDEO_KEY): Promise<StoredVideoMeta> {
   const db = await openMediaDB();
   const meta: StoredVideoMeta = {
     blob: file,
@@ -44,20 +47,20 @@ export async function savePersistentVideo(file: File | Blob, fileName: string): 
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readwrite");
     const store = tx.objectStore(STORE_NAME);
-    const req = store.put(meta, VIDEO_KEY);
+    const req = store.put(meta, key);
 
     req.onsuccess = () => resolve(meta);
     req.onerror = () => reject(req.error);
   });
 }
 
-export async function getPersistentVideo(): Promise<StoredVideoMeta | null> {
+export async function getPersistentVideo(key: string = VIDEO_KEY): Promise<StoredVideoMeta | null> {
   try {
     const db = await openMediaDB();
     return new Promise((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, "readonly");
       const store = tx.objectStore(STORE_NAME);
-      const req = store.get(VIDEO_KEY);
+      const req = store.get(key);
 
       req.onsuccess = () => {
         if (req.result && req.result.blob) {
@@ -75,13 +78,13 @@ export async function getPersistentVideo(): Promise<StoredVideoMeta | null> {
   }
 }
 
-export async function deletePersistentVideo(): Promise<void> {
+export async function deletePersistentVideo(key: string = VIDEO_KEY): Promise<void> {
   try {
     const db = await openMediaDB();
     return new Promise((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, "readwrite");
       const store = tx.objectStore(STORE_NAME);
-      const req = store.delete(VIDEO_KEY);
+      const req = store.delete(key);
 
       req.onsuccess = () => resolve();
       req.onerror = () => reject(req.error);
@@ -90,3 +93,4 @@ export async function deletePersistentVideo(): Promise<void> {
     console.warn("Could not delete persistent video from IndexedDB:", err);
   }
 }
+

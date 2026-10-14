@@ -55,7 +55,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-xs lg:text-[13px] text-white font-bold">
               <li><Link to="/central-ajuda" className="hover:text-amber-400 transition-all hover:translate-x-1.5 inline-block">Central de Ajuda</Link></li>
               <li><Link to="/faq" className="hover:text-amber-400 transition-all hover:translate-x-1.5 inline-block">FAQ</Link></li>
-              <li><Link to="/video-tutorial" className="hover:text-amber-400 transition-all hover:translate-x-1.5 inline-block">Vídeo Tutorial</Link></li>
+              <li><Link to="/videos" className="hover:text-amber-400 transition-all hover:translate-x-1.5 inline-block">Vídeos</Link></li>
             </ul>
           </div>
 
