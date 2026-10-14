@@ -207,16 +207,13 @@ export default function VideoTutorial() {
     {
       id: 2,
       title: "Apresentação Oficial • Correio Digital Angola",
-      subtitle: isSavedInCodebase 
-        ? "Vídeo Integrado no Código • Pronto para Todos"
-        : (customVideoUrl ? "Vídeo Carregado • Pronto para Gravar no Código" : "Em Breve • Novo Conteúdo"),
+      subtitle: "Vídeo Oficial de Apresentação",
       description: "Apresentação institucional oficial do Correio Digital Angola. Assista à demonstração completa da plataforma de correspondência e inclusão digital que está a transformar a comunicação em Angola — permitindo a cidadãos, empresas e instituições públicas receber, consultar e gerir documentos de forma simples, segura e sem filas de espera.",
-      videoUrl: customVideoUrl || "",
-      duration: customVideoUrl ? (customVideoSize || "Disponível") : "Brevemente",
-      badgeColor: isSavedInCodebase || customVideoUrl ? "emerald" : "amber",
-      isAvailable: Boolean(customVideoUrl),
-      thumbnail: LOGO_CORREIO_ANGOLA,
-      isCustom: Boolean(customVideoUrl)
+      videoUrl: "/segundo-video-correio-digital.mp4",
+      duration: "1:53",
+      badgeColor: "red",
+      isAvailable: true,
+      thumbnail: LOGO_CORREIO_ANGOLA
     }
   ];
 
