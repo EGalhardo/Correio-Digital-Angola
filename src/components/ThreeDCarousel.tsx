@@ -7,11 +7,11 @@ interface ThreeDCarouselProps {
 }
 
 const CARDS = [
-  { img: "https://i.postimg.cc/XNmPqn6h/1.png", label: "Identificação Civil", sub: "BI & Passaporte" },
-  { img: "https://i.postimg.cc/8zHwRS9x/2-mobile.png", label: "Finanças & AGT", sub: "Impostos & Guias" },
-  { img: "https://i.postimg.cc/nLW42c2Z/3-Mobile.png", label: "Serviços Públicos", sub: "ENDE & EPAL" },
-  { img: "https://i.postimg.cc/yxy3MVm3/4-Mobile.png", label: "Saúde & Emergência", sub: "Círculo de Confiança" },
-  { img: "https://i.postimg.cc/3RgkGKbf/6-Mobile.png", label: "Cidadania Ativa", sub: "Estado & Cidadãos" },
+  { img: "/carousel/identificacao-civil.png", label: "Identificação Civil", sub: "BI & Passaporte" },
+  { img: "/carousel/financas-agt.png", label: "Finanças & AGT", sub: "Impostos & Guias" },
+  { img: "/carousel/servicos-publicos.png", label: "Serviços Públicos", sub: "ENDE & EPAL" },
+  { img: "/carousel/saude-emergencia.png", label: "Saúde & Emergência", sub: "Círculo de Confiança" },
+  { img: "/carousel/cidadania-ativa.png", label: "Cidadania Ativa", sub: "Estado & Cidadãos" },
 ];
 
 const N = CARDS.length;

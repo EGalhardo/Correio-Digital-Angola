@@ -44,6 +44,7 @@ export default function OfficialVideoModal({
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const autoPlayPendingRef = useRef(false);
 
   const isDedicatedSource = Boolean(
     videoUrl && (
@@ -60,12 +61,35 @@ export default function OfficialVideoModal({
 
   // Close handler that safely stops playback
   const handleClose = () => {
+    autoPlayPendingRef.current = false;
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
     setIsPlaying(false);
     onClose();
+  };
+
+  // Tenta iniciar com som e, se o browser bloquear, inicia automaticamente sem som.
+  // Também é chamado quando o vídeo fica pronto, evitando depender de vários cliques.
+  const attemptAutoPlay = async () => {
+    const video = videoRef.current;
+    if (!isOpen || !autoPlayPendingRef.current || !video || !video.paused) return;
+
+    try {
+      await video.play();
+    } catch {
+      if (!videoRef.current || !autoPlayPendingRef.current) return;
+
+      try {
+        video.muted = true;
+        setIsMuted(true);
+        await video.play();
+      } catch (error) {
+        console.log("Autoplay paused by browser policy:", error);
+        setIsPlaying(false);
+      }
+    }
   };
 
   // Keyboard shortcut (ESC) & Spacebar play/pause
@@ -102,41 +126,16 @@ export default function OfficialVideoModal({
     if (isOpen) {
       setHasError(false);
       setVideoSrcIndex(0);
-      
-      const timer = setTimeout(() => {
-        if (videoRef.current) {
-          videoRef.current.currentTime = 0;
-          videoRef.current.volume = volume;
-          videoRef.current.muted = isMuted;
-          
-          const playPromise = videoRef.current.play();
-          if (playPromise !== undefined) {
-            playPromise
-              .then(() => {
-                setIsPlaying(true);
-              })
-              .catch((err) => {
-                console.log("Unmuted autoplay restricted, attempting muted playback...", err);
-                if (videoRef.current) {
-                  videoRef.current.muted = true;
-                  setIsMuted(true);
-                  videoRef.current.play()
-                    .then(() => {
-                      setIsPlaying(true);
-                    })
-                    .catch((e) => {
-                      console.log("Autoplay paused by browser policy:", e);
-                      setIsPlaying(false);
-                    });
-                }
-              });
-          }
-        }
-      }, 60);
+      autoPlayPendingRef.current = true;
 
-      return () => clearTimeout(timer);
-    } else if (!isOpen && videoRef.current) {
-      videoRef.current.pause();
+      if (videoRef.current) {
+        videoRef.current.volume = volume;
+        videoRef.current.muted = isMuted;
+        void attemptAutoPlay();
+      }
+    } else {
+      autoPlayPendingRef.current = false;
+      if (videoRef.current) videoRef.current.pause();
       setIsPlaying(false);
     }
   }, [isOpen]);
@@ -145,12 +144,14 @@ export default function OfficialVideoModal({
     if (!videoRef.current) return;
     setHasUserInteracted(true);
     if (videoRef.current.paused) {
+      autoPlayPendingRef.current = true;
       if (isMuted && !hasUserInteracted) {
         videoRef.current.muted = false;
         setIsMuted(false);
       }
-      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+      void attemptAutoPlay();
     } else {
+      autoPlayPendingRef.current = false;
       videoRef.current.pause();
       setIsPlaying(false);
     }
@@ -201,24 +202,28 @@ export default function OfficialVideoModal({
   const handleRestart = () => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+      autoPlayPendingRef.current = true;
+      void attemptAutoPlay();
     }
   };
 
   const handleVideoError = () => {
     if (videoSrcIndex < videoSources.length - 1) {
+      autoPlayPendingRef.current = true;
       setVideoSrcIndex((prev) => prev + 1);
     } else {
+      autoPlayPendingRef.current = false;
       setHasError(true);
     }
   };
 
   const retryPlayback = () => {
+    autoPlayPendingRef.current = true;
     setHasError(false);
     setVideoSrcIndex(0);
     if (videoRef.current) {
       videoRef.current.load();
-      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+      void attemptAutoPlay();
     }
   };
 
@@ -330,13 +335,16 @@ export default function OfficialVideoModal({
                   ref={videoRef}
                   src={videoSources[videoSrcIndex]}
                   playsInline
-                  autoPlay
                   preload="auto"
                   controls={false}
                   onClick={togglePlay}
                   onTimeUpdate={handleTimeUpdate}
                   onLoadedMetadata={handleLoadedMetadata}
-                  onPlay={() => setIsPlaying(true)}
+                  onCanPlay={attemptAutoPlay}
+                  onPlay={() => {
+                    autoPlayPendingRef.current = false;
+                    setIsPlaying(true);
+                  }}
                   onPause={() => setIsPlaying(false)}
                   onEnded={() => setIsPlaying(false)}
                   onError={handleVideoError}
