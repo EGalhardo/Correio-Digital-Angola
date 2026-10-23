@@ -196,7 +196,7 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
                 src={card.img} 
                 alt={card.label} 
                 className="w-full h-full object-cover object-center select-none pointer-events-none block" 
-                loading={i === 0 ? "eager" : "lazy"}
+                loading="eager"
                 decoding="async"
                 fetchPriority={i === 0 ? "high" : "low"}
                 referrerPolicy="no-referrer" 
