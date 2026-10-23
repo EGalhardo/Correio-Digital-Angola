@@ -12,35 +12,35 @@ interface Slide {
 
 const SLIDES: Slide[] = [
   {
-    img: "https://i.postimg.cc/FKbn9N6r/1-CIRCULO-DE-EMERGENCIA.png",
+    img: "/depoimentos/circulo-emergencia.png",
     tag: "Saúde Pública",
     title: "Círculo de Emergência",
     desc: "Em situações críticas, a rápida identificação dos contactos do Círculo de Confiança permite agir com celeridade e salvar vidas no atendimento de urgências.",
     color: "#e21a22"
   },
   {
-    img: "https://i.postimg.cc/pTXkR88G/2-FIM-DAS-FILAS-DE-ESPERA.png",
+    img: "/depoimentos/fim-filas-espera.png",
     tag: "SME & Identificação Civil",
     title: "Fim das Filas de Espera",
     desc: "Com o Correio Digital, reduzimos drasticamente as filas nos postos de Luanda. O cidadão é notificado no segundo exacto em que o seu BI ou passaporte está pronto para levantamento.",
     color: "#e21a22"
   },
   {
-    img: "https://i.postimg.cc/pLJ6vP4b/3-NOTIFICACOES-FISCAIS.png",
+    img: "/depoimentos/notificacoes-fiscais.png",
     tag: "Finanças - AGT",
     title: "Notificações Fiscais",
     desc: "As guias oficiais e avisos passaram a ser recebidos diretamente no BI do contribuinte, de forma segura, reduzindo perdas e extravios fiscais a zero.",
     color: "#e21a22"
   },
   {
-    img: "https://i.postimg.cc/fyYvvKhk/4-FATURACAO-DIRECTA.png",
+    img: "/depoimentos/faturacao-directa.png",
     tag: "Energia - ENDE/EPAL",
     title: "Faturação Directa",
     desc: "Disponibilizamos faturas e alertas de consumo de água e luz digitalmente de forma célere, eliminando custos gigantescos de papel impresso e distribuição.",
     color: "#e21a22"
   },
   {
-    img: "https://i.postimg.cc/HkvbXKy1/5-SOBERANIA-DE-ANGOLA.png",
+    img: "/depoimentos/soberania-angola.png",
     tag: "Governo Digital",
     title: "Soberania de Angola",
     desc: "Esta plataforma representa a verdadeira inclusão cidadã e soberania nacional, interligando a infraestrutura pública oficial aos angolanos de forma integrada.",
