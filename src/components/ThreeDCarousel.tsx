@@ -183,7 +183,7 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
           {CARDS.map((card, i) => (
             <div
               key={i}
-              className={`penta-card bg-neutral-950 flex items-center justify-center ${i === activeCard ? "shadow-2xl shadow-black/70 scale-105" : ""}`}
+              className={`penta-card flex items-center justify-center ${i === activeCard ? "shadow-2xl shadow-black/70 scale-105" : ""}`}
               style={{
                 width: `${cardW}px`,
                 height: `${cardH}px`,
@@ -198,7 +198,7 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
                 className="w-full h-full object-cover object-center select-none pointer-events-none block" 
                 loading="eager"
                 decoding="async"
-                fetchPriority={i === 0 ? "high" : "low"}
+                fetchPriority="high"
                 onError={(e) => {
                   if (e.currentTarget.getAttribute("src") !== card.fallback) {
                     e.currentTarget.src = card.fallback;
