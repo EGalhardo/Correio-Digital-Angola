@@ -45,6 +45,12 @@ export default function OfficialVideoModal({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const autoPlayPendingRef = useRef(false);
+  // Número de sequência do pedido de reprodução mais recente.
+  // Se durante o "await play()" surgir um pedido mais novo, a tentativa
+  // antiga termina em silêncio. Isto evita a tempestade de chamadas play()
+  // que se anulavam umas às outras (AbortError) e obrigavam o utilizador
+  // a clicar várias vezes até o vídeo finalmente iniciar.
+  const playRequestRef = useRef(0);
 
   const isDedicatedSource = Boolean(
     videoUrl && (
@@ -76,17 +82,26 @@ export default function OfficialVideoModal({
     const video = videoRef.current;
     if (!isOpen || !autoPlayPendingRef.current || !video || !video.paused) return;
 
+    const requestId = ++playRequestRef.current;
+    const isStale = () =>
+      requestId !== playRequestRef.current || !videoRef.current || !autoPlayPendingRef.current;
+
     try {
       await video.play();
-    } catch {
-      if (!videoRef.current || !autoPlayPendingRef.current) return;
+    } catch (error) {
+      // AbortError: um pedido de reprodução mais recente já assumiu o controlo.
+      // Não é um bloqueio de autoplay — terminar em silêncio para não anular
+      // o novo pedido (era isto que exigia vários cliques ao utilizador).
+      if (isStale() || (error as DOMException)?.name === "AbortError") return;
 
+      // NotAllowedError (política de autoplay): tentar novamente sem som.
       try {
         video.muted = true;
         setIsMuted(true);
         await video.play();
-      } catch (error) {
-        console.log("Autoplay paused by browser policy:", error);
+      } catch (mutedError) {
+        if (isStale() || (mutedError as DOMException)?.name === "AbortError") return;
+        console.log("Autoplay paused by browser policy:", mutedError);
         setIsPlaying(false);
       }
     }
