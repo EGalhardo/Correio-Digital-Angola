@@ -49,15 +49,15 @@
   }
 
   .penta-card {
-    @apply absolute rounded-[24px] overflow-hidden transition-shadow duration-300;
-    transform-style: preserve-3d;
+    @apply absolute rounded-[24px] transition-shadow duration-300;
     /* Fundo claro enquanto a imagem carrega: evita o cartão preto/vazio */
     background-color: #ffffff;
-    /* Esconde a face traseira do cartão: em vários browsers (Chrome/Android) a
-       face traseira de um cartão 3D com overflow:hidden é renderizada escura,
-       fazendo parecer que um dos cartões tem "fundo escuro" */
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    /* Cartão plano e sem recorte: overflow:hidden com preserve-3d achata o
+       elemento e faz alguns browsers pintarem a face traseira de escuro.
+       Esconder a face traseira, por sua vez, faz o cartão desaparecer e deixa
+       ver o fundo escuro do hero. Assim os 5 cartões mostram sempre a imagem. */
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
     box-shadow: 0 12px 48px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
   }
 

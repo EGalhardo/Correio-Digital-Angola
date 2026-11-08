@@ -195,7 +195,7 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
               <img 
                 src={card.img} 
                 alt={card.label} 
-                className="w-full h-full object-cover object-center select-none pointer-events-none block" 
+                className="w-full h-full rounded-[24px] object-cover object-center select-none pointer-events-none block"
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"
