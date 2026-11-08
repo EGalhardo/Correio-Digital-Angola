@@ -10,7 +10,8 @@ import {
   Minimize2, 
   CheckCircle2,
   X,
-  RefreshCw
+  RefreshCw,
+  Loader2
 } from "lucide-react";
 
 interface OfficialVideoModalProps {
@@ -36,7 +37,15 @@ export default function OfficialVideoModal({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(66.7);
   const [volume, setVolume] = useState(1);
-  const [isMuted, setIsMuted] = useState(false);
+  // O vídeo começa SEM SOM de propósito: o autoplay muted é o único caminho
+  // permitido em todos os browsers (Chrome, Safari iOS, WebViews). Assim o
+  // vídeo inicia SEMPRE automaticamente ao abrir o modal; o utilizador activa
+  // o som com um toque no botão "Activar Som" (já existente abaixo).
+  const [isMuted, setIsMuted] = useState(true);
+  // true enquanto o vídeo está a carregar/bufferizar: mostra um indicador de
+  // carregamento para o utilizador não pensar que está parado e clicar várias
+  // vezes (cada clique reiniciava o pedido de reprodução).
+  const [isBuffering, setIsBuffering] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const [videoSrcIndex, setVideoSrcIndex] = useState(0);
@@ -51,6 +60,10 @@ export default function OfficialVideoModal({
   // que se anulavam umas às outras (AbortError) e obrigavam o utilizador
   // a clicar várias vezes até o vídeo finalmente iniciar.
   const playRequestRef = useRef(0);
+  // Momento em que o modal abriu: usado para ignorar cliques no backdrop
+  // durante os primeiros instantes (um duplo toque acidental no cartão não
+  // pode fechar o modal logo a abrir).
+  const openedAtRef = useRef(0);
 
   const isDedicatedSource = Boolean(
     videoUrl && (
@@ -141,6 +154,8 @@ export default function OfficialVideoModal({
     if (isOpen) {
       setHasError(false);
       setVideoSrcIndex(0);
+      setIsBuffering(true);
+      openedAtRef.current = Date.now();
       autoPlayPendingRef.current = true;
 
       if (videoRef.current) {
@@ -272,7 +287,11 @@ export default function OfficialVideoModal({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={handleClose}
+            onClick={() => {
+              // Ignora cliques no backdrop nos primeiros instantes apos abrir:
+              // um duplo toque rapido no cartao nao fecha o modal por acidente.
+              if (Date.now() - openedAtRef.current > 700) handleClose();
+            }}
             className="absolute inset-0 bg-black/90 backdrop-blur-md cursor-pointer"
           />
 
@@ -350,14 +369,23 @@ export default function OfficialVideoModal({
                   ref={videoRef}
                   src={videoSources[videoSrcIndex]}
                   playsInline
+                  muted
+                  autoPlay
                   preload="auto"
                   controls={false}
                   onClick={togglePlay}
                   onTimeUpdate={handleTimeUpdate}
                   onLoadedMetadata={handleLoadedMetadata}
-                  onCanPlay={attemptAutoPlay}
+                  onLoadStart={() => setIsBuffering(true)}
+                  onWaiting={() => setIsBuffering(true)}
+                  onPlaying={() => setIsBuffering(false)}
+                  onCanPlay={() => {
+                    setIsBuffering(false);
+                    void attemptAutoPlay();
+                  }}
                   onPlay={() => {
                     autoPlayPendingRef.current = false;
+                    setIsBuffering(false);
                     setIsPlaying(true);
                   }}
                   onPause={() => setIsPlaying(false)}
@@ -382,8 +410,16 @@ export default function OfficialVideoModal({
                 </button>
               )}
 
+              {/* Indicador de carregamento enquanto o video bufferiza */}
+              {isBuffering && !hasError && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/40 pointer-events-none">
+                  <Loader2 size={44} className="text-white animate-spin drop-shadow-lg" />
+                  <span className="text-white/80 text-[11px] font-bold uppercase tracking-widest">A carregar vídeo...</span>
+                </div>
+              )}
+
               {/* Center Play/Pause Overlay Button when paused */}
-              {!isPlaying && !hasError && (
+              {!isPlaying && !isBuffering && !hasError && (
                 <div 
                   onClick={togglePlay}
                   className="absolute inset-0 flex items-center justify-center bg-black/40 cursor-pointer backdrop-blur-[2px] transition-all"
