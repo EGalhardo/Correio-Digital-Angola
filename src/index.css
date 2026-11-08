@@ -53,10 +53,11 @@
     transform-style: preserve-3d;
     /* Fundo claro enquanto a imagem carrega: evita o cartão preto/vazio */
     background-color: #ffffff;
-    /* A face traseira tem de continuar visível: com 5 cartões no anel, 2 a 3
-       estão sempre virados e escondê-los deixa ver o fundo escuro do hero. */
-    backface-visibility: visible;
-    -webkit-backface-visibility: visible;
+    /* Esconde a face traseira do cartão: em vários browsers (Chrome/Android) a
+       face traseira de um cartão 3D com overflow:hidden é renderizada escura,
+       fazendo parecer que um dos cartões tem "fundo escuro" */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     box-shadow: 0 12px 48px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
   }
 
