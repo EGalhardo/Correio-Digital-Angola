@@ -192,10 +192,28 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
               }}
               onClick={() => snapToCard(i)}
             >
+              {/* Face da frente */}
               <img 
                 src={card.img} 
                 alt={card.label} 
-                className="w-full h-full rounded-[24px] object-cover object-center select-none pointer-events-none block"
+                className="penta-face select-none pointer-events-none"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                onError={(e) => {
+                  if (e.currentTarget.getAttribute("src") !== card.fallback) {
+                    e.currentTarget.src = card.fallback;
+                  }
+                }}
+                referrerPolicy="no-referrer" 
+              />
+              {/* Face de trás (mesma imagem): o cartão nunca aparece escuro
+                  quando roda para o verso durante a rotação */}
+              <img 
+                src={card.img} 
+                alt=""
+                aria-hidden="true"
+                className="penta-face penta-face-back select-none pointer-events-none"
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"

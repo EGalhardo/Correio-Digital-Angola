@@ -49,16 +49,28 @@
   }
 
   .penta-card {
+    /* Sem overflow-hidden: combinado com preserve-3d achata o elemento.
+       O recorte arredondado é feito por cada face (.penta-face). */
     @apply absolute rounded-[24px] transition-shadow duration-300;
+    transform-style: preserve-3d;
     /* Fundo claro enquanto a imagem carrega: evita o cartão preto/vazio */
     background-color: #ffffff;
-    /* Cartão plano e sem recorte: overflow:hidden com preserve-3d achata o
-       elemento e faz alguns browsers pintarem a face traseira de escuro.
-       Esconder a face traseira, por sua vez, faz o cartão desaparecer e deixa
-       ver o fundo escuro do hero. Assim os 5 cartões mostram sempre a imagem. */
-    backface-visibility: visible;
-    -webkit-backface-visibility: visible;
     box-shadow: 0 12px 48px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+
+  /* Cada cartão tem duas faces com a mesma imagem (frente e verso), ambas
+     com backface-visibility:hidden. Assim, de qualquer ângulo da rotação,
+     o utilizador vê sempre uma face frontal normal — nunca uma face
+     traseira (que alguns Chrome/Android pintam de escuro) nem o fundo
+     escuro do hero através de um cartão escondido. */
+  .penta-face {
+    @apply absolute inset-0 w-full h-full object-cover object-center rounded-[24px];
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .penta-face-back {
+    transform: rotateY(180deg);
   }
 
   .penta-card::before {
