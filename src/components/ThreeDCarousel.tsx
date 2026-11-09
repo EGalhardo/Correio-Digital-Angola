@@ -181,10 +181,6 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
           }}
         >
           {CARDS.map((card, i) => {
-            // Vira a mesma face apenas quando o cartão passa pelo plano lateral.
-            // Assim nenhum verso 3D fica visível com o fundo escuro do browser.
-            const faceAngle = Math.cos((currentAngle + i * ANGLE_STEP) * Math.PI / 180) < 0 ? 180 : 0;
-
             return (
               <div
                 key={i}
@@ -192,7 +188,7 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
                 style={{
                   width: `${cardW}px`,
                   height: `${cardH}px`,
-                  transform: `rotateY(${i * ANGLE_STEP}deg) translateZ(${radius}px) rotateY(${faceAngle}deg)`,
+                  transform: `rotateY(${i * ANGLE_STEP}deg) translateZ(${radius}px)`,
                   transition: "box-shadow 0.3s"
                 }}
                 onClick={() => snapToCard(i)}
