@@ -186,7 +186,7 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
               {[0, 180].map((faceAngle) => (
                 <div
                   key={faceAngle}
-                  className={`penta-card flex items-center justify-center ${i === activeCard ? "shadow-2xl shadow-black/70 scale-105" : ""}`}
+                  className={`penta-card ${faceAngle === 180 ? "penta-card-back" : ""} flex items-center justify-center ${i === activeCard && faceAngle === 0 ? "shadow-2xl shadow-black/70 scale-105" : ""}`}
                   style={{
                     width: `${cardW}px`,
                     height: `${cardH}px`,

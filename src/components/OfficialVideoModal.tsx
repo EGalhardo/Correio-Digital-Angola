@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, ChangeEvent } from "react";
+import { useState, useEffect, useLayoutEffect, useRef, ChangeEvent } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Play, 
@@ -54,7 +54,9 @@ export default function OfficialVideoModal({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   // Mantém a intenção de reprodução até o utilizador pausar ou fechar o vídeo.
-  const shouldPlayRef = useRef(false);
+  const shouldPlayRef = useRef(isOpen);
+  // Evita que os eventos de carregamento criem pedidos play() concorrentes.
+  const playPendingRef = useRef(false);
   // Momento em que o modal abriu: usado para ignorar cliques no backdrop
   // durante os primeiros instantes (um duplo toque acidental no cartão não
   // pode fechar o modal logo a abrir).
@@ -88,8 +90,9 @@ export default function OfficialVideoModal({
   // voltam a chamá-lo enquanto a reprodução continuar pretendida.
   const attemptAutoPlay = async () => {
     const video = videoRef.current;
-    if (!isOpen || !shouldPlayRef.current || !video || !video.paused) return;
+    if (!isOpen || !shouldPlayRef.current || !video || !video.paused || playPendingRef.current) return;
 
+    playPendingRef.current = true;
     try {
       await video.play();
     } catch (error) {
@@ -106,6 +109,8 @@ export default function OfficialVideoModal({
         setIsPlaying(false);
         setIsBuffering(false);
       }
+    } finally {
+      playPendingRef.current = false;
     }
   };
 
@@ -138,8 +143,8 @@ export default function OfficialVideoModal({
     };
   }, [isOpen]);
 
-  // Handle Video AutoPlay whenever modal opens
-  useEffect(() => {
+  // Inicia no mesmo gesto que abriu o modal, antes do browser perder a activação do clique.
+  useLayoutEffect(() => {
     if (isOpen) {
       setHasError(false);
       setVideoSrcIndex(0);
