@@ -50,24 +50,19 @@
 
   .penta-card {
     @apply absolute rounded-[24px] transition-shadow duration-300;
-    background-color: #ffffff;
-    /* Mantém a orientação 3D estável e oculta os versos durante a rotação,
-       sem inverter manualmente a face nem sobrepor as imagens visíveis. */
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    /* O contentor posiciona as duas faces; não deve esconder ambas ao rodar
+       nem mostrar um fundo opaco no lugar da imagem do verso. */
+    background-color: transparent;
+    transform-style: preserve-3d;
     box-shadow: 0 12px 48px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
-  }
-
-  .penta-card.penta-card-back {
-    box-shadow: none;
   }
 
   .penta-face {
     @apply absolute inset-0 w-full h-full object-cover object-center rounded-[24px];
+    /* Apenas a textura de costas é ocultada. As orientações das duas faces
+       são fixas, independentes do ângulo animado do anel. */
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    /* Separa a textura do fundo do cartão para evitar conflitos de profundidade. */
-    transform: translateZ(1px);
   }
 
   .penta-card::before {

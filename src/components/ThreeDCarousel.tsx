@@ -193,20 +193,25 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
                 }}
                 onClick={() => snapToCard(i)}
               >
-                <img
-                  src={card.img}
-                  alt={card.label}
-                  className="penta-face select-none pointer-events-none"
-                  loading="eager"
-                  decoding="async"
-                  fetchPriority="high"
-                  onError={(e) => {
-                    if (e.currentTarget.getAttribute("src") !== card.fallback) {
-                      e.currentTarget.src = card.fallback;
-                    }
-                  }}
-                  referrerPolicy="no-referrer"
-                />
+                {[0, 180].map((faceAngle) => (
+                  <img
+                    key={faceAngle}
+                    src={card.img}
+                    alt={faceAngle === 0 ? card.label : ""}
+                    aria-hidden={faceAngle === 180}
+                    className="penta-face select-none pointer-events-none"
+                    style={{ transform: `rotateY(${faceAngle}deg) translateZ(1px)` }}
+                    loading="eager"
+                    decoding="async"
+                    fetchPriority="high"
+                    onError={(e) => {
+                      if (e.currentTarget.getAttribute("src") !== card.fallback) {
+                        e.currentTarget.src = card.fallback;
+                      }
+                    }}
+                    referrerPolicy="no-referrer"
+                  />
+                ))}
               </div>
             );
           })}

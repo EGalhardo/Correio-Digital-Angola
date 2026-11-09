@@ -37,10 +37,8 @@ export default function OfficialVideoModal({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(66.7);
   const [volume, setVolume] = useState(1);
-  // O vídeo começa SEM SOM de propósito: o autoplay muted é o único caminho
-  // permitido em todos os browsers (Chrome, Safari iOS, WebViews). Assim o
-  // vídeo inicia SEMPRE automaticamente ao abrir o modal; o utilizador activa
-  // o som com um toque no botão "Activar Som" (já existente abaixo).
+  // Começa sem som para permitir o autoplay nativo. O som é activado apenas
+  // pelo controlo próprio, sem alterar muted durante um arranque pendente.
   const [isMuted, setIsMuted] = useState(true);
   // true enquanto o vídeo está a carregar/bufferizar: mostra um indicador de
   // carregamento para o utilizador não pensar que está parado e clicar várias
@@ -55,7 +53,7 @@ export default function OfficialVideoModal({
   const containerRef = useRef<HTMLDivElement | null>(null);
   // Mantém a intenção de reprodução até o utilizador pausar ou fechar o vídeo.
   const shouldPlayRef = useRef(isOpen);
-  // Evita que os eventos de carregamento criem pedidos play() concorrentes.
+  // Evita que cliques repetidos nos controlos criem pedidos play() concorrentes.
   const playPendingRef = useRef(false);
   // Momento em que o modal abriu: usado para ignorar cliques no backdrop
   // durante os primeiros instantes (um duplo toque acidental no cartão não
@@ -86,8 +84,8 @@ export default function OfficialVideoModal({
     onClose();
   };
 
-  // Se o browser interromper o primeiro pedido, os eventos de carregamento
-  // voltam a chamá-lo enquanto a reprodução continuar pretendida.
+  // Os controlos retomam a reprodução num gesto do utilizador. O arranque
+  // automático fica a cargo do autoPlay nativo, sem pedidos play() concorrentes.
   const attemptAutoPlay = async () => {
     const video = videoRef.current;
     if (!isOpen || !shouldPlayRef.current || !video || !video.paused || playPendingRef.current) return;
@@ -96,18 +94,11 @@ export default function OfficialVideoModal({
     try {
       await video.play();
     } catch (error) {
-      if (!shouldPlayRef.current || !videoRef.current || !video.paused) return;
-      if ((error as DOMException)?.name === "AbortError") return;
-
-      try {
-        video.muted = true;
-        setIsMuted(true);
-        await video.play();
-      } catch (mutedError) {
-        if (!shouldPlayRef.current || (mutedError as DOMException)?.name === "AbortError") return;
-        console.log("Autoplay paused by browser policy:", mutedError);
-        setIsPlaying(false);
-        setIsBuffering(false);
+      if (!shouldPlayRef.current || videoRef.current !== video || !video.paused) return;
+      setIsPlaying(false);
+      setIsBuffering(false);
+      if ((error as DOMException)?.name !== "AbortError") {
+        console.warn("Não foi possível reproduzir o vídeo:", error);
       }
     } finally {
       playPendingRef.current = false;
@@ -143,7 +134,8 @@ export default function OfficialVideoModal({
     };
   }, [isOpen]);
 
-  // Inicia no mesmo gesto que abriu o modal, antes do browser perder a activação do clique.
+  // O autoPlay nativo trata do arranque ao montar. Não competir com esse pedido
+  // chamando play() novamente no layout, em loadedmetadata e em canplay.
   useLayoutEffect(() => {
     if (isOpen) {
       setHasError(false);
@@ -156,7 +148,6 @@ export default function OfficialVideoModal({
         videoRef.current.volume = volume;
         videoRef.current.muted = true;
         setIsMuted(true);
-        void attemptAutoPlay();
       }
     } else {
       shouldPlayRef.current = false;
@@ -169,23 +160,19 @@ export default function OfficialVideoModal({
     const video = videoRef.current;
     if (!video) return;
 
-    // Enquanto o primeiro play() está pendente, o browser já pode indicar
-    // paused=false mesmo sem apresentar frames. Um clique nesse período não
-    // deve ser interpretado como pausa, pois cancelaria o arranque automático.
-    if (shouldPlayRef.current && !video.paused && video.currentTime === 0) return;
+    // O tempo pode avançar antes do primeiro frame. O estado de carregamento,
+    // e não currentTime === 0, distingue o arranque pendente de uma reprodução.
+    if (playPendingRef.current || (shouldPlayRef.current && !video.paused && video.readyState < video.HAVE_CURRENT_DATA)) return;
 
     setHasUserInteracted(true);
     if (video.paused) {
       shouldPlayRef.current = true;
-      if (isMuted && !hasUserInteracted) {
-        videoRef.current.muted = false;
-        setIsMuted(false);
-      }
       void attemptAutoPlay();
     } else {
       shouldPlayRef.current = false;
-      videoRef.current.pause();
+      video.pause();
       setIsPlaying(false);
+      setIsBuffering(false);
     }
   };
 
@@ -199,7 +186,6 @@ export default function OfficialVideoModal({
     if (videoRef.current) {
       setDuration(videoRef.current.duration || 66.7);
       setHasError(false);
-      void attemptAutoPlay();
     }
   };
 
@@ -372,7 +358,7 @@ export default function OfficialVideoModal({
                   ref={videoRef}
                   src={videoSources[videoSrcIndex]}
                   playsInline
-                  muted
+                  muted={isMuted}
                   autoPlay
                   preload="auto"
                   controls={false}
@@ -381,14 +367,14 @@ export default function OfficialVideoModal({
                   onLoadedMetadata={handleLoadedMetadata}
                   onLoadStart={() => setIsBuffering(true)}
                   onWaiting={() => setIsBuffering(true)}
-                  onPlaying={() => setIsBuffering(false)}
-                  onCanPlay={() => {
-                    setIsBuffering(false);
-                    void attemptAutoPlay();
-                  }}
-                  onPlay={() => {
+                  onPlaying={() => {
                     setIsBuffering(false);
                     setIsPlaying(true);
+                  }}
+                  onCanPlay={() => {
+                    // Se o autoplay foi recusado, mostrar o controlo de reprodução
+                    // em vez de um spinner permanente. Se já arrancou, esperar por playing.
+                    if (videoRef.current?.paused) setIsBuffering(false);
                   }}
                   onPause={() => setIsPlaying(false)}
                   onEnded={() => {
