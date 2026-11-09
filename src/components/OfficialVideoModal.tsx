@@ -166,9 +166,16 @@ export default function OfficialVideoModal({
   }, [isOpen]);
 
   const togglePlay = () => {
-    if (!videoRef.current) return;
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Enquanto o primeiro play() está pendente, o browser já pode indicar
+    // paused=false mesmo sem apresentar frames. Um clique nesse período não
+    // deve ser interpretado como pausa, pois cancelaria o arranque automático.
+    if (shouldPlayRef.current && !video.paused && video.currentTime === 0) return;
+
     setHasUserInteracted(true);
-    if (videoRef.current.paused) {
+    if (video.paused) {
       shouldPlayRef.current = true;
       if (isMuted && !hasUserInteracted) {
         videoRef.current.muted = false;

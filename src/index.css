@@ -51,8 +51,10 @@
   .penta-card {
     @apply absolute rounded-[24px] transition-shadow duration-300;
     background-color: #ffffff;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    /* A face única é orientada pelo componente; nunca a esconder evita que
+       alguns browsers apresentem um cartão escuro durante a rotação. */
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
     box-shadow: 0 12px 48px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
   }
 
@@ -62,8 +64,8 @@
 
   .penta-face {
     @apply absolute inset-0 w-full h-full object-cover object-center rounded-[24px];
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
   }
 
   .penta-card::before {
