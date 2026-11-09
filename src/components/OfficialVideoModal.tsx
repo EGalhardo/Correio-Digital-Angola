@@ -53,13 +53,8 @@ export default function OfficialVideoModal({
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const autoPlayPendingRef = useRef(false);
-  // Número de sequência do pedido de reprodução mais recente.
-  // Se durante o "await play()" surgir um pedido mais novo, a tentativa
-  // antiga termina em silêncio. Isto evita a tempestade de chamadas play()
-  // que se anulavam umas às outras (AbortError) e obrigavam o utilizador
-  // a clicar várias vezes até o vídeo finalmente iniciar.
-  const playRequestRef = useRef(0);
+  // Mantém a intenção de reprodução até o utilizador pausar ou fechar o vídeo.
+  const shouldPlayRef = useRef(false);
   // Momento em que o modal abriu: usado para ignorar cliques no backdrop
   // durante os primeiros instantes (um duplo toque acidental no cartão não
   // pode fechar o modal logo a abrir).
@@ -80,7 +75,7 @@ export default function OfficialVideoModal({
 
   // Close handler that safely stops playback
   const handleClose = () => {
-    autoPlayPendingRef.current = false;
+    shouldPlayRef.current = false;
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
@@ -89,33 +84,27 @@ export default function OfficialVideoModal({
     onClose();
   };
 
-  // Tenta iniciar com som e, se o browser bloquear, inicia automaticamente sem som.
-  // Também é chamado quando o vídeo fica pronto, evitando depender de vários cliques.
+  // Se o browser interromper o primeiro pedido, os eventos de carregamento
+  // voltam a chamá-lo enquanto a reprodução continuar pretendida.
   const attemptAutoPlay = async () => {
     const video = videoRef.current;
-    if (!isOpen || !autoPlayPendingRef.current || !video || !video.paused) return;
-
-    const requestId = ++playRequestRef.current;
-    const isStale = () =>
-      requestId !== playRequestRef.current || !videoRef.current || !autoPlayPendingRef.current;
+    if (!isOpen || !shouldPlayRef.current || !video || !video.paused) return;
 
     try {
       await video.play();
     } catch (error) {
-      // AbortError: um pedido de reprodução mais recente já assumiu o controlo.
-      // Não é um bloqueio de autoplay — terminar em silêncio para não anular
-      // o novo pedido (era isto que exigia vários cliques ao utilizador).
-      if (isStale() || (error as DOMException)?.name === "AbortError") return;
+      if (!shouldPlayRef.current || !videoRef.current || !video.paused) return;
+      if ((error as DOMException)?.name === "AbortError") return;
 
-      // NotAllowedError (política de autoplay): tentar novamente sem som.
       try {
         video.muted = true;
         setIsMuted(true);
         await video.play();
       } catch (mutedError) {
-        if (isStale() || (mutedError as DOMException)?.name === "AbortError") return;
+        if (!shouldPlayRef.current || (mutedError as DOMException)?.name === "AbortError") return;
         console.log("Autoplay paused by browser policy:", mutedError);
         setIsPlaying(false);
+        setIsBuffering(false);
       }
     }
   };
@@ -156,15 +145,16 @@ export default function OfficialVideoModal({
       setVideoSrcIndex(0);
       setIsBuffering(true);
       openedAtRef.current = Date.now();
-      autoPlayPendingRef.current = true;
+      shouldPlayRef.current = true;
 
       if (videoRef.current) {
         videoRef.current.volume = volume;
-        videoRef.current.muted = isMuted;
+        videoRef.current.muted = true;
+        setIsMuted(true);
         void attemptAutoPlay();
       }
     } else {
-      autoPlayPendingRef.current = false;
+      shouldPlayRef.current = false;
       if (videoRef.current) videoRef.current.pause();
       setIsPlaying(false);
     }
@@ -174,14 +164,14 @@ export default function OfficialVideoModal({
     if (!videoRef.current) return;
     setHasUserInteracted(true);
     if (videoRef.current.paused) {
-      autoPlayPendingRef.current = true;
+      shouldPlayRef.current = true;
       if (isMuted && !hasUserInteracted) {
         videoRef.current.muted = false;
         setIsMuted(false);
       }
       void attemptAutoPlay();
     } else {
-      autoPlayPendingRef.current = false;
+      shouldPlayRef.current = false;
       videoRef.current.pause();
       setIsPlaying(false);
     }
@@ -197,6 +187,7 @@ export default function OfficialVideoModal({
     if (videoRef.current) {
       setDuration(videoRef.current.duration || 66.7);
       setHasError(false);
+      void attemptAutoPlay();
     }
   };
 
@@ -232,23 +223,23 @@ export default function OfficialVideoModal({
   const handleRestart = () => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      autoPlayPendingRef.current = true;
+      shouldPlayRef.current = true;
       void attemptAutoPlay();
     }
   };
 
   const handleVideoError = () => {
     if (videoSrcIndex < videoSources.length - 1) {
-      autoPlayPendingRef.current = true;
+      shouldPlayRef.current = true;
       setVideoSrcIndex((prev) => prev + 1);
     } else {
-      autoPlayPendingRef.current = false;
+      shouldPlayRef.current = false;
       setHasError(true);
     }
   };
 
   const retryPlayback = () => {
-    autoPlayPendingRef.current = true;
+    shouldPlayRef.current = true;
     setHasError(false);
     setVideoSrcIndex(0);
     if (videoRef.current) {
@@ -384,12 +375,14 @@ export default function OfficialVideoModal({
                     void attemptAutoPlay();
                   }}
                   onPlay={() => {
-                    autoPlayPendingRef.current = false;
                     setIsBuffering(false);
                     setIsPlaying(true);
                   }}
                   onPause={() => setIsPlaying(false)}
-                  onEnded={() => setIsPlaying(false)}
+                  onEnded={() => {
+                    shouldPlayRef.current = false;
+                    setIsPlaying(false);
+                  }}
                   onError={handleVideoError}
                   className="w-full h-full object-contain cursor-pointer"
                 />
