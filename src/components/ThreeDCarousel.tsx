@@ -180,6 +180,8 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
             transformStyle: "preserve-3d"
           }}
         >
+          {/* Faces fixas nos dois lados evitam inverter o cartão durante a rotação.
+              O navegador oculta apenas a imagem de costas, sem transições de transformação. */}
           {CARDS.map((card, i) => {
             return (
               <div
