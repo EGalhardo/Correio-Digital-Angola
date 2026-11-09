@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect, useRef, useCallback, MouseEvent as ReactMouseEvent, TouchEvent as ReactTouchEvent } from "react";
+import { useState, useEffect, useRef, useCallback, MouseEvent as ReactMouseEvent, TouchEvent as ReactTouchEvent } from "react";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 
 interface ThreeDCarouselProps {
@@ -172,7 +172,7 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
         {/* Ring */}
         <div 
           ref={ringRef}
-          className="pentagon-ring relative transition-transform duration-75 ease-linear"
+          className="pentagon-ring relative"
           style={{
             width: `${cardW}px`,
             height: `${cardH}px`,
@@ -180,40 +180,40 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
             transformStyle: "preserve-3d"
           }}
         >
-          {/* Faces independentes evitam a renderização escura de versos aninhados. */}
-          {CARDS.map((card, i) => (
-            <Fragment key={i}>
-              {[0, 180].map((faceAngle) => (
-                <div
-                  key={faceAngle}
-                  className={`penta-card ${faceAngle === 180 ? "penta-card-back" : ""} flex items-center justify-center ${i === activeCard && faceAngle === 0 ? "shadow-2xl shadow-black/70 scale-105" : ""}`}
-                  style={{
-                    width: `${cardW}px`,
-                    height: `${cardH}px`,
-                    transform: `rotateY(${i * ANGLE_STEP}deg) translateZ(${radius}px) rotateY(${faceAngle}deg)`,
-                    transition: "box-shadow 0.3s, transform 0.3s"
+          {CARDS.map((card, i) => {
+            // Vira a mesma face apenas quando o cartão passa pelo plano lateral.
+            // Assim nenhum verso 3D fica visível com o fundo escuro do browser.
+            const faceAngle = Math.cos((currentAngle + i * ANGLE_STEP) * Math.PI / 180) < 0 ? 180 : 0;
+
+            return (
+              <div
+                key={i}
+                className={`penta-card flex items-center justify-center ${i === activeCard ? "shadow-2xl shadow-black/70 scale-105" : ""}`}
+                style={{
+                  width: `${cardW}px`,
+                  height: `${cardH}px`,
+                  transform: `rotateY(${i * ANGLE_STEP}deg) translateZ(${radius}px) rotateY(${faceAngle}deg)`,
+                  transition: "box-shadow 0.3s"
+                }}
+                onClick={() => snapToCard(i)}
+              >
+                <img
+                  src={card.img}
+                  alt={card.label}
+                  className="penta-face select-none pointer-events-none"
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
+                  onError={(e) => {
+                    if (e.currentTarget.getAttribute("src") !== card.fallback) {
+                      e.currentTarget.src = card.fallback;
+                    }
                   }}
-                  aria-hidden={faceAngle === 180}
-                  onClick={() => snapToCard(i)}
-                >
-                  <img
-                    src={card.img}
-                    alt={faceAngle === 0 ? card.label : ""}
-                    className="penta-face select-none pointer-events-none"
-                    loading="eager"
-                    decoding="async"
-                    fetchPriority="high"
-                    onError={(e) => {
-                      if (e.currentTarget.getAttribute("src") !== card.fallback) {
-                        e.currentTarget.src = card.fallback;
-                      }
-                    }}
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-              ))}
-            </Fragment>
-          ))}
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            );
+          })}
         </div>
 
         {/* Translucent Glass Play/Pause Audio Button centered over the cards */}
