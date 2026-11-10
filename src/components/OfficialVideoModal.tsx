@@ -84,8 +84,9 @@ export default function OfficialVideoModal({
     onClose();
   };
 
-  // Os controlos retomam a reprodução num gesto do utilizador. O arranque
-  // automático fica a cargo do autoPlay nativo, sem pedidos play() concorrentes.
+  // Arranque e retoma da reprodução passam sempre por aqui. Se o pedido perder
+  // a corrida para outro play() (ex.: o autoplay nativo), faz retry em vez de
+  // deixar o vídeo parado — era isso que obrigava a vários cliques.
   const attemptAutoPlay = async () => {
     const video = videoRef.current;
     if (!isOpen || !shouldPlayRef.current || !video || !video.paused || playPendingRef.current) return;
@@ -96,8 +97,13 @@ export default function OfficialVideoModal({
     } catch (error) {
       if (!shouldPlayRef.current || videoRef.current !== video || !video.paused) return;
       setIsPlaying(false);
-      setIsBuffering(false);
-      if ((error as DOMException)?.name !== "AbortError") {
+      if ((error as DOMException)?.name === "AbortError") {
+        window.setTimeout(() => {
+          if (shouldPlayRef.current) void attemptAutoPlay();
+        }, 350);
+      } else {
+        // Autoplay recusado pela política do navegador: mostrar o botão de play.
+        setIsBuffering(false);
         console.warn("Não foi possível reproduzir o vídeo:", error);
       }
     } finally {
@@ -134,8 +140,19 @@ export default function OfficialVideoModal({
     };
   }, [isOpen]);
 
-  // O autoPlay nativo trata do arranque ao montar. Não competir com esse pedido
-  // chamando play() novamente no layout, em loadedmetadata e em canplay.
+  // Arranque controlado ao abrir: o autoPlay nativo cobre a maioria dos casos,
+  // mas este play() explícito garante o arranque nos browsers em que o atributo
+  // sozinho falha ou fica pendente. O retry em AbortError trata das corridas.
+  useEffect(() => {
+    if (!isOpen) return;
+    const t = window.setTimeout(() => {
+      void attemptAutoPlay();
+    }, 150);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
+  // Reset de estado ao abrir/fechar o modal.
   useLayoutEffect(() => {
     if (isOpen) {
       setHasError(false);
@@ -160,9 +177,10 @@ export default function OfficialVideoModal({
     const video = videoRef.current;
     if (!video) return;
 
-    // O tempo pode avançar antes do primeiro frame. O estado de carregamento,
-    // e não currentTime === 0, distingue o arranque pendente de uma reprodução.
-    if (playPendingRef.current || (shouldPlayRef.current && !video.paused && video.readyState < video.HAVE_CURRENT_DATA)) return;
+    // Enquanto um play() esta pendente, cliques extra sao ignorados (evita
+    // corridas que abortavam o arranque). Depois e o comportamento normal:
+    // parado -> reproduzir, a reproduzir -> pausar.
+    if (playPendingRef.current) return;
 
     setHasUserInteracted(true);
     if (video.paused) {
