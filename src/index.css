@@ -59,10 +59,11 @@
 
   .penta-face {
     @apply absolute inset-0 w-full h-full object-cover object-center rounded-[24px];
-    /* Apenas a textura de costas é ocultada. As orientações das duas faces
-       são fixas, independentes do ângulo animado do anel. */
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    /* Sem backface-visibility: a imagem e sempre pintada e o componente
+       vira-a 180° via JS quando o cartao esta de costas. Isto evita os
+       cartoes escuros causados por bugs de ocultacao de faces (Safari/WebKit). */
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
   }
 
   .penta-card::before {

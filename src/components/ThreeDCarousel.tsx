@@ -180,9 +180,13 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
             transformStyle: "preserve-3d"
           }}
         >
-          {/* Faces fixas nos dois lados evitam inverter o cartão durante a rotação.
-              O navegador oculta apenas a imagem de costas, sem transições de transformação. */}
+          {/* Uma unica imagem por cartao, sempre pintada (sem backface-visibility).
+              Quando o cartao esta de costas (cosseno negativo), a imagem e virada
+              180° via JS para nao aparecer espelhada. Assim o navegador nunca
+              oculta a imagem: fim dos cartoes escuros em qualquer navegador. */}
           {CARDS.map((card, i) => {
+            const totalAngle = currentAngle + i * ANGLE_STEP;
+            const isBackFacing = Math.cos((totalAngle * Math.PI) / 180) < 0;
             return (
               <div
                 key={i}
@@ -195,25 +199,21 @@ export default function ThreeDCarousel({ isPlayingAudio = false, onPlayClick }: 
                 }}
                 onClick={() => snapToCard(i)}
               >
-                {[0, 180].map((faceAngle) => (
-                  <img
-                    key={faceAngle}
-                    src={card.img}
-                    alt={faceAngle === 0 ? card.label : ""}
-                    aria-hidden={faceAngle === 180}
-                    className="penta-face select-none pointer-events-none"
-                    style={{ transform: `rotateY(${faceAngle}deg) translateZ(1px)` }}
-                    loading="eager"
-                    decoding="async"
-                    fetchPriority="high"
-                    onError={(e) => {
-                      if (e.currentTarget.getAttribute("src") !== card.fallback) {
-                        e.currentTarget.src = card.fallback;
-                      }
-                    }}
-                    referrerPolicy="no-referrer"
-                  />
-                ))}
+                <img
+                  src={card.img}
+                  alt={card.label}
+                  className="penta-face select-none pointer-events-none"
+                  style={{ transform: isBackFacing ? "rotateY(180deg)" : undefined }}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
+                  onError={(e) => {
+                    if (e.currentTarget.getAttribute("src") !== card.fallback) {
+                      e.currentTarget.src = card.fallback;
+                    }
+                  }}
+                  referrerPolicy="no-referrer"
+                />
               </div>
             );
           })}
